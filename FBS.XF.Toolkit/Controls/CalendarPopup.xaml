@@ -1,0 +1,131 @@
+﻿<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:pages="http://rotorgames.com"
+			 xmlns:local="clr-namespace:FBS.XF.Toolkit.Controls;assembly=FBS.XF.Toolkit"
+			 xmlns:controls="clr-namespace:Xamarin.Plugin.Calendar.Controls;assembly=Xamarin.Plugin.Calendar"
+			 x:Class="FBS.XF.Toolkit.Controls.CalendarPopup" >
+	<ContentPage.Content>
+		<StackLayout BackgroundColor="{AppThemeBinding Light=#414141, Dark=#616161}" 
+		             HeightRequest="400" HorizontalOptions="Center"
+					 VerticalOptions="Center"
+		             WidthRequest="380">
+			<!-- Title -->
+			<Label BackgroundColor="{AppThemeBinding Light=#212121, Dark=#818181}"
+			       FontSize="18" 
+			       HorizontalOptions="Center"
+			       Padding="0,5,0,10"
+			       Text="{Binding Title}" />
+
+			<!-- Calendar -->
+			<controls:Calendar FooterSectionVisible="False"
+			                   HorizontalOptions="Center"
+			                   MaximumDate="{Binding MaximumDate}"
+			                   MinimumDate="{Binding MinimumDate}"
+			                   MonthYear="{Binding MonthYear}"
+			                   Padding="10,0"
+			                   SelectedDate="{Binding SelectedDate}"
+			                   VerticalOptions="Center"
+			                   WidthRequest="320">
+				<controls:Calendar.HeaderSectionTemplate>
+					<DataTemplate>
+						<Grid HorizontalOptions="FillAndExpand"
+						      Margin="0,2,0,10"
+						      Padding="0"
+						      VerticalOptions="Start">
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto" />
+							</Grid.RowDefinitions>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="1*" />
+								<ColumnDefinition Width="1*" />
+								<ColumnDefinition Width="4*" />
+								<ColumnDefinition Width="1*" />
+								<ColumnDefinition Width="1*" />
+							</Grid.ColumnDefinitions>
+
+							<!-- Decrease year -->
+							<local:SvgImage Grid.Column="0" 
+							                Color="{AppThemeBinding Light=Black, Dark=White}" 
+							                HeightRequest="18" HorizontalOptions="Center"
+							                Source="angle-double-left.svg" 
+											VerticalOptions="Center"
+							                WidthRequest="18">
+								<local:SvgImage.GestureRecognizers>
+									<TapGestureRecognizer Command="{Binding PrevYearCommand}" />
+								</local:SvgImage.GestureRecognizers>
+							</local:SvgImage>
+
+							<!-- Decrease month -->
+							<local:SvgImage Grid.Column="1" 
+							                Color="{AppThemeBinding Light=Black, Dark=White}" 
+							                HeightRequest="18" HorizontalOptions="Center"
+							                Source="angle-left.svg" 
+							                VerticalOptions="Center"
+							                WidthRequest="12" >
+								<local:SvgImage.GestureRecognizers>
+									<TapGestureRecognizer Command="{Binding PrevMonthCommand}" />
+								</local:SvgImage.GestureRecognizers>
+							</local:SvgImage>
+
+							<!-- Month/Year-->
+							<Label Grid.Column="2"
+							       FontAttributes="Bold" FontSize="Medium"
+							       HorizontalOptions="Center"
+							       TextColor="{Binding MonthLabelColor}"
+							       VerticalOptions="Center">
+								<Label.FormattedText>
+									<FormattedString>
+										<Span Text="{Binding MonthText, Mode=TwoWay}" />
+										<Span Text=", " />
+										<Span Text="{Binding Year, Mode=TwoWay}" />
+									</FormattedString>
+								</Label.FormattedText>
+							</Label>
+
+							<!-- Increase month -->
+							<local:SvgImage Grid.Column="3" 
+							                Color="{AppThemeBinding Light=Black, Dark=White}" 
+							                HeightRequest="18" HorizontalOptions="Center"
+							                Source="angle-right.svg" 
+							                VerticalOptions="Center"
+							                WidthRequest="12" >
+								<local:SvgImage.GestureRecognizers>
+									<TapGestureRecognizer Command="{Binding NextMonthCommand}" />
+								</local:SvgImage.GestureRecognizers>
+							</local:SvgImage>
+
+							<!-- Increase year -->
+							<local:SvgImage Grid.Column="4" 
+							                Color="{AppThemeBinding Light=Black, Dark=White}" 
+							                HeightRequest="18" HorizontalOptions="Center"
+							                Source="angle-double-right.svg" 
+							                VerticalOptions="Center"
+							                WidthRequest="18">
+								<local:SvgImage.GestureRecognizers>
+									<TapGestureRecognizer Command="{Binding NextYearCommand}" />
+								</local:SvgImage.GestureRecognizers>
+							</local:SvgImage>
+						</Grid>
+					</DataTemplate>
+				</controls:Calendar.HeaderSectionTemplate>
+			</controls:Calendar>
+
+			<!-- Actions -->
+			<StackLayout HorizontalOptions="EndAndExpand" 
+						 Margin="0,0,0,10"
+			             Orientation="Horizontal" 
+			             VerticalOptions="EndAndExpand">
+				<local:CustomButton BackgroundColor="Transparent"
+									Clicked="CancelButton_Clicked" 
+									FontSize="12"
+									Padding="20,5"
+									Text="CANCEL" TextColor="#FF2066" />
+				<local:CustomButton BackgroundColor="Transparent"
+									Clicked="OKButton_Clicked"
+									FontSize="12"
+									Padding="20,5"
+									Text="OK" TextColor="#FF2066" />
+			</StackLayout>
+		</StackLayout>
+	</ContentPage.Content>
+</pages:PopupPage>

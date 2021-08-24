@@ -1,0 +1,72 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Company>Fairwinds Business Solutions</Company>
+    <Product>FBS Toolkit</Product>
+    <Copyright>Copyright 2021 © Fairwinds Business Solutions</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageId>FBS.Toolkit</PackageId>
+    <Description>Library containing several controls and helper classess to support Xamarin Forms development</Description>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
+    <AssemblyName>FBS.XF.Toolkit</AssemblyName>
+    <RootNamespace>FBS.XF.Toolkit</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Android\**" />
+    <Compile Remove="iOS\**" />
+    <EmbeddedResource Remove="Android\**" />
+    <EmbeddedResource Remove="iOS\**" />
+    <None Remove="Android\**" />
+    <None Remove="iOS\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\angle-double-left.svg" />
+    <None Remove="Resources\angle-double-right.svg" />
+    <None Remove="Resources\angle-left.svg" />
+    <None Remove="Resources\angle-right.svg" />
+    <None Remove="Resources\eye.svg" />
+    <None Remove="Resources\microphone.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\angle-double-left.svg" />
+    <EmbeddedResource Include="Resources\angle-double-right.svg" />
+    <EmbeddedResource Include="Resources\angle-left.svg" />
+    <EmbeddedResource Include="Resources\angle-right.svg" />
+    <EmbeddedResource Include="Resources\eye.svg" />
+    <EmbeddedResource Include="Resources\microphone.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="10.3.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.8" />
+    <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
+    <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.12" />
+    <PackageReference Include="SkiaSharp" Version="2.80.3" />
+    <PackageReference Include="Svg.Skia" Version="0.5.6.1" />
+    <PackageReference Include="Syncfusion.Xamarin.SfListView" Version="19.2.0.48" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
+    <PackageReference Include="Xamarin.Plugin.Calendar" Version="1.4.5304" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Templates\LabelViewCell.xaml.cs">
+      <DependentUpon>LabelViewCell.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Controls\CalendarPopup.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Templates\LabelViewCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>
