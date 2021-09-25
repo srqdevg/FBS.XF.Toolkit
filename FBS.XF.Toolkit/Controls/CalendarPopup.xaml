@@ -5,16 +5,17 @@
 			 xmlns:controls="clr-namespace:Xamarin.Plugin.Calendar.Controls;assembly=Xamarin.Plugin.Calendar"
 			 x:Class="FBS.XF.Toolkit.Controls.CalendarPopup" >
 	<ContentPage.Content>
-		<StackLayout BackgroundColor="{AppThemeBinding Light=#414141, Dark=#616161}" 
-		             HeightRequest="400" HorizontalOptions="Center"
+		<StackLayout BackgroundColor="{Binding BackgroundColor}" 
+		             HeightRequest="410" HorizontalOptions="Center"
 					 VerticalOptions="Center"
 		             WidthRequest="380">
+
 			<!-- Title -->
-			<Label BackgroundColor="{AppThemeBinding Light=#212121, Dark=#818181}"
-			       FontSize="18" 
-			       HorizontalOptions="Center"
-			       Padding="0,5,0,10"
-			       Text="{Binding Title}" />
+			<Label BackgroundColor="{Binding TitleBackgroundColor}"
+			       FontAttributes="Bold" FontSize="24" 
+			       HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center"
+			       Padding="0,10,0,10"
+			       Text="{Binding TitleText}" VerticalTextAlignment="Center" />
 
 			<!-- Calendar -->
 			<controls:Calendar FooterSectionVisible="False"
@@ -112,19 +113,18 @@
 
 			<!-- Actions -->
 			<StackLayout HorizontalOptions="EndAndExpand" 
-						 Margin="0,0,0,10"
+						 Margin="0,0,20,20"
 			             Orientation="Horizontal" 
 			             VerticalOptions="EndAndExpand">
 				<local:CustomButton BackgroundColor="Transparent"
 									Clicked="CancelButton_Clicked" 
 									FontSize="12"
-									Padding="20,5"
-									Text="CANCEL" TextColor="#FF2066" />
+									Text="CANCEL" TextColor="{Binding ButtonTextColor}" />
 				<local:CustomButton BackgroundColor="Transparent"
 									Clicked="OKButton_Clicked"
 									FontSize="12"
-									Padding="20,5"
-									Text="OK" TextColor="#FF2066" />
+									Padding="20,0"
+									Text="OK" TextColor="{Binding ButtonTextColor}" />
 			</StackLayout>
 		</StackLayout>
 	</ContentPage.Content>

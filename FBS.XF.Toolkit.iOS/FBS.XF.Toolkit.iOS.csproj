@@ -40,7 +40,6 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\ThreeButtonDialog.cs" />
     <Compile Include="Renderers\ExtendedButtonRenderer.cs" />
     <Compile Include="Renderers\SegmentedControlRenderer.cs" />
     <Compile Include="Services\NativeService.cs" />
@@ -50,7 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Syncfusion.Xamarin.SfListView">
-      <Version>19.2.0.48</Version>
+      <Version>19.2.0.62</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
       <Version>5.0.0.2012</Version>

@@ -78,6 +78,13 @@ namespace FBS.XF.Toolkit.Controls
 				BindingMode.TwoWay, propertyChanged: ShowOptionalTextPropertyChanged);
 
 		/// <summary>
+		/// The title property
+		/// </summary>
+		public static readonly BindableProperty TitleProperty =
+			BindableProperty.Create(nameof(TitleProperty), typeof(string), typeof(ValidDatePicker), null,
+				BindingMode.OneWay, propertyChanged: TitlePropertyChanged);
+
+		/// <summary>
 		/// The validate field property
 		/// </summary>
 		public static readonly BindableProperty ValidateFieldProperty =
@@ -359,6 +366,17 @@ namespace FBS.XF.Toolkit.Controls
 		}
 
 		/// <summary>
+		/// Titles the property changed.
+		/// </summary>
+		/// <param name="bindable">The bindable.</param>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		private static void TitlePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			((ValidDatePicker) bindable).calendarPopupPage.TitleText = (string) newValue;
+		}
+
+		/// <summary>
 		/// Handles the Tapped event of the TapGestureRecognizer control.
 		/// </summary>
 		/// <param name="sender">The source of the event.</param>
@@ -395,14 +413,6 @@ namespace FBS.XF.Toolkit.Controls
 						VerticalOptions = LayoutOptions.Start
 					};
 
-					////var row = GetRow(datePicker) + 1;
-
-					////if (row >= RowDefinitions.Count)
-					////{
-					////	RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-					////}
-
-					////SetGridRowColumn(errorLabel, row, 0);
 					Children.Add(errorLabel);
 				}
 
@@ -435,12 +445,6 @@ namespace FBS.XF.Toolkit.Controls
 				return;
 			}
 
-			// Save viewmodel if it is valid
-			////if (control.BindingContext is IValidateViewModel model)
-			////{
-			////	control.viewModel = model;
-			////}
-
 			if (control.BindingContext is INotifyDataErrorInfo errorModel)
 			{
 				errorModel.ErrorsChanged -= control.ValidateField_ErrorsChanged;
@@ -458,7 +462,7 @@ namespace FBS.XF.Toolkit.Controls
 		private static string ValidatePropertyName(ValidDatePicker validPicker)
 		{
 			// Get binding
-			validPicker.binding = validPicker.binding ?? validPicker.GetBinding(SelectedDateProperty);
+			validPicker.binding ??= validPicker.GetBinding(SelectedDateProperty);
 
 			if (string.IsNullOrWhiteSpace(validPicker.binding.Path))
 				throw new ArgumentNullException($"{nameof(validPicker.binding.Path)} cannot be null");
@@ -600,6 +604,16 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			get => (bool) GetValue(ValidateFieldProperty);
 			set => SetValue(ValidateFieldProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the title.
+		/// </summary>
+		/// <value>The title.</value>
+		public string Title
+		{
+			get => (string) GetValue(TitleProperty);
+			set => SetValue(TitleProperty, value);
 		}
 		#endregion
 

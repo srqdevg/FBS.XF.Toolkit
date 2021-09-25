@@ -20,7 +20,7 @@ namespace FBS.XF.Toolkit.Extensions
 		/// <returns>Task&lt;System.Boolean&gt;.</returns>
 		public static Task<bool> ChangeBackgroundColorTo(this VisualElement self, Color newColor, uint length = 250, Easing easing = null)
 		{
-			Task<bool> result = new Task<bool>(() => false);
+			var result = new Task<bool>(() => false);
 
 			if (!self.AnimationIsRunning(nameof(ChangeBackgroundColorTo)))
 			{
@@ -59,12 +59,39 @@ namespace FBS.XF.Toolkit.Extensions
 		/// <returns>Task&lt;System.Boolean&gt;.</returns>
 		private static Task<bool> TransmuteColorAnimation(VisualElement element, string name, Func<double, Color> transform, uint length, Easing easing)
 		{
-			easing = easing ?? Easing.Linear;
+			easing ??= Easing.Linear;
 			var taskCompletionSource = new TaskCompletionSource<bool>();
 
 			element.Animate(name, transform, color => { element.BackgroundColor = color; }, 16, length, easing, (v, c) => taskCompletionSource.SetResult(c));
 			return taskCompletionSource.Task;
 		}
 		#endregion
+
+
+		 public static Task<bool> ColorTo(this VisualElement self, Color fromColor, Color toColor, Action<Color> callback, uint length = 250, Easing easing = null)
+		 {
+			 Color Transform(double t) => Color.FromRgba(
+				 fromColor.R + t * (toColor.R - fromColor.R), 
+				 fromColor.G + t * (toColor.G - fromColor.G), 
+				 fromColor.B + t * (toColor.B - fromColor.B), 
+				 fromColor.A + t * (toColor.A - fromColor.A));
+
+			 return ColorAnimation(self, "ColorTo", Transform, callback, length, easing);
+		 }
+
+    public static void CancelAnimation(this VisualElement self)
+    {
+        self.AbortAnimation("ColorTo");
+    }
+
+    public static Task<bool> ColorAnimation(VisualElement element, string name, Func<double, Color> transform, Action<Color> callback, uint length, Easing easing)
+    {
+        easing ??= Easing.Linear;
+        var taskCompletionSource = new TaskCompletionSource<bool>();
+
+        element.Animate(name, transform, callback, 16, length, easing, (v, c) => taskCompletionSource.SetResult(c));
+
+        return taskCompletionSource.Task;
+    }
 	}
 }

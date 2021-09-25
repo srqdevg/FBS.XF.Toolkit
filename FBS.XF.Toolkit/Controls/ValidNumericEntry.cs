@@ -45,7 +45,7 @@ namespace FBS.XF.Toolkit.Controls
 		private void ValidNumericEntry_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			// Do we have a max value and do we check it
-			if (MaxValue > 0)
+			if (MaxValue > 0 & !string.IsNullOrWhiteSpace(e.NewTextValue) )
 			{
 				// Parse text
 				if (int.TryParse(e.NewTextValue, out var value))
@@ -55,6 +55,11 @@ namespace FBS.XF.Toolkit.Controls
 						IsValid = true;
 						return;
 					}
+				}
+				else
+				{
+					// Reset value
+					Text = e.OldTextValue;
 				}
 			}
 

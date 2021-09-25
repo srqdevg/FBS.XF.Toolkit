@@ -38,6 +38,31 @@ namespace System
 		}
 
 		/// <summary>
+		/// Copies the properties.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="copyFrom">The copy from.</param>
+		/// <param name="copyTo">The copy to.</param>
+		/// <returns>T.</returns>
+		/// <exception cref="ArgumentNullException">copyFrom</exception>
+		public static T CopyProperties<T>(this T copyFrom, T copyTo)
+		{
+			// Check args
+			if (copyFrom == null)
+			{
+				throw new ArgumentNullException(nameof(copyFrom));
+			}
+
+			// Iterate all properties and copy values
+			copyFrom.GetType()
+				.GetProperties()
+				.Where(prop => prop.CanRead && prop.CanWrite)
+				.ForEach(p => p.SetValue(copyTo, p.GetValue(copyFrom)));
+
+			return copyTo;
+		}
+
+		/// <summary>
 		/// Sets the named property.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>

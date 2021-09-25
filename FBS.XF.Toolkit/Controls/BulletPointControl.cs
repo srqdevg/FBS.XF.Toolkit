@@ -144,14 +144,20 @@ namespace FBS.XF.Toolkit.Controls
 			}
 
 			// Create the container.
-			var parentLayout = new StackLayout { HorizontalOptions = LayoutOptions.Fill, Padding = new Thickness(1) };
+			var parentLayout = new StackLayout 
+			{ 
+				HorizontalOptions = LayoutOptions.Fill, 
+				Padding = new Thickness(1) 
+			};
 
 			// Render the list.
 			foreach (var item in Items)
 			{
 				// Make sure they provided a good bullet.
 				if (string.IsNullOrWhiteSpace(BulletCharacter) && BulletImage == null)
+				{
 					BulletCharacter = DefaultBulletCharacter;
+				}
 
 				// Choose the bullet. Default to text if no image defined.
 				var bullet = !string.IsNullOrWhiteSpace(BulletCharacter) && BulletImage == null
@@ -169,6 +175,7 @@ namespace FBS.XF.Toolkit.Controls
 				{
 					FontSize = ListItemFontSize,
 					Margin = new Thickness(10, 0, 10, 0),
+					LineBreakMode = LineBreakMode.WordWrap,
 					Text = item,
 					VerticalTextAlignment = TextAlignment.Start
 				};
