@@ -1,6 +1,5 @@
 ﻿using System;
 using Xamarin.Forms;
-using Color = Xamarin.Forms.Color;
 
 namespace FBS.XF.Toolkit.Controls
 {
@@ -20,7 +19,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		public new static readonly BindableProperty BackgroundColorProperty =
 			BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(CustomButton), Color.Default,
-				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).IsToggledPropertyChanged(ov, nv)); 
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).IsToggledPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The border color property
@@ -41,21 +40,21 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		public static readonly BindableProperty FontSizeProperty =
 			BindableProperty.Create(nameof(FontSize), typeof(double), typeof(CustomButton), default(double),
-				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).FontSizePropertyChanged(ov, nv)); 
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).FontSizePropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The horizontal image options property
 		/// </summary>
 		public static readonly BindableProperty HorizontalImageOptionsProperty =
 			BindableProperty.Create(nameof(HorizontalImageOptions), typeof(LayoutOptions), typeof(CustomButton), LayoutOptions.Center,
-				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).HorizontalImageOptionsPropertyChanged(ov, nv)); 
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).HorizontalImageOptionsPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The horizontal text alignment property
 		/// </summary>
 		public static readonly BindableProperty HorizontalTextAlignmentProperty =
 			BindableProperty.Create(nameof(HorizontalTextAlignment), typeof(TextAlignment), typeof(CustomButton), TextAlignment.Center,
-				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).HorizontalTextAlignmentPropertyChanged(ov, nv)); 
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).HorizontalTextAlignmentPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The horizontal text options property
@@ -69,7 +68,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		public static readonly BindableProperty ImageColorProperty =
 			BindableProperty.Create(nameof(ImageColor), typeof(Color), typeof(CustomButton), Color.Default,
-				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).ImageColorPropertyChanged(ov, nv)); 
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).ImageColorPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The image toggle color property
@@ -90,14 +89,14 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		public static readonly BindableProperty ImageWPFProperty =
 			BindableProperty.Create(nameof(Image), typeof(string), typeof(CustomButton), default(string),
-				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).ImageSourceWPFPropertyChanged(ov, nv)); 
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).ImageSourceWPFPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The image property
 		/// </summary>
 		public static readonly BindableProperty ImageProperty =
 			BindableProperty.Create(nameof(Image), typeof(string), typeof(CustomButton), default(string),
-				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).ImageSourcePropertyChanged(ov, nv)); 
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).ImageSourcePropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The image width property
@@ -110,7 +109,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// The is toggled property
 		/// </summary>
 		public static readonly BindableProperty IsToggledProperty =
-			BindableProperty.Create(nameof(IsToggled), typeof(bool), typeof(CustomButton), default(bool), BindingMode.TwoWay, 
+			BindableProperty.Create(nameof(IsToggled), typeof(bool), typeof(CustomButton), default(bool), BindingMode.TwoWay,
 				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).IsToggledPropertyChanged(ov, nv));
 
 		/// <summary>
@@ -120,32 +119,39 @@ namespace FBS.XF.Toolkit.Controls
 			BindableProperty.Create(nameof(ButtonMode), typeof(ButtonMode), typeof(CustomButton), ButtonMode.Normal);
 
 		/// <summary>
+		/// The number of taps
+		/// </summary>
+		public static readonly BindableProperty NumberOfTapsProperty =
+			BindableProperty.Create(nameof(NumberOfTaps), typeof(int), typeof(CustomButton), 1,
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).NumberOfTapsPropertyChanged(ov, nv));
+
+		/// <summary>
 		/// The padding property
 		/// </summary>
 		public new static readonly BindableProperty PaddingProperty =
 			BindableProperty.Create(nameof(Padding), typeof(Thickness), typeof(CustomButton), default(Thickness),
-				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).PaddingPropertyChanged(ov, nv)); 
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).PaddingPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The toggle background color property
 		/// </summary>
 		public static readonly BindableProperty ToggleBackgroundColorProperty =
 			BindableProperty.Create(nameof(ToggleBackgroundColor), typeof(Color), typeof(CustomButton), Color.Default,
-				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).IsToggledPropertyChanged(ov, nv)); 
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).IsToggledPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The toggle border color property
 		/// </summary>
 		public static readonly BindableProperty ToggleBorderColorProperty =
 			BindableProperty.Create(nameof(ToggleBorderColor), typeof(Color), typeof(CustomButton), Color.Default,
-				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).IsToggledPropertyChanged(ov, nv)); 
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).IsToggledPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The text color property
 		/// </summary>
 		public static readonly BindableProperty TextColorProperty =
 			BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(CustomButton), Color.Default,
-				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).IsToggledPropertyChanged(ov, nv)); 
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).IsToggledPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The text location property
@@ -159,14 +165,14 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		public static readonly BindableProperty TextMarginProperty =
 			BindableProperty.Create(nameof(TextMargin), typeof(Thickness), typeof(CustomButton), default(Thickness),
-				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).TextMarginPropertyChanged(ov, nv)); 
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).TextMarginPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The text property
 		/// </summary>
 		public static readonly BindableProperty TextProperty =
 			BindableProperty.Create(nameof(Text), typeof(string), typeof(CustomButton), default(string),
-				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).TextPropertyChanged(ov, nv)); 
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).TextPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The toggle image color property
@@ -186,28 +192,28 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		public static readonly BindableProperty ToggleTextColorProperty =
 			BindableProperty.Create(nameof(ToggleTextColor), typeof(Color), typeof(CustomButton), Color.Default,
-				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).IsToggledPropertyChanged(ov, nv)); 
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).IsToggledPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The vertical image options property
 		/// </summary>
 		public static readonly BindableProperty VerticalImageOptionsProperty =
 			BindableProperty.Create(nameof(VerticalImageOptions), typeof(LayoutOptions), typeof(CustomButton), LayoutOptions.Center,
-				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).VerticalImageOptionsPropertyChanged(ov, nv)); 
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).VerticalImageOptionsPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The vertical text alignment property
 		/// </summary>
 		public static readonly BindableProperty VerticalTextAlignmentProperty =
 			BindableProperty.Create(nameof(VerticalTextAlignment), typeof(TextAlignment), typeof(CustomButton), TextAlignment.Center,
-				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).VerticalTextAlignmentPropertyChanged(ov, nv)); 
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).VerticalTextAlignmentPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The vertical text options property
 		/// </summary>
 		public static readonly BindableProperty VerticalTextOptionsProperty =
 			BindableProperty.Create(nameof(VerticalTextOptions), typeof(LayoutOptions), typeof(CustomButton), LayoutOptions.Center,
-				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).VerticalTextOptionsPropertyChanged(ov, nv)); 
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).VerticalTextOptionsPropertyChanged(ov, nv));
 		#endregion
 
 		#region Constructors
@@ -340,20 +346,21 @@ namespace FBS.XF.Toolkit.Controls
 			IsClippedToBounds = true;
 			Padding = new Thickness(2);
 
-			// Add touch gesture recognizer
-			var touchRecognizer = new TouchGestureRecognizer();
-			touchRecognizer.TouchDown += Button_TouchDown;
-			touchRecognizer.TouchUp += Button_TouchUp;
-
-			// Add it to the this
-			GestureRecognizers.Add(touchRecognizer);
-
 			// Add tap gesture recognizer
-			var tapRecognizer = new TapGestureRecognizer();
-			tapRecognizer.Tapped += TapRecognizer_Tapped;
+			tapGestureRecognizer = new TapGestureRecognizer();
+			tapGestureRecognizer.Tapped += TapRecognizer_Tapped;
+			tapGestureRecognizer.NumberOfTapsRequired = NumberOfTaps;
 
 			// Add it to the this
-			GestureRecognizers.Add(tapRecognizer);
+			GestureRecognizers.Add(tapGestureRecognizer);
+
+			// Add touch gesture recognizer
+			touchGestureRecognizer = new TouchGestureRecognizer();
+			touchGestureRecognizer.TouchDown += Button_TouchDown;
+			touchGestureRecognizer.TouchUp += Button_TouchUp;
+
+			// Add it to the this
+			GestureRecognizers.Add(touchGestureRecognizer);
 
 			// Create the outer stack layout
 			buttonStackLayout = new StackLayout
@@ -397,7 +404,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void FontFamilyPropertyChanged(object oldValue, object newValue)
 		{
-			if (newValue != null && buttonLabel != null)
+			if (newValue != null && oldValue != newValue && buttonLabel != null)
 			{
 				buttonLabel.FontFamily = (string) newValue;
 			}
@@ -410,7 +417,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void FontSizePropertyChanged(object oldValue, object newValue)
 		{
-			if (newValue != null && buttonLabel != null)
+			if (newValue != null && oldValue != newValue && buttonLabel != null)
 			{
 				buttonLabel.FontSize = (double) newValue;
 			}
@@ -443,7 +450,10 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void HorizontalImageOptionsPropertyChanged(object oldValue, object newValue)
 		{
-			buttonImage.HorizontalOptions = (LayoutOptions) newValue;
+			if (oldValue != newValue)
+			{
+				buttonImage.HorizontalOptions = (LayoutOptions) newValue;
+			}
 		}
 
 		/// <summary>
@@ -453,7 +463,10 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void HorizontalTextAlignmentPropertyChanged(object oldValue, object newValue)
 		{
-			buttonLabel.HorizontalTextAlignment = (TextAlignment) newValue;
+			if (oldValue != newValue)
+			{
+				buttonLabel.HorizontalTextAlignment = (TextAlignment) newValue;
+			}
 		}
 
 		/// <summary>
@@ -463,7 +476,10 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void HorizontalTextOptionsPropertyChanged(object oldValue, object newValue)
 		{
-			buttonLabel.HorizontalOptions = (LayoutOptions) newValue;
+			if (oldValue != newValue)
+			{
+				buttonLabel.HorizontalOptions = (LayoutOptions) newValue;
+			}
 		}
 
 		/// <summary>
@@ -473,7 +489,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void ImageColorPropertyChanged(object oldValue, object newValue)
 		{
-			if (buttonImage is SvgImage svgImage)
+			if (oldValue != newValue && buttonImage is SvgImage svgImage)
 			{
 				svgImage.Color = (Color) newValue;
 			}
@@ -486,7 +502,10 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void ImageHeightPropertyChanged(object oldValue, object newValue)
 		{
-			buttonImage.HeightRequest = (int) newValue;
+			if (oldValue != newValue)
+			{
+				buttonImage.HeightRequest = (int) newValue;
+			}
 		}
 
 		/// <summary>
@@ -546,7 +565,10 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void ImageWidthPropertyChanged(object oldValue, object newValue)
 		{
-			buttonImage.WidthRequest = (int) newValue;
+			if (oldValue != newValue)
+			{
+				buttonImage.WidthRequest = (int) newValue;
+			}
 		}
 
 		/// <summary>
@@ -556,36 +578,58 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void IsToggledPropertyChanged(object oldValue, object newValue)
 		{
-			if (IsToggled)
+			if (oldValue != newValue)
 			{
-				base.BackgroundColor = ToggleBackgroundColor;
-				base.BorderColor = ToggleBorderColor;
-				buttonLabel.TextColor = ToggleTextColor;
-
-				if (buttonImage is SvgImage svgImage)
+				if (IsToggled)
 				{
-					svgImage.Color = ImageToggleColor;
+					base.BackgroundColor = ToggleBackgroundColor;
+					base.BorderColor = ToggleBorderColor;
+					buttonLabel.TextColor = ToggleTextColor;
+
+					if (buttonImage is SvgImage svgImage)
+					{
+						svgImage.Color = ImageToggleColor;
+					}
+
+					if (buttonLabel != null)
+					{
+						buttonLabel.Text = string.IsNullOrWhiteSpace(ToggleText) ? Text : ToggleText;
+					}
 				}
-
-				if (buttonLabel != null)
+				else
 				{
-					buttonLabel.Text = string.IsNullOrWhiteSpace(ToggleText) ? Text : ToggleText;
+					base.BackgroundColor = BackgroundColor;
+					base.BorderColor = BorderColor;
+					buttonLabel.TextColor = TextColor;
+
+					if (buttonImage is SvgImage svgImage)
+					{
+						svgImage.Color = ImageColor;
+					}
+
+					if (buttonLabel != null)
+					{
+						buttonLabel.Text = Text;
+					}
 				}
 			}
-			else
+		}
+
+		/// <summary>
+		/// Numbers the of taps property changed.
+		/// </summary>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		private void NumberOfTapsPropertyChanged(object oldValue, object newValue)
+		{
+			if (newValue != oldValue)
 			{
-				base.BackgroundColor = BackgroundColor;
-				base.BorderColor = BorderColor;
-				buttonLabel.TextColor = TextColor;
+				tapGestureRecognizer.NumberOfTapsRequired = NumberOfTaps;
 
-				if (buttonImage is SvgImage svgImage)
+				if (NumberOfTaps != 1)
 				{
-					svgImage.Color = ImageColor;
-				}
-
-				if (buttonLabel != null)
-				{
-					buttonLabel.Text = Text;
+					GestureRecognizers.Remove(touchGestureRecognizer);
+					touchGestureRecognizer = null;
 				}
 			}
 		}
@@ -701,7 +745,10 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void VerticalImageOptionsPropertyChanged(object oldValue, object newValue)
 		{
-			buttonImage.VerticalOptions = (LayoutOptions) newValue;
+			if (newValue != oldValue)
+			{
+				buttonImage.VerticalOptions = (LayoutOptions) newValue;
+			}
 		}
 
 		/// <summary>
@@ -711,7 +758,10 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void VerticalTextAlignmentPropertyChanged(object oldValue, object newValue)
 		{
-			buttonLabel.VerticalTextAlignment = (TextAlignment) newValue;
+			if (newValue != oldValue)
+			{
+				buttonLabel.VerticalTextAlignment = (TextAlignment) newValue;
+			}
 		}
 
 		/// <summary>
@@ -721,7 +771,10 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void VerticalTextOptionsPropertyChanged(object oldValue, object newValue)
 		{
-			buttonLabel.VerticalOptions = (LayoutOptions) newValue;
+			if (newValue != oldValue)
+			{
+				buttonLabel.VerticalOptions = (LayoutOptions) newValue;
+			}
 		}
 		#endregion
 
@@ -880,6 +933,16 @@ namespace FBS.XF.Toolkit.Controls
 		}
 
 		/// <summary>
+		/// Gets or sets the number of taps.
+		/// </summary>
+		/// <value>The number of taps.</value>
+		public int NumberOfTaps
+		{
+			get => (int) GetValue(NumberOfTapsProperty);
+			set => SetValue(NumberOfTapsProperty, value);
+		}
+
+		/// <summary>
 		/// Gets or sets the inner padding of the Layout.
 		/// </summary>
 		/// <value>The Thickness values for the layout. The default value is a Thickness with all values set to 0.</value>
@@ -969,7 +1032,7 @@ namespace FBS.XF.Toolkit.Controls
 			get => (string) GetValue(ToggleTextProperty);
 			set => SetValue(ToggleTextProperty, value);
 		}
-		
+
 		/// <summary>
 		/// Gets or sets the color of the toggle text.
 		/// </summary>
@@ -1010,12 +1073,14 @@ namespace FBS.XF.Toolkit.Controls
 			set => SetValue(VerticalTextOptionsProperty, value);
 		}
 		#endregion
-		
+
 		#region Fields
 		//private SvgImage buttonSvgImage;
 		private Image buttonImage;
 		private Label buttonLabel;
 		private StackLayout buttonStackLayout;
+		private TapGestureRecognizer tapGestureRecognizer;
+		private TouchGestureRecognizer touchGestureRecognizer;
 		#endregion
 	}
 }
