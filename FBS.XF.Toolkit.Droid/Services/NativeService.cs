@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using Android.Accounts;
 using Android.Content;
@@ -8,8 +9,8 @@ using Android.Util;
 using FBS.XF.Toolkit.Android.Services;
 using FBS.XF.Toolkit.Interfaces;
 using Xamarin.Forms;
-using Application = Android.App.Application;
-using Environment = Android.OS.Environment;
+using AndroidOSApplication = Android.App.Application;
+using AndroidOSEnvironment = Android.OS.Environment;
 
 [assembly: Dependency(typeof(NativeServices))]
 namespace FBS.XF.Toolkit.Android.Services
@@ -53,7 +54,7 @@ namespace FBS.XF.Toolkit.Android.Services
 		/// <returns>System.String.</returns>
 		public string GetCarrierCountry()
 		{
-			var manager = (TelephonyManager) Application.Context.GetSystemService(Context.TelephonyService);
+			var manager = (TelephonyManager) AndroidOSApplication.Context.GetSystemService(Context.TelephonyService);
 			return manager?.SimCountryIso;
 		}
 
@@ -63,7 +64,7 @@ namespace FBS.XF.Toolkit.Android.Services
 		/// <returns>System.String.</returns>
 		public string GetCarrierName()
 		{
-			var manager = (TelephonyManager) Application.Context.GetSystemService(Context.TelephonyService);
+			var manager = (TelephonyManager) AndroidOSApplication.Context.GetSystemService(Context.TelephonyService);
 			return manager?.SimCarrierIdName;
 		}
 
@@ -74,8 +75,10 @@ namespace FBS.XF.Toolkit.Android.Services
 		public string GetDownloadFolder()
 		{
 			// Download folder
-			var folder = Application.Context.GetExternalFilesDir(Environment.DirectoryDownloads);
-			return folder?.Path;
+			//var folder = AndroidOSApplication.Context.GetExternalFilesDir();
+			//return folder?.Path;
+			var folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+			return folder;
 		}
 		
 		/// <summary>
@@ -84,7 +87,7 @@ namespace FBS.XF.Toolkit.Android.Services
 		/// <returns>System.String.</returns>
 		public string GetPhoneNumber()
 		{
-			var manager = (TelephonyManager) Application.Context.GetSystemService(Context.TelephonyService);
+			var manager = (TelephonyManager) AndroidOSApplication.Context.GetSystemService(Context.TelephonyService);
 			return manager?.Line1Number;
 		}
 		
@@ -104,7 +107,7 @@ namespace FBS.XF.Toolkit.Android.Services
 
 			// Normal internal storage
 #pragma warning disable 618
-			return Environment.GetExternalStoragePublicDirectory(Environment.DirectoryDcim)?.AbsolutePath;
+			return AndroidOSEnvironment.GetExternalStoragePublicDirectory(AndroidOSEnvironment.DirectoryDcim)?.AbsolutePath;
 #pragma warning restore 618
 		}
 		
@@ -115,7 +118,7 @@ namespace FBS.XF.Toolkit.Android.Services
 		public string GetPrimaryEmail()
 		{
 			var emailPattern = Patterns.EmailAddress;
-			var accounts = AccountManager.Get(Application.Context)?.GetAccounts();
+			var accounts = AccountManager.Get(AndroidOSApplication.Context)?.GetAccounts();
 
 			if (accounts != null && emailPattern != null)
 			{
@@ -185,15 +188,15 @@ namespace FBS.XF.Toolkit.Android.Services
 
 			try
 			{
-				var context = Application.Context;
+				var context = AndroidOSApplication.Context;
 				var dirs = context.GetExternalFilesDirs(null);
 
 				if (dirs != null)
 				{
 					foreach (var folder in dirs)
 					{
-						var isRemovable = Environment.InvokeIsExternalStorageRemovable(folder);
-						var isEmulated = Environment.InvokeIsExternalStorageEmulated(folder);
+						var isRemovable = AndroidOSEnvironment.InvokeIsExternalStorageRemovable(folder);
+						var isEmulated = AndroidOSEnvironment.InvokeIsExternalStorageEmulated(folder);
 
 						if (sdStorage ? isRemovable && !isEmulated : !isRemovable && isEmulated)
 						{

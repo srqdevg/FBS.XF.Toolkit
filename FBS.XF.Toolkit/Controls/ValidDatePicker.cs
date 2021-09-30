@@ -16,11 +16,18 @@ namespace FBS.XF.Toolkit.Controls
 	{
 		#region Bindable properties
 		/// <summary>
+		/// The background color property
+		/// </summary>
+		public new static readonly BindableProperty BackgroundColorProperty =
+			BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(CustomButton), Color.Default,
+				propertyChanged: (bd, ov, nv) => ((ValidDatePicker) bd).BackgroundColorChanged(ov, nv));
+
+		/// <summary>
 		/// The bullet character font size property
 		/// </summary>
 		public static readonly BindableProperty FontSizeProperty =
 			BindableProperty.Create(nameof(FontSize), typeof(double), typeof(double),
-				propertyChanged: FontSizePropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((ValidDatePicker) bd).FontSizePropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The format property
@@ -33,63 +40,63 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		public static readonly BindableProperty MaximumDateProperty =
 			BindableProperty.Create(nameof(MaximumDate), typeof(DateTime), typeof(ValidDatePicker), default(DateTime),
-				propertyChanged: MaximumDatePropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((ValidDatePicker) bd).MaximumDatePropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The minimum date property
 		/// </summary>
 		public static readonly BindableProperty MinimumDateProperty =
 			BindableProperty.Create(nameof(MinimumDate), typeof(DateTime), typeof(ValidDatePicker), default(DateTime),
-				propertyChanged: MinimumDatePropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((ValidDatePicker) bd).MinimumDatePropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The label property
 		/// </summary>
 		public static readonly BindableProperty LabelProperty =
 			BindableProperty.Create(nameof(Label), typeof(string), typeof(ValidDatePicker), default(string),
-				propertyChanged: LabelPropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((ValidDatePicker) bd).LabelPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The label font attributes property
 		/// </summary>
 		public static readonly BindableProperty LabelFontAttributesProperty =
 			BindableProperty.Create(nameof(FontAttributes), typeof(FontAttributes), typeof(ValidDatePicker), default(FontAttributes),
-				propertyChanged: LabelFontAttributesPropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((ValidDatePicker) bd).LabelFontAttributesPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The selected date property
 		/// </summary>
 		public static readonly BindableProperty SelectedDateProperty =
 			BindableProperty.Create(nameof(SelectedDateProperty), typeof(DateTime?), typeof(ValidDatePicker), default(DateTime),
-				BindingMode.TwoWay, propertyChanged: SelectedDatePropertyChanged);
+				BindingMode.TwoWay, propertyChanged: (bd, ov, nv) => ((ValidDatePicker) bd).SelectedDatePropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The show error message visible property
 		/// </summary>
 		public static readonly BindableProperty ShowErrorMessageProperty =
 			BindableProperty.Create(nameof(ShowErrorMessage), typeof(bool), typeof(ValidDatePicker), default(bool),
-				BindingMode.TwoWay, propertyChanged: ShowErrorMessageVisiblePropertyChanged);
+				BindingMode.TwoWay, propertyChanged: (bd, ov, nv) => ((ValidDatePicker) bd).ShowErrorMessageVisiblePropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The show optional text property
 		/// </summary>
 		public static readonly BindableProperty ShowOptionalTextProperty =
 			BindableProperty.Create(nameof(ShowOptionalText), typeof(bool), typeof(ValidDatePicker), default(bool),
-				BindingMode.TwoWay, propertyChanged: ShowOptionalTextPropertyChanged);
+				BindingMode.TwoWay, propertyChanged: (bd, ov, nv) => ((ValidDatePicker) bd).ShowOptionalTextPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The title property
 		/// </summary>
 		public static readonly BindableProperty TitleProperty =
 			BindableProperty.Create(nameof(TitleProperty), typeof(string), typeof(ValidDatePicker), null,
-				BindingMode.OneWay, propertyChanged: TitlePropertyChanged);
+				BindingMode.OneWay, propertyChanged: (bd, ov, nv) => ((ValidDatePicker) bd).TitlePropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The validate field property
 		/// </summary>
 		public static readonly BindableProperty ValidateFieldProperty =
 			BindableProperty.Create(nameof(ValidateField), typeof(bool), typeof(ValidDatePicker), default(bool),
-				BindingMode.OneWay, propertyChanged: ValidateFieldPropertyChanged);
+				BindingMode.OneWay, propertyChanged: (bd, ov, nv) => ((ValidDatePicker) bd).ValidateFieldPropertyChanged(ov, nv));
 		#endregion
 
 		#region Constructors
@@ -107,6 +114,19 @@ namespace FBS.XF.Toolkit.Controls
 		#endregion
 
 		#region Private methods
+		/// <summary>
+		/// Backgrounds the color changed.
+		/// </summary>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		private void BackgroundColorChanged(object oldValue, object newValue)
+		{
+			if (oldValue != newValue)
+			{
+				BackgroundColor = (Color) newValue;
+			}
+		}
+
 		/// <summary>
 		/// Calendars the popup page data changed.
 		/// </summary>
@@ -199,56 +219,55 @@ namespace FBS.XF.Toolkit.Controls
 		/// <summary>
 		/// Fonts the size property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void FontSizePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void FontSizePropertyChanged(object oldValue, object newValue)
 		{
-			if (newValue is double value)
+			if (newValue != oldValue)
 			{
-				((ValidDatePicker) bindable).FontSize = value;
+				if (newValue is double value)
+				{
+					FontSize = value;
+				}
 			}
 		}
 
 		/// <summary>
 		/// Labels the property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void LabelPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void LabelPropertyChanged(object oldValue, object newValue)
 		{
-			if (newValue != null || oldValue != null)
+			if (newValue != oldValue)
 			{
-				var control = (ValidDatePicker) bindable;
-
 				// Add the label
-				if (control.label == null)
+				if (label == null)
 				{
 					// Add extra row
-					control.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+					RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
 					// Adjust other controls
-					foreach (var childControl in control.Children)
+					foreach (var childControl in Children)
 					{
 						SetRow(childControl, GetRow(childControl) + 1);
 					}
 
 					// Now create text label
-					control.label = new Label
+					label = new Label
 					{
-						FontAttributes = control.FontAttributes,
+						FontAttributes = FontAttributes,
 						Margin = new Thickness(3, 0, 0, 0),
 						Text = (string) newValue
 					};
 
-					control.SetGridRowColumn(control.label, 0, 0);
-					control.Children.Add(control.label);
+					SetGridRowColumn(label, 0, 0);
+					Children.Add(label);
 
 					// Do we need optional?
-					if (control.ShowOptionalText)
+					if (ShowOptionalText)
 					{
-						control.CreateOptionalControl();
+						CreateOptionalControl();
 					}
 				}
 			}
@@ -257,18 +276,15 @@ namespace FBS.XF.Toolkit.Controls
 		/// <summary>
 		/// Labels the font attributes property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void LabelFontAttributesPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void LabelFontAttributesPropertyChanged(object oldValue, object newValue)
 		{
-			if (newValue != null || oldValue != null)
+			if (newValue != oldValue)
 			{
-				var control = (ValidDatePicker) bindable;
-
-				if (control.label != null)
+				if (label != null)
 				{
-					control.label.FontAttributes = control.FontAttributes;
+					label.FontAttributes = FontAttributes;
 				}
 			}
 		}
@@ -276,41 +292,43 @@ namespace FBS.XF.Toolkit.Controls
 		/// <summary>
 		/// Maximums the date property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void MaximumDatePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void MaximumDatePropertyChanged(object oldValue, object newValue)
 		{
-			((ValidDatePicker) bindable).calendarPopupPage.MaximumDate = (DateTime) newValue;
+			if (newValue != oldValue)
+			{
+				calendarPopupPage.MaximumDate = (DateTime) newValue;
+			}
 		}
 
 		/// <summary>
 		/// Minimums the date property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void MinimumDatePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void MinimumDatePropertyChanged(object oldValue, object newValue)
 		{
-			((ValidDatePicker) bindable).calendarPopupPage.MinimumDate = (DateTime) newValue;
+			if (newValue != oldValue)
+			{
+				calendarPopupPage.MinimumDate = (DateTime) newValue;
+			}
 		}
 
 		/// <summary>
 		/// Dates the property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void SelectedDatePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void SelectedDatePropertyChanged(object oldValue, object newValue)
 		{
 			// If we have a value, change it,
-			if (newValue != null)
+			if (newValue != oldValue && newValue != null)
 			{
 				var dateTime = (DateTime) newValue;
-				var validDatePicker = (ValidDatePicker) bindable;
-				validDatePicker.calendarPopupPage.SelectedDate = dateTime;
-				validDatePicker.dateLabel.Text = !string.IsNullOrWhiteSpace(validDatePicker.Format)
-					? dateTime.ToString(validDatePicker.Format)
+				calendarPopupPage.SelectedDate = dateTime;
+				dateLabel.Text = !string.IsNullOrWhiteSpace(Format)
+					? dateTime.ToString(Format)
 					: dateTime.ToShortDateString();
 			}
 		}
@@ -343,25 +361,32 @@ namespace FBS.XF.Toolkit.Controls
 		/// <summary>
 		/// ShowErrorMessage property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void ShowErrorMessageVisiblePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void ShowErrorMessageVisiblePropertyChanged(object oldValue, object newValue)
 		{
-			((ValidDatePicker) bindable).errorLabel.IsVisible = (bool) newValue;
+			if (newValue != oldValue)
+			{
+				if (newValue != null)
+				{
+					errorLabel.IsVisible = (bool) newValue;
+				}
+			}
 		}
 
 		/// <summary>
 		/// Shows the optional text property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void ShowOptionalTextPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void ShowOptionalTextPropertyChanged(object oldValue, object newValue)
 		{
-			if ((bool) newValue)
+			if (newValue != oldValue)
 			{
-				((ValidDatePicker) bindable).CreateOptionalControl();
+				if ((bool) newValue)
+				{
+					CreateOptionalControl();
+				}
 			}
 		}
 
@@ -371,9 +396,12 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void TitlePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void TitlePropertyChanged(object oldValue, object newValue)
 		{
-			((ValidDatePicker) bindable).calendarPopupPage.TitleText = (string) newValue;
+			if (newValue != oldValue)
+			{
+				calendarPopupPage.TitleText = (string) newValue;
+			}
 		}
 
 		/// <summary>
@@ -432,25 +460,22 @@ namespace FBS.XF.Toolkit.Controls
 		/// <summary>
 		/// Validates the field property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldvalue">The oldvalue.</param>
 		/// <param name="newvalue">The newvalue.</param>
-		private static void ValidateFieldPropertyChanged(BindableObject bindable, object oldvalue, object newvalue)
+		private void ValidateFieldPropertyChanged(object oldvalue, object newvalue)
 		{
-			var control = (ValidDatePicker) bindable;
-
 			// If equal, do nothing
 			if (oldvalue == newvalue)
 			{
 				return;
 			}
 
-			if (control.BindingContext is INotifyDataErrorInfo errorModel)
+			if (BindingContext is INotifyDataErrorInfo errorModel)
 			{
-				errorModel.ErrorsChanged -= control.ValidateField_ErrorsChanged;
+				errorModel.ErrorsChanged -= ValidateField_ErrorsChanged;
 
 				if (bool.TryParse(newvalue.ToString(), out var validatesOnDataErrors) && validatesOnDataErrors)
-					errorModel.ErrorsChanged += control.ValidateField_ErrorsChanged;
+					errorModel.ErrorsChanged += ValidateField_ErrorsChanged;
 			}
 		}
 
@@ -488,7 +513,7 @@ namespace FBS.XF.Toolkit.Controls
 
 			if (ValidateField)
 			{
-				ValidateFieldPropertyChanged(this, null, ValidateField);
+				ValidateFieldPropertyChanged(null, ValidateField);
 			}
 		}
 		#endregion

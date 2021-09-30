@@ -17,13 +17,20 @@ namespace FBS.XF.Toolkit.ViewModels
 	/// </summary>
 	/// <seealso cref="System.ComponentModel.INotifyDataErrorInfo" />
 	[AddINotifyPropertyChangedInterface]
-	public class BaseViewModel : INotifyDataErrorInfo, IValidateViewModel
+	public class BaseViewModel : INotifyDataErrorInfo, IValidateViewModel, INotifyPropertyChanged
 	{
 		#region INotifyDataErrorInfo Events
 		/// <summary>
 		/// Occurs when the validation errors have changed for a property or for the entire entity.
 		/// </summary>
 		public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+		#endregion
+
+		#region INotifyPropertyChanged Events
+		/// <summary>
+		/// Occurs when the validation errors have changed for a property or for the entire entity.
+		/// </summary>
+		public event PropertyChangedEventHandler PropertyChanged;
 		#endregion
 
 		#region Constructor
@@ -142,6 +149,14 @@ namespace FBS.XF.Toolkit.ViewModels
 		public bool HasErrors { get; set; }
 		#endregion
 
+		#region IValidateViewModel Properties
+		/// <summary>
+		/// Gets or sets the validate command.
+		/// </summary>
+		/// <value>The validate command.</value>
+		public ICommand ValidateCommand { get; set; }
+		#endregion
+
 		#region Properties
 		/// <summary>
 		/// Gets or sets the errors.
@@ -189,14 +204,6 @@ namespace FBS.XF.Toolkit.ViewModels
 		/// </summary>
 		/// <value><c>true</c> if [validate fields]; otherwise, <c>false</c>.</value>
 		public bool ValidateFields { get; set; }
-		#endregion
-
-		#region IValidateViewModel Properties
-		/// <summary>
-		/// Gets or sets the validate command.
-		/// </summary>
-		/// <value>The validate command.</value>
-		public ICommand ValidateCommand { get; set; }
 		#endregion
 	}
 }
