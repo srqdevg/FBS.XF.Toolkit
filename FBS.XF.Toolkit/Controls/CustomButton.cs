@@ -269,6 +269,22 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			if (IsEnabled)
 			{
+				// If WPF we have to fake the double tap
+				if (Device.RuntimePlatform == Device.WPF && Mode != ButtonMode.Toggle && NumberOfTaps > 1)
+				{
+					var now = DateTime.Now;
+
+					if (lastTapTime.HasValue && (now - lastTapTime.Value).Milliseconds < 300)
+					{
+						Clicked?.Invoke(this, null);
+						lastTapTime = null;
+						return;
+					}
+
+					lastTapTime = now;
+					return;
+				}
+
 				Highlight(false);
 
 				if (Mode == ButtonMode.Toggle)
@@ -349,7 +365,12 @@ namespace FBS.XF.Toolkit.Controls
 			// Add tap gesture recognizer
 			tapGestureRecognizer = new TapGestureRecognizer();
 			tapGestureRecognizer.Tapped += TapRecognizer_Tapped;
-			tapGestureRecognizer.NumberOfTapsRequired = NumberOfTaps;
+
+			// If WPF we have to fake the double tap
+			if (Device.RuntimePlatform != Device.WPF)
+			{
+				tapGestureRecognizer.NumberOfTapsRequired = NumberOfTaps;
+			}
 
 			// Add it to the this
 			GestureRecognizers.Add(tapGestureRecognizer);
@@ -622,7 +643,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void NumberOfTapsPropertyChanged(object oldValue, object newValue)
 		{
-			if (newValue != oldValue)
+			if (newValue != oldValue && Device.RuntimePlatform != Device.WPF)
 			{
 				tapGestureRecognizer.NumberOfTapsRequired = NumberOfTaps;
 
@@ -1079,6 +1100,7 @@ namespace FBS.XF.Toolkit.Controls
 		private Image buttonImage;
 		private Label buttonLabel;
 		private StackLayout buttonStackLayout;
+		private DateTime? lastTapTime; 
 		private TapGestureRecognizer tapGestureRecognizer;
 		private TouchGestureRecognizer touchGestureRecognizer;
 		#endregion

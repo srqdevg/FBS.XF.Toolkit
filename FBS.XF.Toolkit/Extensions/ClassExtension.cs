@@ -45,7 +45,7 @@ namespace System
 		/// <param name="copyTo">The copy to.</param>
 		/// <returns>T.</returns>
 		/// <exception cref="ArgumentNullException">copyFrom</exception>
-		public static T CopyProperties<T>(this T copyFrom, T copyTo)
+		public static T CopyProperties<T>(T copyFrom, T copyTo)
 		{
 			// Check args
 			if (copyFrom == null)
@@ -56,7 +56,7 @@ namespace System
 			// Iterate all properties and copy values
 			copyFrom.GetType()
 				.GetProperties()
-				.Where(prop => prop.CanRead && prop.CanWrite)
+				.Where(prop => prop.CanRead && prop.CanWrite && !prop.GetGetMethod().IsVirtual)
 				.ForEach(p => p.SetValue(copyTo, p.GetValue(copyFrom)));
 
 			return copyTo;

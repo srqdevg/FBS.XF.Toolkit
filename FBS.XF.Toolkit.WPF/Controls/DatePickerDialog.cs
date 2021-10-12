@@ -2,13 +2,19 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using FBS.XF.Toolkit.Interfaces;
 using FBS.XF.Toolkit.WPF.Controls;
 using Xamarin.Forms;
+using Application = Xamarin.Forms.Application;
+using Color = Xamarin.Forms.Color;
+using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventArgs;
+using SolidColorBrush = System.Windows.Media.SolidColorBrush;
+using Thickness = System.Windows.Thickness;
 
 [assembly: Dependency(typeof(DatePickerDialog))]
+
 namespace FBS.XF.Toolkit.WPF.Controls
 {
 	/// <summary>
@@ -24,7 +30,7 @@ namespace FBS.XF.Toolkit.WPF.Controls
 		/// </summary>
 		/// <param name="sender">The source of the event.</param>
 		/// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
-		private void DatePicker_SelectedDatesChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+		private void DatePicker_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
 		{
 			SelectedDate = datePicker.SelectedDate;
 			datePickerWindow.DialogResult = true;
@@ -35,9 +41,9 @@ namespace FBS.XF.Toolkit.WPF.Controls
 		/// </summary>
 		/// <param name="sender">The source of the event.</param>
 		/// <param name="e">The <see cref="System.Windows.Input.KeyEventArgs"/> instance containing the event data.</param>
-		private void Window_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+		private void Window_KeyUp(object sender, KeyEventArgs e)
 		{
-			if (e.Key == System.Windows.Input.Key.Escape)
+			if (e.Key == Key.Escape)
 			{
 				datePickerWindow.DialogResult = false;
 			}
@@ -52,9 +58,17 @@ namespace FBS.XF.Toolkit.WPF.Controls
 		/// <returns>Task&lt;System.Nullable&lt;DateTime&gt;&gt;.</returns>
 		public Task<bool> PickDate(DateTime? startDateTime)
 		{
+			var backgroundColor = (Color) (Application.Current.RequestedTheme == OSAppTheme.Dark
+				? Application.Current.Resources["PopupBackgroundDark"]
+				: Application.Current.Resources["PopupBackgroundLight"]);
+
+			var backgroundBrush = (SolidColorBrush) new BrushConverter().ConvertFrom(backgroundColor.ToHex());
+
 			// Create dialog window
-			var window = new System.Windows.Window
+			var window = new Window
 			{
+				BorderBrush = backgroundBrush,
+				BorderThickness = new Thickness(2, 2, 2, 2),
 				ResizeMode = ResizeMode.NoResize,
 				ShowInTaskbar = false,
 				SizeToContent = SizeToContent.WidthAndHeight,
@@ -94,7 +108,6 @@ namespace FBS.XF.Toolkit.WPF.Controls
 
 			return taskCompletionSource.Task;
 		}
-
 		#endregion
 
 		#region Properties
@@ -102,7 +115,7 @@ namespace FBS.XF.Toolkit.WPF.Controls
 		#endregion
 
 		#region Fields
-		private System.Windows.Controls.Calendar datePicker;
+		private Calendar datePicker;
 		private Window datePickerWindow;
 		#endregion
 	}

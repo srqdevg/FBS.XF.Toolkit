@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -40,7 +39,7 @@ namespace FBS.XF.Toolkit.Helpers
 		/// <returns>Decrypted data</returns>
 		public static byte[] Decrypt(CryptoType cryptoType, string key, byte[] input)
 		{
-			var deriveBytes = new Rfc2898DeriveBytes(key, defaultSalt);
+			var deriveBytes = new Rfc2898DeriveBytes(key, Salt ?? defaultSalt);
 			var algorithm = SelectAlgorithm(cryptoType);
 			algorithm.Key = deriveBytes.GetBytes(algorithm.KeySize / 8);
 			algorithm.IV = deriveBytes.GetBytes(algorithm.BlockSize / 8);
@@ -86,7 +85,7 @@ namespace FBS.XF.Toolkit.Helpers
 		/// <returns>Encrypted data</returns>
 		public static byte[] Encrypt(CryptoType cryptoType, string key, byte[] input)
 		{
-			var deriveBytes = new Rfc2898DeriveBytes(key, defaultSalt);
+			var deriveBytes = new Rfc2898DeriveBytes(key, Salt ?? defaultSalt);
 			var algorithm = SelectAlgorithm(cryptoType);
 			algorithm.Key = deriveBytes.GetBytes(algorithm.KeySize / 8);
 			algorithm.IV = deriveBytes.GetBytes(algorithm.BlockSize / 8);
@@ -122,10 +121,21 @@ namespace FBS.XF.Toolkit.Helpers
 		{
 			using (var saltGenerator = new RNGCryptoServiceProvider())
 			{
-				defaultSalt = new byte[saltByteSize];
-				saltGenerator.GetBytes(defaultSalt);
-				return defaultSalt;
+				Salt = new byte[saltByteSize];
+				saltGenerator.GetBytes(Salt);
+				return Salt;
 			}
+		}
+
+		/// <summary>
+		/// Generates the salt.
+		/// </summary>
+		/// <param name="saltByteSize">Size of the salt byte.</param>
+		/// <returns>System.Byte[].</returns>
+		public static byte[] GenerateSalt(string salt)
+		{
+			Salt = Encoding.ASCII.GetBytes(salt);
+			return Salt;
 		}
 
 		/// <summary>
@@ -138,7 +148,7 @@ namespace FBS.XF.Toolkit.Helpers
 		/// <returns>System.Byte[].</returns>
 		public static byte[] Hash(string password, string username = null, int iterations = HashIterationsCount, int hashByteSize = HashByteSize)
 		{
-			var saltBytes = string.IsNullOrWhiteSpace(username) ? defaultSalt : Encoding.ASCII.GetBytes(username);
+			var saltBytes = string.IsNullOrWhiteSpace(username) ? Salt ?? defaultSalt : Encoding.ASCII.GetBytes(username);
 
 			if (saltBytes.Length < 8)
 			{
@@ -207,7 +217,7 @@ namespace FBS.XF.Toolkit.Helpers
 		#endregion
 
 		#region Properties
-		public byte[] Salt { get; set; }
+		public static byte[] Salt { get; set; }
 		#endregion
 
 		#region Fields

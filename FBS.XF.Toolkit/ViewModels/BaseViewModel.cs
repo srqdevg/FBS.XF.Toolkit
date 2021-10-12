@@ -111,7 +111,6 @@ namespace FBS.XF.Toolkit.ViewModels
 					// Yes add error
 					Errors.Add(new ValidationFailure(propertyName, message));
 					RaiseErrorChanged(propertyName);
-					HasErrors = Errors.Any();
 				}
 				else
 				{
@@ -122,7 +121,6 @@ namespace FBS.XF.Toolkit.ViewModels
 					{
 						Errors.Remove(priorError);
 						RaiseErrorChanged(propertyName);
-						HasErrors = Errors.Any();
 					}
 				}
 			}
@@ -146,7 +144,7 @@ namespace FBS.XF.Toolkit.ViewModels
 		/// Gets a value that indicates whether the entity has validation errors.
 		/// </summary>
 		/// <value><c>true</c> if this instance has errors; otherwise, <c>false</c>.</value>
-		public bool HasErrors { get; set; }
+		public bool HasErrors => Errors.Any();
 		#endregion
 
 		#region IValidateViewModel Properties

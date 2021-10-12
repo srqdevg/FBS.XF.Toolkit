@@ -5,11 +5,23 @@ using Xamarin.Forms;
 namespace FBS.XF.Toolkit.Converters
 {
 	/// <summary>
-	/// Is Not Null Or Empty Converter.
+	/// Boolean To Object Converter.
+	/// Implements the <see cref="Xamarin.Forms.IValueConverter" />
 	/// </summary>
 	/// <seealso cref="Xamarin.Forms.IValueConverter" />
-	public class IsNotNullOrEmptyConverter : IValueConverter
+	public class BoolToObjectConverter : IValueConverter
 	{
+		#region Constructor
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BoolToObjectConverter"/> class.
+		/// </summary>
+		public BoolToObjectConverter()
+		{
+			FalseObject = null;
+			TrueObject = null;
+		}
+		#endregion
+
 		#region Public methods
 		/// <summary>
 		/// Converts a value.
@@ -21,25 +33,17 @@ namespace FBS.XF.Toolkit.Converters
 		/// <returns>A converted value. If the method returns null, the valid null value is used.</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			try
+			if (value == null)
 			{
-				if (value != null)
-				{
-					if (value is string stringValue)
-					{
-						return !string.IsNullOrWhiteSpace(stringValue);
-					}
-
-					return true;
-				}
-
-				return false;
+				return null;
 			}
-			catch
+
+			if (value is bool temp)
 			{
-
-				return false;
+				return temp ? TrueObject : FalseObject;
 			}
+
+			return value;
 		}
 
 		/// <summary>
@@ -52,17 +56,24 @@ namespace FBS.XF.Toolkit.Converters
 		/// <returns>A converted value. If the method returns null, the valid null value is used.</returns>
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			// Do nothing
+			if (value is { } result)
+				return result.Equals(TrueObject);
+
+			if (value == null && TrueObject == null)
+				return true;
+
 			return value;
 		}
 		#endregion
 
 		#region Properties
+		public object FalseObject { get; set; }
+
 		/// <summary>
-		/// Gets or sets a value indicating whether [invert return value].
+		/// Gets or sets the true object.
 		/// </summary>
-		/// <value><c>true</c> if [invert return value]; otherwise, <c>false</c>.</value>
-		public bool InvertReturnValue { get; set; }
+		/// <value>The true object.</value>
+		public object TrueObject { get; set; }
 		#endregion
 	}
 }
