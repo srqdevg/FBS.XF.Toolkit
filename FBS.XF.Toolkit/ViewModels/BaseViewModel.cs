@@ -17,20 +17,13 @@ namespace FBS.XF.Toolkit.ViewModels
 	/// </summary>
 	/// <seealso cref="System.ComponentModel.INotifyDataErrorInfo" />
 	[AddINotifyPropertyChangedInterface]
-	public class BaseViewModel : INotifyDataErrorInfo, IValidateViewModel, INotifyPropertyChanged
+	public class BaseViewModel : INotifyDataErrorInfo, IValidateViewModel
 	{
 		#region INotifyDataErrorInfo Events
 		/// <summary>
 		/// Occurs when the validation errors have changed for a property or for the entire entity.
 		/// </summary>
 		public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-		#endregion
-
-		#region INotifyPropertyChanged Events
-		/// <summary>
-		/// Occurs when the validation errors have changed for a property or for the entire entity.
-		/// </summary>
-		public event PropertyChangedEventHandler PropertyChanged;
 		#endregion
 
 		#region Constructor
@@ -111,6 +104,7 @@ namespace FBS.XF.Toolkit.ViewModels
 					// Yes add error
 					Errors.Add(new ValidationFailure(propertyName, message));
 					RaiseErrorChanged(propertyName);
+					HasErrors = Errors.Any();
 				}
 				else
 				{
@@ -121,6 +115,7 @@ namespace FBS.XF.Toolkit.ViewModels
 					{
 						Errors.Remove(priorError);
 						RaiseErrorChanged(propertyName);
+						HasErrors = Errors.Any();
 					}
 				}
 			}
@@ -144,15 +139,7 @@ namespace FBS.XF.Toolkit.ViewModels
 		/// Gets a value that indicates whether the entity has validation errors.
 		/// </summary>
 		/// <value><c>true</c> if this instance has errors; otherwise, <c>false</c>.</value>
-		public bool HasErrors => Errors.Any();
-		#endregion
-
-		#region IValidateViewModel Properties
-		/// <summary>
-		/// Gets or sets the validate command.
-		/// </summary>
-		/// <value>The validate command.</value>
-		public ICommand ValidateCommand { get; set; }
+		public bool HasErrors { get; set; }
 		#endregion
 
 		#region Properties
@@ -202,6 +189,14 @@ namespace FBS.XF.Toolkit.ViewModels
 		/// </summary>
 		/// <value><c>true</c> if [validate fields]; otherwise, <c>false</c>.</value>
 		public bool ValidateFields { get; set; }
+		#endregion
+
+		#region IValidateViewModel Properties
+		/// <summary>
+		/// Gets or sets the validate command.
+		/// </summary>
+		/// <value>The validate command.</value>
+		public ICommand ValidateCommand { get; set; }
 		#endregion
 	}
 }

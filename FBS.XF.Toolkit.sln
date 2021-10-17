@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FBS.XF.Toolkit.Android", "F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FBS.XF.Toolkit.iOS", "FBS.XF.Toolkit.iOS\FBS.XF.Toolkit.iOS.csproj", "{7571922D-6E2F-432C-8BA6-7C3D6C9B80A5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FBS.XF.Toolkit.WPF", "FBS.XF.Toolkit.WPF\FBS.XF.Toolkit.WPF.csproj", "{C51E7AC1-37BA-46CD-AE13-3B87456BF745}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{7571922D-6E2F-432C-8BA6-7C3D6C9B80A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7571922D-6E2F-432C-8BA6-7C3D6C9B80A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7571922D-6E2F-432C-8BA6-7C3D6C9B80A5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C51E7AC1-37BA-46CD-AE13-3B87456BF745}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C51E7AC1-37BA-46CD-AE13-3B87456BF745}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C51E7AC1-37BA-46CD-AE13-3B87456BF745}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C51E7AC1-37BA-46CD-AE13-3B87456BF745}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

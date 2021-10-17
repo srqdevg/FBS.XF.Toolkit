@@ -45,7 +45,7 @@ namespace System
 		/// <param name="copyTo">The copy to.</param>
 		/// <returns>T.</returns>
 		/// <exception cref="ArgumentNullException">copyFrom</exception>
-		public static T CopyProperties<T>(T copyFrom, T copyTo)
+		public static T CopyProperties<T>(this T copyFrom, T copyTo)
 		{
 			// Check args
 			if (copyFrom == null)
