@@ -8,7 +8,7 @@ namespace FBS.XF.Toolkit.Controls
 	/// <summary>
 	/// TapImage.
 	/// </summary>
-	public class TapImage : SvgImage
+	public class TapImage : SvgImage, IDisposable
 	{
 		#region Events/Delegates
 		public event EventHandler<ItemTappedEventArgs> Tapped;
@@ -39,12 +39,22 @@ namespace FBS.XF.Toolkit.Controls
 			if (!GestureRecognizers.Any())
 			{
 				// Create a tap recognizer
-				var tapRecognizer = new TapGestureRecognizer();
+				tapRecognizer = new TapGestureRecognizer();
 				tapRecognizer.Tapped += Image_Tapped;
 
 				// Add it to the this
 				GestureRecognizers.Add(tapRecognizer);
 			}
+		}
+		#endregion
+
+		#region IDisposable
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			tapRecognizer.Tapped -= Image_Tapped;
 		}
 		#endregion
 
@@ -108,6 +118,10 @@ namespace FBS.XF.Toolkit.Controls
 			get => (bool) GetValue(PlatformiOSProperty);
 			set => SetValue(PlatformiOSProperty, value);
 		}
+		#endregion
+
+		#region Fields
+		private TapGestureRecognizer tapRecognizer;
 		#endregion
 	}
 }

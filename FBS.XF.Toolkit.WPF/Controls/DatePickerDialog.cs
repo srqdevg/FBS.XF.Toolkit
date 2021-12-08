@@ -58,16 +58,14 @@ namespace FBS.XF.Toolkit.WPF.Controls
 		/// <returns>Task&lt;System.Nullable&lt;DateTime&gt;&gt;.</returns>
 		public Task<bool> PickDate(DateTime? startDateTime)
 		{
-			var backgroundColor = (Color) (Application.Current.RequestedTheme == OSAppTheme.Dark
-				? Application.Current.Resources["PopupBackgroundDark"]
-				: Application.Current.Resources["PopupBackgroundLight"]);
-
-			var backgroundBrush = (SolidColorBrush) new BrushConverter().ConvertFrom(backgroundColor.ToHex());
+			var backgroundBrush = (SolidColorBrush) new BrushConverter().ConvertFrom("#FFFFFFFF");
+			var borderBrush = (SolidColorBrush) new BrushConverter().ConvertFrom("#FF666666");
 
 			// Create dialog window
 			var window = new Window
 			{
-				BorderBrush = backgroundBrush,
+				Background = backgroundBrush,
+				BorderBrush = borderBrush,
 				BorderThickness = new Thickness(2, 2, 2, 2),
 				ResizeMode = ResizeMode.NoResize,
 				ShowInTaskbar = false,

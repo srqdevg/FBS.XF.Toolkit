@@ -7,7 +7,7 @@ namespace FBS.XF.Toolkit.Controls
 	/// LinkLabel.
 	/// </summary>
 	/// <seealso cref="Label" />
-	public class LinkLabel : Label
+	public class LinkLabel : Label, IDisposable
 	{
 		#region Events/Delegates
 		/// <summary>
@@ -43,6 +43,16 @@ namespace FBS.XF.Toolkit.Controls
 				CreateControl();
 			}
 		}
+	#endregion
+
+		#region IDisposable
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			tapRecognizer.Tapped -= OnLink_Tapped;
+		}
 		#endregion
 
 		#region Private methods
@@ -52,7 +62,7 @@ namespace FBS.XF.Toolkit.Controls
 		private void CreateControl()
 		{
 			// Create a tap recognizer
-			var tapRecognizer = new TapGestureRecognizer();
+			tapRecognizer = new TapGestureRecognizer();
 			tapRecognizer.Tapped += OnLink_Tapped;
 			
 			// Create content
@@ -181,6 +191,7 @@ namespace FBS.XF.Toolkit.Controls
 		private Span linkSpan;
 		private Span postLinkSpan;
 		private Span preLinkSpan;
+		private TapGestureRecognizer tapRecognizer;
 		#endregion
 	}
 }

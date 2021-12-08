@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using FBS.XF.Toolkit.Images;
 using Xamarin.Forms;
 
@@ -20,6 +21,13 @@ namespace FBS.XF.Toolkit.Controls
 			BindableProperty.Create(nameof(Color), typeof(Color), typeof(SvgImage), Color.Default,
 				propertyChanged: (bd, ov, nv) => ((SvgImage) bd).ColorPropertyChanged(ov, nv));
 
+		/// <summary>
+		/// The is busy property
+		/// </summary>
+		public static readonly BindableProperty IsBusyProperty =
+			BindableProperty.Create(nameof(IsBusy), typeof(bool), typeof(SvgImage), false,
+				propertyChanged: (bd, ov, nv) => ((SvgImage) bd).IsBusyPropertyChanged(ov, nv));    
+		
 		/// <summary>
 		/// The is selected property
 		/// </summary>
@@ -42,13 +50,6 @@ namespace FBS.XF.Toolkit.Controls
 				propertyChanged: (bd, ov, nv) => ((SvgImage) bd).SourcePropertyChanged(ov, nv));
 
 		/// <summary>
-		/// The selected source property
-		/// </summary>
-		public static readonly BindableProperty SelectedSourceWPFProperty =
-			BindableProperty.Create(nameof(SelectedSourceWPF), typeof(string), typeof(SvgImage), null,
-				propertyChanged: (bd, ov, nv) => ((SvgImage) bd).SourcePropertyChanged(ov, nv));
-
-		/// <summary>
 		/// The source property
 		/// </summary>
 		public new static readonly BindableProperty SourceProperty =
@@ -56,14 +57,52 @@ namespace FBS.XF.Toolkit.Controls
 				propertyChanged: (bd, ov, nv) => ((SvgImage) bd).SourcePropertyChanged(ov, nv));
 
 		/// <summary>
-		/// The source property
+		/// The WPF mode property
 		/// </summary>
-		public static readonly BindableProperty SourceWPFProperty =
-			BindableProperty.Create(nameof(SourceWPF), typeof(string), typeof(SvgImage), null,
-				propertyChanged: (bd, ov, nv) => ((SvgImage) bd).SourcePropertyChanged(ov, nv));
+		public static readonly BindableProperty WPFModeProperty =
+			BindableProperty.Create(nameof(WPFMode), typeof(WPFMode), typeof(CustomButton), WPFMode.None);
 		#endregion
 
 		#region Private methods
+		/// <summary>
+		/// Adds the color of the size and.
+		/// </summary>
+		/// <param name="source">The source.</param>
+		/// <param name="color">The color.</param>
+		/// <returns>System.String.</returns>
+		private string AddSizeAndColor(string source, Color color)
+		{
+			source = source.ToLower().Trim();
+
+			if (source.EndsWith(".png") || source.EndsWith(".svg"))
+			{
+				source = source.Substring(0, source.LastIndexOf('.'));
+			}
+
+			if (source.StartsWith("test"))
+			{
+				source = source;
+			}
+
+			if (Device.RuntimePlatform == Device.WPF)
+			{
+				switch (WPFMode)
+				{
+					case WPFMode.Color:
+						source = $"{source}{color.ToHex().ToLower().Substring(3)}";
+						break;
+					case WPFMode.Size:
+						source = $"{source}{Width}";
+						break;
+					case WPFMode.SizeColor:
+						source = $"{source}{Width}{color.ToHex().ToLower().Substring(3)}";
+						break;
+				}
+			}
+
+			return source;
+		}
+
 		/// <summary>
 		/// Sources the property changed.
 		/// </summary>
@@ -89,29 +128,34 @@ namespace FBS.XF.Toolkit.Controls
 
 			if (mustDraw || isDrawn)
 			{
-				var source = Source;
+				var sb = new StringBuilder();
 
 				if (Device.RuntimePlatform == Device.WPF)
 				{
-					if (IsSelected && !string.IsNullOrWhiteSpace(SelectedSourceWPF))
+					sb.Append("resources/");
+				}
+
+				if (IsSelected)
+				{
+					if (string.IsNullOrWhiteSpace(SelectedSource))
 					{
-						source = SelectedSourceWPF;
-					} 
-					else if (!string.IsNullOrWhiteSpace(SourceWPF))
-					{
-						source = SourceWPF;
+						return;
 					}
+
+					sb.Append(AddSizeAndColor(SelectedSource, color));
 				}
-				else if (IsSelected && !string.IsNullOrWhiteSpace(SelectedSource))
+				else 
 				{
-					source = SelectedSource;
+					if (string.IsNullOrWhiteSpace(Source))
+					{
+						return;
+					}
+
+					sb.Append(AddSizeAndColor(Source, color));
 				}
 
-				if (!string.IsNullOrWhiteSpace(source))
-				{
-					base.Source = CachedImageSource.FindOrAddImage(source, actualWidth, actualHeight, color, cachedImages).Image;
-				}
-
+				sb.Append(Device.RuntimePlatform == Device.WPF ? ".png" : ".svg");
+				base.Source = CachedImageSource.FindOrAddImage(sb.ToString(), actualWidth, actualHeight, color, cachedImages).Image;
 				isDrawn = true;
 			}
 		}
@@ -123,7 +167,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// <returns>Color.</returns>
 		private Color DetermineColor(string color)
 		{
-			if (!string.IsNullOrEmpty(color))
+			if (!string.IsNullOrWhiteSpace(color))
 			{
 				if (color.StartsWith("[Color"))
 				{
@@ -142,6 +186,28 @@ namespace FBS.XF.Toolkit.Controls
 			}
 
 			return Color.Default;
+		}
+
+		/// <summary>
+		/// Determines whether [is busy property changed] [the specified old value].
+		/// </summary>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		private void IsBusyPropertyChanged(object oldValue, object newValue)
+		{
+			// Do we have a new value
+			if (newValue != oldValue)
+			{
+				if ((bool) newValue)
+				{
+					rotation ??= new Animation(v => Rotation = v, 0, 360);
+					rotation.Commit(this, "rotate", 16, 1000, Easing.Linear, (v, c) => Rotation = 0, () => true);
+				}
+				else if (rotation != null)
+				{
+					this.AbortAnimation("rotate");
+				}
+			}
 		}
 
 		/// <summary>
@@ -189,7 +255,34 @@ namespace FBS.XF.Toolkit.Controls
 		}
 		#endregion
 
-		#region Override methods
+		//protected override void OnPropertyChanged(
+		//	[CallerMemberName] string propertyName = null)
+		//{
+		//	base.OnPropertyChanged(propertyName);
+
+		//	if (propertyName == "Renderer")
+		//	{
+		//		// CONTROL IS BEING RENDERED!!!
+		//		propertyName = propertyName;
+
+		//		//if (!_animationStarted)
+		//		//{
+		//		//	// start the animation on element rendering
+		//		//	_animationStarted = true;
+
+		//		//	RunAnimations();
+		//		//}
+		//		//else
+		//		//{
+		//		//	// abort the animation on element disposing
+		//		//	this.AbortAnimation(
+		//		//		"loadingIndicatorPulseAnimation");
+		//		//}
+		//	}
+		//}
+
+		#region Override methods//rotation = new Animation(v => LabelRotateIcon.Rotation = v, 0, 360);
+
 		/// <summary>
 		/// This method is called when the size of the element is set during a layout cycle. This method is called directly before the
 		/// <see cref="E:Xamarin.Forms.VisualElement.SizeChanged" /> event is emitted. Implement this method to add class handling for this event.
@@ -224,6 +317,16 @@ namespace FBS.XF.Toolkit.Controls
 		}
 
 		/// <summary>
+		/// Gets or sets a value indicating whether this instance is busy.
+		/// </summary>
+		/// <value><c>true</c> if this instance is busy; otherwise, <c>false</c>.</value>
+		public bool IsBusy
+		{
+			get => (bool) GetValue(IsBusyProperty);
+			set => SetValue(IsBusyProperty, value);
+		}
+
+		/// <summary>
 		/// Gets or sets a value indicating whether this instance is selected.
 		/// </summary>
 		/// <value><c>true</c> if this instance is selected; otherwise, <c>false</c>.</value>
@@ -254,16 +357,6 @@ namespace FBS.XF.Toolkit.Controls
 		}
 
 		/// <summary>
-		/// Gets or sets the selected source WPF.
-		/// </summary>
-		/// <value>The selected source WPF.</value>
-		public string SelectedSourceWPF
-		{
-			get => (string) GetValue(SelectedSourceWPFProperty);
-			set => SetValue(SelectedSourceWPFProperty, value);
-		}
-
-		/// <summary>
 		/// Gets or sets the source of the image. This is a bindable property.
 		/// </summary>
 		/// <value>An <see cref="T:Xamarin.Forms.ImageSource" /> representing the image source. Default is null.</value>
@@ -275,13 +368,13 @@ namespace FBS.XF.Toolkit.Controls
 		}
 
 		/// <summary>
-		/// Gets or sets the source WPF.
+		/// Gets or sets the WPF mode.
 		/// </summary>
-		/// <value>The source WPF.</value>
-		public string SourceWPF
+		/// <value>The WPF mode.</value>
+		public WPFMode WPFMode
 		{
-			get => (string) GetValue(SourceWPFProperty);
-			set => SetValue(SourceWPFProperty, value);
+			get => (WPFMode) GetValue(WPFModeProperty);
+			set => SetValue(WPFModeProperty, value);
 		}
 		#endregion
 
@@ -290,8 +383,9 @@ namespace FBS.XF.Toolkit.Controls
 		private double actualHeight;
 		private Color actualSelectedColor;
 		private double actualWidth;
-		private bool isDrawn;
 		private static readonly List<CachedImageSource> cachedImages = new List<CachedImageSource>();
+		private bool isDrawn;
+		private Animation rotation;
 		#endregion
 
 		#region Nested Types
@@ -314,16 +408,7 @@ namespace FBS.XF.Toolkit.Controls
 				Color = Color;
 				Name = name;
 				Height = height;
-
-				if (Device.RuntimePlatform != Device.WPF)
-				{
-					Image = SvgImageSource.FromSvgResource(name.ToLower(), width, height, color, GetType());
-				}
-				else
-				{
-					Image = name.ToLower();
-				}
-
+				Image = Device.RuntimePlatform != Device.WPF ? SvgImageSource.FromSvgResource(name.ToLower(), width, height, color, GetType()) : name.ToLower();
 				Width = width;
 			}
 			#endregion

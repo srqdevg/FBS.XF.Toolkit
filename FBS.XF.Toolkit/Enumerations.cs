@@ -29,4 +29,11 @@
 		BeforeImage
 	}
 
+	public enum WPFMode
+	{
+		None,
+		Color,
+		Size,
+		SizeColor
+	}
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.ObjectModel;
+using FBS.XF.Toolkit.Collections;
 using Xamarin.Forms;
 
 namespace FBS.XF.Toolkit.Controls
@@ -14,7 +16,8 @@ namespace FBS.XF.Toolkit.Controls
 	///	https://github.com/xamarinhowto/DataTemplateRepeaterControlExample
 	/// https://stackoverflow.com/questions/41233767/xamarin-forms-create-instance-of-a-datatemplate
 	/// </remarks>
-	public class RepeaterView : StackLayout
+	/////////[ContentProperty("Contents")]
+	public class RepeaterView : StackLayout, IDisposable
 	{
 		#region Events/Delegates
 		/// <summary>
@@ -29,28 +32,28 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		public static readonly BindableProperty BackgroundColorSelectedProperty =
 			BindableProperty.Create(nameof(BackgroundColorSelected), typeof(Color), typeof(RepeaterView), Color.Default, 
-				propertyChanged: ControlPropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((RepeaterView) bd).ControlPropertyChanged(ov, nv)); 
 
 		/// <summary>
 		/// The items source property
 		/// </summary>
 		public static readonly BindableProperty ItemsSourceProperty =
 			BindableProperty.Create(nameof(ItemsSource), typeof(object), typeof(RepeaterView),
-				propertyChanged: ControlPropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((RepeaterView) bd).ControlPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The item template property
 		/// </summary>
 		public static readonly BindableProperty ItemTemplateProperty =
 			BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(RepeaterView),
-				propertyChanged: ControlPropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((RepeaterView) bd).ControlPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The repeat count property
 		/// </summary>
 		public static readonly BindableProperty RepeatCountProperty =
 			BindableProperty.Create(nameof(RepeatCount), typeof(int), typeof(RepeaterView),
-				propertyChanged: ControlPropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((RepeaterView) bd).ControlPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The repeate visibility property
@@ -60,17 +63,38 @@ namespace FBS.XF.Toolkit.Controls
 				RepeatVisibilityMode.All);
 
 		/// <summary>
+		/// The selected indexroperty
+		/// </summary>
+		public static readonly BindableProperty SelectedIndexProperty =
+			BindableProperty.Create(nameof(SelectedIndex), typeof(int), typeof(RepeaterView), -1, BindingMode.TwoWay, 
+				propertyChanged: (bd, ov, nv) => ((RepeaterView) bd).SelectedItemPropertyChanged(ov, nv));
+
+		/// <summary>
 		/// The selected item property
 		/// </summary>
 		public static readonly BindableProperty SelectedItemProperty =
 			BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(RepeaterView), defaultBindingMode: BindingMode.TwoWay, 
-				propertyChanged: SelectedItemPropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((RepeaterView) bd).SelectedItemPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The selected text color property
 		/// </summary>
 		public static readonly BindableProperty SelectedTextColorProperty =
 			BindableProperty.Create(nameof(SelectedTextColor), typeof(Color), typeof(RepeaterView), Color.Default);
+
+		/// <summary>
+		/// The separator property
+		/// </summary>
+		public static readonly BindableProperty SeparatorProperty =
+			BindableProperty.Create(nameof(Separator), typeof(string), typeof(RepeaterView),
+				propertyChanged: (bd, ov, nv) => ((RepeaterView) bd).ControlPropertyChanged(ov, nv));
+
+		/// <summary>
+		/// The separator template property
+		/// </summary>
+		public static readonly BindableProperty SeparatorTemplateProperty =
+			BindableProperty.Create(nameof(SeparatorTemplate), typeof(DataTemplate), typeof(RepeaterView),
+				propertyChanged: (bd, ov, nv) => ((RepeaterView) bd).ControlPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The text color property
@@ -86,6 +110,17 @@ namespace FBS.XF.Toolkit.Controls
 		public RepeaterView()
 		{
 			Spacing = 0;
+			Padding = 0;
+		}
+		#endregion
+
+		#region IDisposable
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			tapRecognizer.Tapped -= Item_Tapped;
 		}
 		#endregion
 
@@ -96,15 +131,12 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void ControlPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void ControlPropertyChanged(object oldValue, object newValue)
 		{
 			try
 			{
-				// Get control
-				var repeater = (RepeaterView) bindable;
-
 				// If we don't have a template yet (binding order) then bail 
-				if (repeater.ItemTemplate == null)
+				if (ItemTemplate == null)
 				{
 					return;
 				}
@@ -112,12 +144,22 @@ namespace FBS.XF.Toolkit.Controls
 				// If we have an old data then clear out the controls
 				if (oldValue != null)
 				{
-					repeater.Children.Clear();
+					Children.Clear();
 				}
 
 				// New data (but it might be the template that got updated)
 				if (newValue != null)
 				{
+					// Is this the data template?
+					if (newValue is DataTemplate)
+					{
+						// Yes, so do we have actual data to work with?
+						if (ItemsSource != null)
+						{
+							newValue = ItemsSource;
+						}
+					}
+
 					// Iterate items
 					if (newValue is ICollection itemList)
 					{
@@ -132,7 +174,7 @@ namespace FBS.XF.Toolkit.Controls
 								var item = itemsArray[i];
 
 								// Do we have a template 
-								if (repeater.ItemTemplate == null)
+								if (ItemTemplate == null)
 								{
 									// No, so exit
 									return;
@@ -140,36 +182,46 @@ namespace FBS.XF.Toolkit.Controls
 
 								View itemView;
 
-								// Determine if this is a straight up template or using a DataTemplateSelector
-								if (repeater.ItemTemplate is DataTemplateSelector dataTemplateSelector)
+								// Check for separator and if it is, we create the separator
+								if (IsSeparator(item))
 								{
-									// Figure out template and create controls
-									var template = dataTemplateSelector.SelectTemplate(item, repeater);
-									itemView = (View) template.CreateContent();
+									// Do we have a template?
+									if (SeparatorTemplate == null)
+									{
+										continue;
+									}
+									
+									// Create controls
+									itemView = (View) SeparatorTemplate.CreateContent();
+									itemView.BindingContext = item;
 								}
 								else
 								{
-									// Create controls
-									itemView = (View) repeater.ItemTemplate.CreateContent();
-								}
+									// Determine if this is a straight up template or using a DataTemplateSelector
+									if (ItemTemplate is DataTemplateSelector dataTemplateSelector)
+									{
+										// Figure out template and create controls
+										var template = dataTemplateSelector.SelectTemplate(item, this);
+										itemView = (View) template.CreateContent();
+									}
+									else
+									{
+										// Create controls
+										itemView = (View) ItemTemplate.CreateContent();
+									}
 
-								try
-								{
+									itemView.BindingContext = item;
+
 									// Create tap recognizer
-									var tapRecognizer = new TapGestureRecognizer();
-									tapRecognizer.Tapped += repeater.Item_Tapped;
+									tapRecognizer = new TapGestureRecognizer();
+									tapRecognizer.Tapped += Item_Tapped;
 
 									// Bind it, add tap gesture and add it
 									itemView.GestureRecognizers.Add(tapRecognizer);
+								}
 
-									// Add item 
-									itemView.BindingContext = item;
-									repeater.Children.Add(itemView);
-								}
-								catch (Exception ex)
-								{
-									Console.WriteLine(ex.Message);
-								}
+								// Add item 
+								Children.Add(itemView);
 							}
 						}
 					}
@@ -180,18 +232,18 @@ namespace FBS.XF.Toolkit.Controls
 						{
 							// Create controls
 							// https://stackoverflow.com/questions/41233767/xamarin-forms-create-instance-of-a-datatemplate
-							var itemView = (View) repeater.ItemTemplate.CreateContent();
+							var itemView = (View) ItemTemplate.CreateContent();
 
 							// Create tap recognizer
-							var tapRecognizer = new TapGestureRecognizer();
-							tapRecognizer.Tapped += repeater.Item_Tapped;
+							tapRecognizer = new TapGestureRecognizer();
+							tapRecognizer.Tapped += Item_Tapped;
 
 							// Bind it, add tap gesture and add it
 							itemView.GestureRecognizers.Add(tapRecognizer);
 
 							// Add item 
-							itemView.BindingContext = repeater.ItemsSource;
-							repeater.Children.Add(itemView);
+							itemView.BindingContext = ItemsSource;
+							Children.Add(itemView);
 						}
 					}
 				}
@@ -201,6 +253,24 @@ namespace FBS.XF.Toolkit.Controls
 				Console.WriteLine(ex);
 				throw;
 			}
+		}
+
+		/// <summary>
+		/// Determines whether the specified item is separator.
+		/// </summary>
+		/// <param name="item">The item.</param>
+		/// <returns>bool.</returns>
+		private bool IsSeparator(object item)
+		{
+			// Do we have a separator column specific
+			if (!string.IsNullOrWhiteSpace(Separator))
+			{
+				// Get value
+				var value = item.GetType().GetProperty(Separator)?.GetValue(item, null);
+				return value != null && (bool) value;
+			}
+
+			return false;
 		}
 
 		/// <summary>
@@ -219,7 +289,7 @@ namespace FBS.XF.Toolkit.Controls
 			var itemList = (IList) ItemsSource;
 
 			// Get previous selection
-			var previousSelection = selectedIndex >= 0 ? itemList[selectedIndex] : null;
+			var previousSelection = SelectedIndex >= 0 ? itemList[SelectedIndex] : null;
 
 			// Get current selection
 			var capturedIndex = Children.IndexOf(view);
@@ -228,7 +298,7 @@ namespace FBS.XF.Toolkit.Controls
 			// Show/hide ?
 			if (RepeatVisibility.Equals(RepeatVisibilityMode.SelectedOnly))
 			{
-				if (previousSelection != null)
+				if (previousSelection != null && selectedView != null)
 				{
 					// Hide old
 					selectedView.IsVisible = false;
@@ -240,7 +310,7 @@ namespace FBS.XF.Toolkit.Controls
 
 			// Select it
 			SelectedItem = currentSelection;
-			selectedIndex = capturedIndex;
+			SelectedIndex = capturedIndex;
 			selectedView = view;
 
 			var eventArgs = new RepeaterEventArgs(previousSelection, currentSelection);
@@ -249,17 +319,27 @@ namespace FBS.XF.Toolkit.Controls
 			OnPropertyChanged(SelectedItemProperty.PropertyName);
 		}
 
-		private static void ProcessChildControls(View view, Color color)
+		/// <summary>
+		/// Processes the child controls.
+		/// </summary>
+		/// <param name="view">The view.</param>
+		/// <param name="color">The color.</param>
+		private static void ProcessChildControls(View view, Color color, bool isSelected)
 		{
 			if (view is Label label)
 			{
 				label.TextColor = color;
 			} 
+			else if (view is SvgImage image)
+			{
+				// UGLY, BUT WITH THEM WANTING WPF AND MAC, I CAN'T USE PROPER CONTROLS, SO ONE MORE HACK..
+				image.IsSelected = isSelected;
+			}
 			else if (view is StackLayout stackLayout)
 			{
 				foreach (var child in stackLayout.Children)
 				{
-					ProcessChildControls(child, color);
+					ProcessChildControls(child, color, isSelected);
 				}
 			}
 		}
@@ -270,41 +350,47 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void SelectedItemPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void SelectedItemPropertyChanged(object oldValue, object newValue)
 		{
 			// Get control
-			var repeater = (RepeaterView) bindable;
-
-			foreach (var child in repeater.Children)
+			//if (oldValue != newValue)
 			{
-				if (child.BindingContext.Equals(newValue))
+				var tabindex = 0;
+				var selectedTabIndex = newValue as int? ?? -1;
+
+				foreach (var child in Children)
 				{
-					child.BackgroundColor = repeater.BackgroundColorSelected;
-					repeater.selectedIndex = repeater.Children.IndexOf(child);
-
-					if (repeater.RepeatVisibility.Equals(RepeatVisibilityMode.SelectedOnly))
+					if (child.BindingContext.Equals(newValue) || tabindex.Equals(selectedTabIndex))
 					{
-						repeater.selectedView = repeater.Children[repeater.selectedIndex];
-						repeater.selectedView.IsVisible = true;
+						child.BackgroundColor = BackgroundColorSelected;
+						//SelectedIndex = Children.IndexOf(child);
+
+						if (RepeatVisibility.Equals(RepeatVisibilityMode.SelectedOnly))
+						{
+							selectedView = Children[tabindex];
+							selectedView.IsVisible = true;
+						}
+
+						if (SelectedTextColor != Color.Default)
+						{
+							ProcessChildControls(child, SelectedTextColor, true);
+						}
+					}
+					else
+					{
+						child.BackgroundColor = BackgroundColor;
+
+						if (RepeatVisibility.Equals(RepeatVisibilityMode.SelectedOnly))
+						{
+							var index = Children.IndexOf(child);
+							var view = Children[index];
+							view.IsVisible = false;
+						}
+
+						ProcessChildControls(child, TextColor, false);
 					}
 
-					if (repeater.SelectedTextColor != Color.Default)
-					{
-						ProcessChildControls(child, repeater.SelectedTextColor);
-					}
-				}
-				else
-				{
-					child.BackgroundColor = repeater.BackgroundColor;
-
-					if (repeater.RepeatVisibility.Equals(RepeatVisibilityMode.SelectedOnly))
-					{
-						var index = repeater.Children.IndexOf(child);
-						var view = repeater.Children[index];
-						view.IsVisible = false;
-					}
-
-					ProcessChildControls(child, repeater.TextColor);
+					tabindex++;
 				}
 			}
 		}
@@ -359,7 +445,16 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			get => (RepeatVisibilityMode) GetValue(RepeatVisibilityProperty);
 			set => SetValue(RepeatVisibilityProperty, value);
+		}
 
+		/// <summary>
+		/// Gets or sets the index of the selected.
+		/// </summary>
+		/// <value>The index of the selected.</value>
+		public int SelectedIndex
+		{
+			get => (int) GetValue(SelectedIndexProperty);
+			set => SetValue(SelectedIndexProperty, value);
 		}
 
 		/// <summary>
@@ -383,6 +478,26 @@ namespace FBS.XF.Toolkit.Controls
 		}
 
 		/// <summary>
+		/// Gets or sets the separator.
+		/// </summary>
+		/// <value>The separator.</value>
+		public string Separator
+		{
+			get => (string) GetValue(SeparatorProperty);
+			set => SetValue(SeparatorProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the separator template.
+		/// </summary>
+		/// <value>The separator template.</value>
+		public DataTemplate SeparatorTemplate
+		{
+			get => (DataTemplate) GetValue(SeparatorTemplateProperty);
+			set => SetValue(SeparatorTemplateProperty, value);
+		}
+
+		/// <summary>
 		/// Gets or sets the color of the text.
 		/// </summary>
 		/// <value>The color of the text.</value>
@@ -394,8 +509,8 @@ namespace FBS.XF.Toolkit.Controls
 		#endregion
 
 		#region Fields
-		private int selectedIndex = -1;
 		private View selectedView;
+		private TapGestureRecognizer tapRecognizer;
 		#endregion
 	}
 }

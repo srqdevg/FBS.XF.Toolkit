@@ -13,6 +13,18 @@ namespace FBS.XF.Toolkit.Controls
 		public event EventHandler<ClickedEventArgs> Clicked;
 		#endregion
 
+		#region IDisposable
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			tapGestureRecognizer.Tapped -= TapRecognizer_Tapped;
+			touchGestureRecognizer.TouchDown -= Button_TouchDown;
+			touchGestureRecognizer.TouchUp -= Button_TouchUp;
+		}
+		#endregion
+
 		#region Bindable Properties
 		/// <summary>
 		/// The background color property
@@ -71,25 +83,11 @@ namespace FBS.XF.Toolkit.Controls
 				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).ImageColorPropertyChanged(ov, nv));
 
 		/// <summary>
-		/// The image toggle color property
-		/// </summary>
-		public static readonly BindableProperty ImageToggleColorProperty =
-			BindableProperty.Create(nameof(ImageToggleColor), typeof(Color), typeof(CustomButton), Color.Default,
-				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).IsToggledPropertyChanged(ov, nv));
-
-		/// <summary>
 		/// The image height property
 		/// </summary>
 		public static readonly BindableProperty ImageHeightProperty =
 			BindableProperty.Create(nameof(ImageHeight), typeof(int), typeof(CustomButton), default(int),
 				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).ImageHeightPropertyChanged(ov, nv));
-
-		/// <summary>
-		/// The image WPF property
-		/// </summary>
-		public static readonly BindableProperty ImageWPFProperty =
-			BindableProperty.Create(nameof(Image), typeof(string), typeof(CustomButton), default(string),
-				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).ImageSourceWPFPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The image property
@@ -214,6 +212,13 @@ namespace FBS.XF.Toolkit.Controls
 		public static readonly BindableProperty VerticalTextOptionsProperty =
 			BindableProperty.Create(nameof(VerticalTextOptions), typeof(LayoutOptions), typeof(CustomButton), LayoutOptions.Center,
 				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).VerticalTextOptionsPropertyChanged(ov, nv));
+
+		/// <summary>
+		/// The WPF mode property
+		/// </summary>
+		public static readonly BindableProperty WPFModeProperty =
+			BindableProperty.Create(nameof(WPFMode), typeof(WPFMode), typeof(CustomButton), WPFMode.None,
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).WPFModePropertyChanged(ov, nv));
 		#endregion
 
 		#region Constructors
@@ -510,9 +515,9 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void ImageColorPropertyChanged(object oldValue, object newValue)
 		{
-			if (oldValue != newValue && buttonImage is SvgImage svgImage)
+			if (oldValue != newValue)
 			{
-				svgImage.Color = (Color) newValue;
+				buttonImage.Color = (Color) newValue;
 			}
 		}
 
@@ -530,52 +535,17 @@ namespace FBS.XF.Toolkit.Controls
 		}
 
 		/// <summary>
-		/// Images the source WPF property changed.
-		/// </summary>
-		/// <param name="oldValue">The old value.</param>
-		/// <param name="newValue">The new value.</param>
-		private void ImageSourceWPFPropertyChanged(object oldValue, object newValue)
-		{
-			if (newValue != oldValue)
-			{
-				if (Device.RuntimePlatform == Device.WPF)
-				{
-					// We know the orginal image would be an SVG image, so let's change to PNG
-					var image = new Image
-					{
-						HeightRequest = ImageHeight,
-						HorizontalOptions = LayoutOptions.Center,
-						Source = newValue.ToString(),
-						IsVisible = true,
-						VerticalOptions = LayoutOptions.Center,
-						WidthRequest = ImageHeight
-					};
-
-					// Swap
-					buttonImage = image;
-					SetLayout(this, TextLocation);
-				}
-			}
-		}
-
-		/// <summary>
 		/// Images the source SVG property changed.
 		/// </summary>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
 		private void ImageSourcePropertyChanged(object oldValue, object newValue)
 		{
-			if (newValue != oldValue && Device.RuntimePlatform != Device.WPF)
+			if (newValue != oldValue)
 			{
-				if (buttonImage is SvgImage svgImage)
-				{
-					svgImage.Color = ImageColor;
-					svgImage.HeightRequest = ImageHeight;
-					svgImage.Source = newValue.ToString();
-					svgImage.IsVisible = true;
-					svgImage.WidthRequest = ImageHeight;
-					SetLayout(this, TextLocation);
-				}
+				buttonImage.IsVisible = true;
+				buttonImage.Source = newValue.ToString();
+				SetLayout(this, TextLocation);
 			}
 		}
 
@@ -605,15 +575,15 @@ namespace FBS.XF.Toolkit.Controls
 				{
 					base.BackgroundColor = ToggleBackgroundColor;
 					base.BorderColor = ToggleBorderColor;
-					buttonLabel.TextColor = ToggleTextColor;
 
-					if (buttonImage is SvgImage svgImage)
+					if (buttonImage != null)
 					{
-						svgImage.Color = ImageToggleColor;
+						buttonImage.Color = ToggleImageColor;
 					}
 
 					if (buttonLabel != null)
 					{
+						buttonLabel.TextColor = ToggleTextColor;
 						buttonLabel.Text = string.IsNullOrWhiteSpace(ToggleText) ? Text : ToggleText;
 					}
 				}
@@ -621,15 +591,15 @@ namespace FBS.XF.Toolkit.Controls
 				{
 					base.BackgroundColor = BackgroundColor;
 					base.BorderColor = BorderColor;
-					buttonLabel.TextColor = TextColor;
 
-					if (buttonImage is SvgImage svgImage)
+					if (buttonImage != null)
 					{
-						svgImage.Color = ImageColor;
+						buttonImage.Color = ImageColor;
 					}
 
 					if (buttonLabel != null)
 					{
+						buttonLabel.TextColor = TextColor;
 						buttonLabel.Text = Text;
 					}
 				}
@@ -797,6 +767,19 @@ namespace FBS.XF.Toolkit.Controls
 				buttonLabel.VerticalOptions = (LayoutOptions) newValue;
 			}
 		}
+
+		/// <summary>
+		/// WPFs the mode property changed.
+		/// </summary>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		private void WPFModePropertyChanged(object oldValue, object newValue)
+		{
+			if (oldValue != newValue)
+			{
+				buttonImage.WPFMode = (WPFMode) newValue;
+			}
+		}
 		#endregion
 
 		#region Properties
@@ -901,26 +884,6 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			get => (string) GetValue(ImageProperty);
 			set => SetValue(ImageProperty, value);
-		}
-
-		/// <summary>
-		/// Gets or sets the color of the image toggle.
-		/// </summary>
-		/// <value>The color of the image toggle.</value>
-		public Color ImageToggleColor
-		{
-			get => (Color) GetValue(ImageToggleColorProperty);
-			set => SetValue(ImageToggleColorProperty, value);
-		}
-
-		/// <summary>
-		/// Gets or sets the image WPF.
-		/// </summary>
-		/// <value>The image WPF.</value>
-		public string ImageWPF
-		{
-			get => (string) GetValue(ImageWPFProperty);
-			set => SetValue(ImageWPFProperty, value);
 		}
 
 		/// <summary>
@@ -1093,11 +1056,20 @@ namespace FBS.XF.Toolkit.Controls
 			get => (LayoutOptions) GetValue(VerticalTextOptionsProperty);
 			set => SetValue(VerticalTextOptionsProperty, value);
 		}
+
+		/// <summary>
+		/// Gets or sets the WPF mode.
+		/// </summary>
+		/// <value>The WPF mode.</value>
+		public WPFMode WPFMode
+		{
+			get => (WPFMode) GetValue(WPFModeProperty);
+			set => SetValue(WPFModeProperty, value);
+		}
 		#endregion
 
 		#region Fields
-		//private SvgImage buttonSvgImage;
-		private Image buttonImage;
+		private SvgImage buttonImage;
 		private Label buttonLabel;
 		private StackLayout buttonStackLayout;
 		private DateTime? lastTapTime; 

@@ -219,7 +219,7 @@ namespace FBS.XF.Toolkit.Images
 			}
 			else if (propertyName == SourceProperty.PropertyName)
 			{
-				if (string.IsNullOrEmpty(Source) || StreamFunc != null)
+				if (string.IsNullOrWhiteSpace(Source) || StreamFunc != null)
 				{
 					return;
 				}

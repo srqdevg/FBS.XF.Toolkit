@@ -13,7 +13,7 @@ namespace FBS.XF.Toolkit.Interfaces
 		/// Picks the file.
 		/// </summary>
 		/// <returns>Task&lt;System.String&gt;.</returns>
-		Task<FileResult> PickFile();
+		Task<FileResult> PickFile(string filetypes);
 		#endregion
 	}
 }

@@ -1,5 +1,4 @@
-﻿using FBS.XF.Toolkit.Helpers;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Color = Xamarin.Forms.Color;
 
 namespace FBS.XF.Toolkit.Controls
@@ -40,18 +39,17 @@ namespace FBS.XF.Toolkit.Controls
 				propertyChanged: (bd, ov, nv)=> ((ImageRepeater) bd).ControlPropertyChanged(ov, nv));
 
 		/// <summary>
-		/// The image WPF property
-		/// </summary>
-		public static readonly BindableProperty ImageWPFProperty =
-			BindableProperty.Create(nameof(Image), typeof(string), typeof(ImageRepeater), default(string),
-				propertyChanged: (bd, ov, nv) => ((ImageRepeater) bd).ControlPropertyChanged(ov, nv));
-
-		/// <summary>
 		/// The repeat property
 		/// </summary>
 		public static readonly BindableProperty RepeatProperty =
 			BindableProperty.Create(nameof(Repeat), typeof(int), typeof(ImageRepeater), -1,
 				propertyChanged: (bd, ov, nv)=> ((ImageRepeater) bd).ControlPropertyChanged(ov, nv));
+
+		/// <summary>
+		/// The WPF mode property
+		/// </summary>
+		public static readonly BindableProperty WPFModeProperty =
+			BindableProperty.Create(nameof(WPFMode), typeof(WPFMode), typeof(CustomButton), WPFMode.None);
 		#endregion
 
 		#region Private methods
@@ -69,20 +67,10 @@ namespace FBS.XF.Toolkit.Controls
 				return;
 			}
 
-			// We need to have all the value
-			if (ImageColor == Color.Default || ImageHeight == -1 || ImageWidth == 1 || Repeat == -1 )
+			// We need to have all the values
+			if (ImageColor == Color.Default || ImageHeight == -1 || ImageWidth == 1 || Repeat == -1 || string.IsNullOrWhiteSpace(Image))
 			{
-				// If we are WPF we need those images
-				if (Device.RuntimePlatform == Device.WPF && string.IsNullOrWhiteSpace(ImageWPF))
-				{
-					return;
-				}
-
-				// Otherwise we need the svg images
-				if (Device.RuntimePlatform != Device.WPF && string.IsNullOrWhiteSpace(Image))
-				{
-					return;
-				}
+				return;
 			}
 
 			// Remove any prior variant
@@ -109,16 +97,8 @@ namespace FBS.XF.Toolkit.Controls
 			for (var r = 0; r < Repeat; r++)
 			{
 				// Create image and add
-				if (Device.RuntimePlatform == Device.WPF)
-				{
-					var image = new Image { HeightRequest = ImageHeight, Source = ImageWPF, WidthRequest = ImageWidth };
-					imageStack.Children.Add(image);
-				}
-				else
-				{
-					var image = new SvgImage { Color = ImageColor, HeightRequest = ImageHeight, Source = Image, WidthRequest = ImageWidth };
-					imageStack.Children.Add(image);
-				}
+				var image = new SvgImage { Color = ImageColor, HeightRequest = ImageHeight, Source = Image, WidthRequest = ImageWidth, WPFMode = WPFMode };
+				imageStack.Children.Add(image);
 			}
 		}
 		#endregion
@@ -165,16 +145,6 @@ namespace FBS.XF.Toolkit.Controls
 		}
 
 		/// <summary>
-		/// Gets or sets the image WPF.
-		/// </summary>
-		/// <value>The image WPF.</value>
-		public string ImageWPF
-		{
-			get => (string) GetValue(ImageWPFProperty);
-			set => SetValue(ImageWPFProperty, value);
-		}   
-		
-		/// <summary>
 		/// Gets or sets the repeat.
 		/// </summary>
 		/// <value>The repeat.</value>
@@ -182,6 +152,16 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			get => (int) GetValue(RepeatProperty);
 			set => SetValue(RepeatProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the WPF mode.
+		/// </summary>
+		/// <value>The WPF mode.</value>
+		public WPFMode WPFMode
+		{
+			get => (WPFMode) GetValue(WPFModeProperty);
+			set => SetValue(WPFModeProperty, value);
 		}
 		#endregion
 

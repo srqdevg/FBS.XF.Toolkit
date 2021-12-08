@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FBS.XF.Toolkit.Helpers
 {
@@ -64,6 +65,17 @@ namespace FBS.XF.Toolkit.Helpers
 			return false;
 		}
 
+		/// <summary>
+		/// Determines whether [is generic list] [the specified object].
+		/// </summary>
+		/// <param name="obj">The object.</param>
+		/// <returns><c>true</c> if [is generic list] [the specified object]; otherwise, <c>false</c>.</returns>
+		public static bool IsGenericList(object obj)
+		{
+			var objectType = obj.GetType();
+			return objectType.IsGenericType && (objectType.GetGenericTypeDefinition() == typeof(List<>));
+		}   
+		
 		/// <summary>
 		/// Determines whether [is instance of generic type] [the specified object].
 		/// </summary>

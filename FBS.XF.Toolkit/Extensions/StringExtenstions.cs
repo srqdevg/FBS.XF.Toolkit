@@ -228,7 +228,7 @@ namespace System
 		public static bool IsDateTime(this string source)
 		{
 			// Empty string?
-			if (string.IsNullOrEmpty(source))
+			if (string.IsNullOrWhiteSpace(source))
 			{
 				return false;
 			}
@@ -604,7 +604,7 @@ namespace System
 		public static string ToPhoneNumber(this string phoneNumber)
 		{
 			// Must contain stirng containing only numbers
-			if (string.IsNullOrEmpty(phoneNumber) || !phoneNumber.IsNumeric())
+			if (string.IsNullOrWhiteSpace(phoneNumber) || !phoneNumber.IsNumeric())
 			{
 				return phoneNumber;
 			}
@@ -631,13 +631,13 @@ namespace System
 		/// <returns>System.String.</returns>
 		public static string ToSentenceCase(this string newValue, string oldValue)
 		{
-			if (string.IsNullOrEmpty(oldValue) && newValue.Split(' ').Length < 3)
+			if (string.IsNullOrWhiteSpace(oldValue) && newValue.Split(' ').Length < 3)
 			{
 				return newValue.ToTitleCase();
 			}
 
 			newValue = $"{newValue.Left(1).ToUpper()}{newValue.Substring(1).ToLower()}";
-			return string.IsNullOrEmpty(oldValue) ? newValue : $"{oldValue}. {newValue}";
+			return string.IsNullOrWhiteSpace(oldValue) ? newValue : $"{oldValue}. {newValue}";
 		}
 
 		/// <summary>

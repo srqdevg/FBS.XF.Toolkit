@@ -38,10 +38,10 @@ namespace FBS.XF.Toolkit.Converters
 				{
 					if (!(value is bool b))
 					{
-						return true; // Alternatively, return BindableProperty.UnsetValue to use the binding FallbackValue
+						continue;
 					}
 
-					if (!b)
+					if (b)
 					{
 						return true;
 					}

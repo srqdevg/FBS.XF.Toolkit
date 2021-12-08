@@ -13,7 +13,7 @@ namespace FBS.XF.Toolkit.Controls
 	/// Valid Picker.
 	/// </summary>
 	/// <seealso cref="Xamarin.Forms.Grid" />
-	public class ValidPicker : Grid
+	public class ValidPicker : Grid, IDisposable
 	{
 		#region Bindable properties
 		/// <summary>
@@ -140,6 +140,17 @@ namespace FBS.XF.Toolkit.Controls
 			{
 				CreateControl();
 			}
+		}
+		#endregion
+
+		#region IDisposable
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			picker.Unfocused -= Picker_Unfocused;
+			picker.SelectedIndexChanged -= Picker_SelectedIndexChanged;
 		}
 		#endregion
 

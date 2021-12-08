@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using FBS.XF.Toolkit.Event;
 using FBS.XF.Toolkit.Extensions;
 using FluentValidation.Results;
 using PropertyChanged;
@@ -12,7 +13,7 @@ namespace FBS.XF.Toolkit.Controls
 	/// <summary>
 	/// Valid Date Picker.
 	/// </summary>
-	public class ValidDatePicker : Grid
+	public class ValidDatePicker : Grid, IDisposable
 	{
 		#region Bindable properties
 		/// <summary>
@@ -113,6 +114,17 @@ namespace FBS.XF.Toolkit.Controls
 		}
 		#endregion
 
+		#region IDisposable
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			tapGestureRecognizer.Tapped -= TapGestureRecognizer_Tapped;
+			calendarPopupPage.DataChanged -= CalendarPopupPage_DataChanged;
+		}
+		#endregion
+
 		#region Private methods
 		/// <summary>
 		/// Backgrounds the color changed.
@@ -131,17 +143,17 @@ namespace FBS.XF.Toolkit.Controls
 		/// Calendars the popup page data changed.
 		/// </summary>
 		/// <param name="obj">The <see cref="EventArgs"/> instance containing the event data.</param>
-		private void CalendarPopupPage_DataChanged(EventArgs obj)
+		private void CalendarPopupPage_DataChanged(CalendarEventArgs e)
 		{
 			if (!string.IsNullOrWhiteSpace(Format))
 			{
-				SelectedDate = calendarPopupPage.SelectedDate;
-				dateLabel.Text = calendarPopupPage.SelectedDate?.Date.ToString(Format);
+				SelectedDate = e.NewDate;
+				dateLabel.Text = e.NewDate?.Date.ToString(Format);
 			}
 			else
 			{
-				SelectedDate = calendarPopupPage.SelectedDate;
-				dateLabel.Text = calendarPopupPage.SelectedDate?.Date.ToShortDateString();
+				SelectedDate = e.NewDate;
+				dateLabel.Text = e.NewDate?.Date.ToShortDateString();
 			}
 		}
 
@@ -182,7 +194,7 @@ namespace FBS.XF.Toolkit.Controls
 			ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
 
 			// Create tap handler and add to grid
-			var tapGestureRecognizer = new TapGestureRecognizer();
+			tapGestureRecognizer = new TapGestureRecognizer();
 			tapGestureRecognizer.Tapped += TapGestureRecognizer_Tapped;
 			GestureRecognizers.Add(tapGestureRecognizer);
 
@@ -326,7 +338,6 @@ namespace FBS.XF.Toolkit.Controls
 			if (newValue != oldValue && newValue != null)
 			{
 				var dateTime = (DateTime) newValue;
-				calendarPopupPage.SelectedDate = dateTime;
 				dateLabel.Text = !string.IsNullOrWhiteSpace(Format)
 					? dateTime.ToString(Format)
 					: dateTime.ToShortDateString();
@@ -644,11 +655,12 @@ namespace FBS.XF.Toolkit.Controls
 
 		#region Fields
 		private Binding binding;
+		private CalendarPopup calendarPopupPage;
 		private Label dateLabel;
 		private Label errorLabel;
 		private Label label;
 		private Label optionalLabel;
-		private CalendarPopup calendarPopupPage;
+		private TapGestureRecognizer tapGestureRecognizer;
 		#endregion
 	}
 }

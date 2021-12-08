@@ -7,7 +7,7 @@ namespace FBS.XF.Toolkit.Controls
 	/// TapLabel.
 	/// </summary>
 	/// <seealso cref="Xamarin.Forms.Label" />
-	public class TapLabel : Label
+	public class TapLabel : Label, IDisposable
 	{
 		#region Events/Delegates
 		/// <summary>
@@ -26,6 +26,16 @@ namespace FBS.XF.Toolkit.Controls
 			{
 				CreateControl();
 			}
+		}
+		#endregion
+
+		#region IDisposable
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			tapRecognizer.Tapped -= Label_Tapped;
 		}
 		#endregion
 

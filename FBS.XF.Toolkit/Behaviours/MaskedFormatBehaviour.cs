@@ -80,7 +80,7 @@ namespace FBS.XF.Toolkit.Behaviours
 		/// </summary>
 		private void SetPositions()
 		{
-			if (string.IsNullOrEmpty(Mask))
+			if (string.IsNullOrWhiteSpace(Mask))
 			{
 				positions = null;
 				return;

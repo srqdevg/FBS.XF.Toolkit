@@ -48,7 +48,7 @@
 							<local:SvgImage Grid.Column="0" 
 							                Color="{AppThemeBinding Light=Black, Dark=White}" 
 							                HeightRequest="18" HorizontalOptions="Center"
-							                Source="angle-double-left.svg" 
+							                Source="angle-double-left" 
 											VerticalOptions="Center"
 							                WidthRequest="18">
 								<local:SvgImage.GestureRecognizers>
@@ -60,7 +60,7 @@
 							<local:SvgImage Grid.Column="1" 
 							                Color="{AppThemeBinding Light=Black, Dark=White}" 
 							                HeightRequest="18" HorizontalOptions="Center"
-							                Source="angle-left.svg" 
+							                Source="angle-left" 
 							                VerticalOptions="Center"
 							                WidthRequest="12" >
 								<local:SvgImage.GestureRecognizers>
@@ -87,7 +87,7 @@
 							<local:SvgImage Grid.Column="3" 
 							                Color="{AppThemeBinding Light=Black, Dark=White}" 
 							                HeightRequest="18" HorizontalOptions="Center"
-							                Source="angle-right.svg" 
+							                Source="angle-right" 
 							                VerticalOptions="Center"
 							                WidthRequest="12" >
 								<local:SvgImage.GestureRecognizers>
@@ -99,7 +99,7 @@
 							<local:SvgImage Grid.Column="4" 
 							                Color="{AppThemeBinding Light=Black, Dark=White}" 
 							                HeightRequest="18" HorizontalOptions="Center"
-							                Source="angle-double-right.svg" 
+							                Source="angle-double-right" 
 							                VerticalOptions="Center"
 							                WidthRequest="18">
 								<local:SvgImage.GestureRecognizers>

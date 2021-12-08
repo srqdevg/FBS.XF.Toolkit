@@ -1,6 +1,5 @@
-﻿using System;
-using System.Globalization;
-using Xamarin.Forms;
+﻿using System.Drawing;
+using Color = Xamarin.Forms.Color;
 
 namespace FBS.XF.Toolkit.Helpers
 {
@@ -10,6 +9,44 @@ namespace FBS.XF.Toolkit.Helpers
 	public static class ColorHelper
 	{
 		#region Public methods
+		/// <summary>
+		/// Colors the replace.
+		/// </summary>
+		/// <param name="inputImage">The input image.</param>
+		/// <param name="tolerance">The tolerance.</param>
+		/// <param name="oldColor">The old color.</param>
+		/// <param name="NewColor">Creates new color.</param>
+		/// <returns>System.Drawing.Image.</returns>
+		public static System.Drawing.Image ColorReplace(this System.Drawing.Image inputImage, int tolerance, Color oldColor, Color NewColor)
+		{
+			var outputImage = new Bitmap(inputImage.Width, inputImage.Height);
+			var graphics = Graphics.FromImage(outputImage);
+			graphics.DrawImage(inputImage, 0, 0);
+
+			for (var y = 0; y < outputImage.Height; y++)
+			{
+				for (var x = 0; x < outputImage.Width; x++)
+				{
+					var pixelColor = outputImage.GetPixel(x, y);
+
+					if (pixelColor.R > oldColor.R - tolerance &&
+					    pixelColor.R < oldColor.R + tolerance && 
+					    pixelColor.G > oldColor.G - tolerance &&
+					    pixelColor.G < oldColor.G + tolerance &&
+					    pixelColor.B > oldColor.B - tolerance && 
+					    pixelColor.B < oldColor.B + tolerance)
+					{
+						var redColorDiff = CalculateColorDifference(pixelColor.R, oldColor.R, NewColor.R);
+						var greenColorDiff = CalculateColorDifference(pixelColor.G, oldColor.G, NewColor.G);
+						var blueColorDiff = CalculateColorDifference(pixelColor.B, oldColor.B, NewColor.B);
+
+						outputImage.SetPixel(x, y, System.Drawing.Color.FromArgb(redColorDiff, greenColorDiff, blueColorDiff));
+					}
+				}
+			}
+			return outputImage;
+		}
+
 		/// <summary>
 		/// Colors to name.
 		/// </summary>
@@ -308,16 +345,36 @@ namespace FBS.XF.Toolkit.Helpers
 		}
 		#endregion
 
-		private static System.Drawing.Color GetSystemDrawingColorFromHexString(string hexString)
+		#region Private methods
+		/// <summary>
+		/// Calculates the color difference.
+		/// </summary>
+		/// <param name="pixelColor">Color of the pixel.</param>
+		/// <param name="oldColor">The old color.</param>
+		/// <param name="newColor">The new color.</param>
+		/// <returns>int.</returns>
+		public static int CalculateColorDifference(double pixelColor, double oldColor, double newColor)
 		{
-			if (!System.Text.RegularExpressions.Regex.IsMatch(hexString, @"[#]([0-9]|[a-f]|[A-F]){6}\b"))
-				throw new ArgumentException();
+			var colorDiff = oldColor - pixelColor;
 
-			int a = int.Parse(hexString.Substring(1, 2), NumberStyles.HexNumber);
-			int red = int.Parse(hexString.Substring(3, 2), NumberStyles.HexNumber);
-			int green = int.Parse(hexString.Substring(5, 2), NumberStyles.HexNumber);
-			int blue = int.Parse(hexString.Substring(7, 2), NumberStyles.HexNumber);
-			return Color.FromRgba(red, green, blue, a);
+			if (pixelColor > oldColor)
+			{
+				colorDiff = newColor + colorDiff;
+			}
+			else
+			{
+				colorDiff = newColor - colorDiff;
+			}
+
+			if (colorDiff > 255)
+			{
+				colorDiff = 255;
+			}
+
+			if (colorDiff < 0) colorDiff = 0;
+
+			return (int) colorDiff;
 		}
+		#endregion	
 	}
 }

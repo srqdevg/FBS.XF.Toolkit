@@ -9,12 +9,35 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IdText"/> class.
 		/// </summary>
+		public IdText()
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="IdText"/> class.
+		/// </summary>
+		/// <param name="id">The identifier.</param>
+		/// <param name="text">The text.</param>
+		/// <param name="isSelected">if set to <c>true</c> [is selected].</param>
+		public IdText(int id, string text, bool isSelected = true)
+		{
+			Id = id.ToString();
+			Text = text;
+			IsSelected = isSelected;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="IdText" /> class.
+		/// </summary>
 		/// <param name="id">The identifier.</param>
 		/// <param name="text">The name.</param>
-		public  IdText(string id, string text)
+		/// <param name="isSelected">if set to <c>true</c> [is selected].</param>
+		/// <param name="isVisible">if set to <c>true</c> [is visible].</param>
+		public IdText(string id, string text, bool isSelected = true)
 		{
 			Id = id;
 			Text = text;
+			IsSelected = isSelected;
 		}
 		#endregion
 
@@ -30,6 +53,12 @@
 		/// </summary>
 		/// <value>The text.</value>
 		public string Text { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this instance is selected.
+		/// </summary>
+		/// <value><c>true</c> if this instance is selected; otherwise, <c>false</c>.</value>
+		public bool IsSelected { get; set; }
 		#endregion
 	}
 }

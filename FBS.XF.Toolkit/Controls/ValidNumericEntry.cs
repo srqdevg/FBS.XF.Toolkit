@@ -1,4 +1,7 @@
-﻿using PropertyChanged;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using PropertyChanged;
 using Xamarin.Forms;
 
 namespace FBS.XF.Toolkit.Controls
@@ -7,20 +10,26 @@ namespace FBS.XF.Toolkit.Controls
 	/// Valid Numeric Entry.
 	/// </summary>
 	[AddINotifyPropertyChangedInterface]
-	public class ValidNumericEntry : ValidEntry
+	public class ValidNumericEntry : ValidEntry, IDisposable
 	{
 		#region Bindable properties
 		/// <summary>
-		/// The is valid property
+		/// The in error property
 		/// </summary>
-		public static readonly BindableProperty IsValidProperty =
-			BindableProperty.Create(nameof(IsValid), typeof(bool), typeof(CustomButton), default(bool), BindingMode.TwoWay);
+		public static readonly BindableProperty InErrorProperty =
+			BindableProperty.Create(nameof(InError), typeof(bool), typeof(CustomButton), default(bool), BindingMode.TwoWay);
 
 		/// <summary>
 		/// The maximum value property
 		/// </summary>
 		public static readonly BindableProperty MaxValueProperty =
 			BindableProperty.Create(nameof(MaxValue), typeof(int), typeof(CustomButton), default(int));
+
+		/// <summary>
+		/// The valid values property
+		/// </summary>
+		public static readonly BindableProperty ValidValuesProperty =
+			BindableProperty.Create(nameof(ValidValues), typeof(List<int>), typeof(CustomButton));
 		#endregion
 
 		#region Constructors
@@ -30,9 +39,17 @@ namespace FBS.XF.Toolkit.Controls
 		public ValidNumericEntry() : base(Keyboard.Numeric)
 		{
 			// Add Max Value validation
-			// Add NLOG see IPad or other logging!!!
-
 			TextChanged += ValidNumericEntry_TextChanged;
+		}
+		#endregion
+
+		#region IDisposable
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public new void Dispose()
+		{
+			TextChanged -= ValidNumericEntry_TextChanged;
 		}
 		#endregion
 
@@ -45,14 +62,20 @@ namespace FBS.XF.Toolkit.Controls
 		private void ValidNumericEntry_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			// Do we have a max value and do we check it
-			if (MaxValue > 0 & !string.IsNullOrWhiteSpace(e.NewTextValue) )
+			if (!string.IsNullOrWhiteSpace(e.NewTextValue) )
 			{
 				// Parse text
 				if (int.TryParse(e.NewTextValue, out var value))
 				{
-					if (value > MaxValue)
+					if (MaxValue > 0)
 					{
-						IsValid = true;
+						InError = value > MaxValue;
+						return;
+					}
+
+					if (ValidValues != null && ValidValues.Any())
+					{
+						InError = !ValidValues.Contains(value);
 						return;
 					}
 				}
@@ -63,7 +86,7 @@ namespace FBS.XF.Toolkit.Controls
 				}
 			}
 
-			IsValid = false;
+			InError = false;
 		}
 		#endregion
 
@@ -72,10 +95,10 @@ namespace FBS.XF.Toolkit.Controls
 		/// Returns true if ... is valid.
 		/// </summary>
 		/// <value><c>true</c> if this instance is valid; otherwise, <c>false</c>.</value>
-		public bool IsValid
+		public bool InError
 		{
-			get => (bool) GetValue(IsValidProperty);
-			set => SetValue(IsValidProperty, value);
+			get => (bool) GetValue(InErrorProperty);
+			set => SetValue(InErrorProperty, value);
 		}
 
 		/// <summary>
@@ -86,6 +109,16 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			get => (int) GetValue(MaxValueProperty);
 			set => SetValue(MaxValueProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the valid values.
+		/// </summary>
+		/// <value>The valid values.</value>
+		public List<int> ValidValues
+		{
+			get => (List<int>) GetValue(ValidValuesProperty);
+			set => SetValue(ValidValuesProperty, value);
 		}
 		#endregion
 	}

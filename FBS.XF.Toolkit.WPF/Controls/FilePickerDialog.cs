@@ -21,10 +21,13 @@ namespace FBS.XF.Toolkit.WPF.Controls
 		/// </summary>
 		/// <returns>Task&lt;System.String&gt;.</returns>
 		/// <exception cref="System.NotImplementedException"></exception>
-		public Task<FileResult> PickFile()
+		public Task<FileResult> PickFile(string fileTypes)
 		{
 			var taskCompletionSource = new TaskCompletionSource<FileResult>();
-			var openFileDialog = new OpenFileDialog();
+			var openFileDialog = new OpenFileDialog
+			{
+				Filter = fileTypes
+			};
 			var result = openFileDialog.ShowDialog();
 
 			if (result.HasValue && result == true)

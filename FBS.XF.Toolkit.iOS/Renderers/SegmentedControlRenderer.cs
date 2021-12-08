@@ -218,7 +218,7 @@ namespace FBS.XF.Toolkit.iOS.Renderers
         {
             var uiTextAttribute = _nativeControl.GetTitleTextAttributes(UIControlState.Normal);
 
-            var font = string.IsNullOrEmpty(Element.FontFamily) 
+            var font = string.IsNullOrWhiteSpace(Element.FontFamily) 
                 ? UIFont.SystemFontOfSize((nfloat)Element.FontSize) 
                 : UIFont.FromName(Element.FontFamily, (nfloat)Element.FontSize);
 

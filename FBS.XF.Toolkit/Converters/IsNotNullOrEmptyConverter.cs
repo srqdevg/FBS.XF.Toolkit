@@ -30,14 +30,28 @@ namespace FBS.XF.Toolkit.Converters
 						return !string.IsNullOrWhiteSpace(stringValue);
 					}
 
-					return true;
+					if (value is DateTime)
+					{
+						var dateTimeValue = (DateTime?) value;
+						return dateTimeValue.HasValue;
+					}
+
+					if (value is int)
+					{
+						var intValue = (int?) value;
+						return intValue.HasValue;
+					}
+
+					if (value != null)
+					{
+						return true;
+					}
 				}
 
 				return false;
 			}
 			catch
 			{
-
 				return false;
 			}
 		}

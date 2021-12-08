@@ -6,14 +6,16 @@ using FBS.XF.Toolkit.Images;
 using FBS.XF.Toolkit.Interfaces;
 using FluentValidation.Results;
 using Xamarin.Essentials;
-using Xamarin.Forms;
+using Xamarin.Forms; /// <summary>
+/// The Controls namespace.
+/// </summary>
 
 namespace FBS.XF.Toolkit.Controls
 {
 	/// <summary>
 	/// Valid Entry.
 	/// </summary>
-	public class ValidEntry : Grid
+	public class ValidEntry : Grid, IDisposable
 	{
 		#region Events/Delegates
 		/// <summary>
@@ -33,28 +35,42 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		public static readonly BindableProperty AutoCapitalizationProperty =
 			BindableProperty.Create(nameof(AutoCapitalization), typeof(bool), typeof(ValidEntry), true,
-				BindingMode.TwoWay, propertyChanged: AutoCapitalizationPropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).AutoCapitalizationPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The font family property
 		/// </summary>
 		public static readonly BindableProperty FontFamilyProperty =
 			BindableProperty.Create(nameof(FontSize), typeof(string), typeof(ValidEntry), default(string),
-				propertyChanged: FontFamilyPropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).FontFamilyPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The font size property
 		/// </summary>
 		public static readonly BindableProperty FontSizeProperty =
 			BindableProperty.Create(nameof(FontSize), typeof(double), typeof(ValidEntry), default(double),
-				propertyChanged: FontSizePropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).FontSizePropertyChanged(ov, nv));
+
+		/// <summary>
+		/// The height request property
+		/// </summary>
+		public new static readonly BindableProperty HeightRequestProperty =
+			BindableProperty.Create(nameof(HeightRequest), typeof(double), typeof(ValidEntry), default(double),
+				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).HeightRequestPropertyChanged(ov, nv));
+
+		/// <summary>
+		/// The horizontal text alignment property
+		/// </summary>
+		public static readonly BindableProperty HorizontalTextAlignmentProperty =
+			BindableProperty.Create(nameof(HorizontalTextAlignment), typeof(TextAlignment), typeof(ValidEntry), TextAlignment.Start,
+				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).HorizontalTextAlignmentPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The is editable property
 		/// </summary>
 		public static readonly BindableProperty IsEditableProperty =
 			BindableProperty.Create(nameof(IsEditable), typeof(bool), typeof(ValidEntry), default(bool),
-				BindingMode.TwoWay, propertyChanged: IsEditablePropertyChanged);
+				BindingMode.TwoWay, propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).IsEditablePropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The is focused property
@@ -65,79 +81,86 @@ namespace FBS.XF.Toolkit.Controls
 		/// <summary>
 		/// The return key type property
 		/// </summary>
-		public static readonly BindableProperty ReturnTypeProperty = 
+		public static readonly BindableProperty ReturnTypeProperty =
 			BindableProperty.Create(nameof(ReturnType), typeof(ReturnType), typeof(ValidEntry), ReturnType.Default,
-				propertyChanged: ReturnTypePropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).ReturnTypePropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The label property
 		/// </summary>
 		public static readonly BindableProperty LabelProperty =
 			BindableProperty.Create(nameof(Label), typeof(string), typeof(ValidEntry), default(string),
-				propertyChanged: LabelPropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).LabelPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The label font attributes property
 		/// </summary>
 		public static readonly BindableProperty LabelFontAttributesProperty =
 			BindableProperty.Create(nameof(FontAttributes), typeof(FontAttributes), typeof(ValidEntry), default(FontAttributes),
-				propertyChanged: LabelFontAttributesPropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).LabelFontAttributesPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The length property
 		/// </summary>
 		public static readonly BindableProperty MaxLengthProperty =
-			BindableProperty.Create(nameof(MaxLength), typeof(int), typeof(ValidEntry), default(int), 
-				propertyChanged: MaxLengthPropertyChanged);
+			BindableProperty.Create(nameof(MaxLength), typeof(int), typeof(ValidEntry), default(int),
+				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).MaxLengthPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The text property
 		/// </summary>
 		public static readonly BindableProperty PlaceholderProperty =
 			BindableProperty.Create(nameof(Placeholder), typeof(string), typeof(ValidEntry), default(string),
-				propertyChanged: PlaceholderPropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).PlaceholderPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The show error message visible property
 		/// </summary>
 		public static readonly BindableProperty ShowErrorMessageProperty =
 			BindableProperty.Create(nameof(ShowErrorMessage), typeof(bool), typeof(ValidEntry), default(bool),
-				BindingMode.TwoWay, propertyChanged: ShowErrorMessageVisiblePropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).ShowErrorMessageVisiblePropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The show help icon property
 		/// </summary>
 		public static readonly BindableProperty ShowHelpIconProperty =
 			BindableProperty.Create(nameof(ShowHelpIcon), typeof(bool), typeof(ValidEntry), default(bool),
-				BindingMode.TwoWay, propertyChanged: ShowHelpIconPropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).ShowHelpIconPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The show optional text property
 		/// </summary>
 		public static readonly BindableProperty ShowOptionalTextProperty =
 			BindableProperty.Create(nameof(ShowOptionalText), typeof(bool), typeof(ValidEntry), default(bool),
-				BindingMode.TwoWay, propertyChanged: ShowOptionalTextPropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).ShowOptionalTextPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The text property
 		/// </summary>
-		public static readonly BindableProperty TextProperty = 
-			BindableProperty.Create(nameof(Text), typeof(string), typeof(ValidEntry), defaultBindingMode: BindingMode.TwoWay, 
-				propertyChanged: TextPropertyChanged);
+		public static readonly BindableProperty TextProperty =
+			BindableProperty.Create(nameof(Text), typeof(string), typeof(ValidEntry), defaultBindingMode: BindingMode.TwoWay,
+				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).TextPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The text color property
 		/// </summary>
 		public static readonly BindableProperty TextColorProperty =
-			BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(ValidEntry), default(Color),
-				BindingMode.TwoWay, propertyChanged: TextColorChanged);
+			BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(ValidEntry), default(Color), BindingMode.TwoWay,
+				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).TextColorChanged(ov, nv));
 
 		/// <summary>
 		/// The validate field property
 		/// </summary>
 		public static readonly BindableProperty ValidateFieldProperty =
 			BindableProperty.Create(nameof(ValidateField), typeof(bool), typeof(ValidEntry), default(bool),
-				BindingMode.OneWay, propertyChanged: ValidateFieldPropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).ValidateFieldPropertyChanged(ov, nv));
+
+		/// <summary>
+		/// The vertical text alignment property
+		/// </summary>
+		public static readonly BindableProperty VerticalTextAlignmentProperty =
+			BindableProperty.Create(nameof(VerticalTextAlignment), typeof(TextAlignment), typeof(ValidEntry), TextAlignment.Center,
+				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).VerticalTextAlignmentPropertyChanged(ov, nv));
 		#endregion
 
 		#region Constructors
@@ -147,10 +170,7 @@ namespace FBS.XF.Toolkit.Controls
 		public ValidEntry()
 		{
 			// Add entry
-			if (textEntry == null)
-			{
-				CreateControl(Keyboard.Default, false);
-			}
+			CreateControl(Keyboard.Default, false);
 		}
 
 		/// <summary>
@@ -161,9 +181,27 @@ namespace FBS.XF.Toolkit.Controls
 		public ValidEntry(Keyboard keyboard, bool isPassword = false)
 		{
 			// Add entry
-			if (textEntry == null)
+			CreateControl(keyboard, isPassword);
+		}
+		#endregion
+
+		#region IDisposable
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			textEntry.TextChanged -= TextEntry_TextChanged;
+			textEntry.Unfocused -= TextEntry_Unfocused;
+
+			if (showHideTap != null)
 			{
-				CreateControl(keyboard, isPassword);
+				showHideTap.Tapped -= Show_Tapped;
+			}
+
+			if (helpImageTap != null)
+			{
+				helpImageTap.Tapped -= HelpImage_Tapped;
 			}
 		}
 		#endregion
@@ -178,16 +216,6 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			// Invoke action
 			ShowHelpTapped?.Invoke(this, null);
-		}
-
-		/// <summary>
-		/// Handles the TextChanged event of the TextEntry control.
-		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="TextChangedEventArgs"/> instance containing the event data.</param>
-		private void TextEntry_TextChanged(object sender, TextChangedEventArgs e)
-		{
-			TextChanged?.Invoke(this, e);
 		}
 
 		/// <summary>
@@ -216,20 +244,71 @@ namespace FBS.XF.Toolkit.Controls
 			// Restore cursor position
 			textEntry.CursorPosition = cursorPosition;
 		}
+
+		/// <summary>
+		/// Handles the TextChanged event of the TextEntry control.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="TextChangedEventArgs"/> instance containing the event data.</param>
+		private void TextEntry_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			TextChanged?.Invoke(this, e);
+		}
+
+		/// <summary>
+		/// Handles the Unfocused event of the TextEntry control.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="FocusEventArgs"/> instance containing the event data.</param>
+		private void TextEntry_Unfocused(object sender, FocusEventArgs e)
+		{
+			if (ValidateField)
+			{
+				// Validate the field
+				var propertyName = ValidatePropertyName(this);
+				viewModel?.ValidateCommand?.Execute(propertyName);
+			}
+		}
+		#endregion
+
+		#region Protected methods
+		/// <summary>
+		/// Sets the grid row column.
+		/// </summary>
+		/// <param name="control">The control.</param>
+		/// <param name="row">The row.</param>
+		/// <param name="column">The column.</param>
+		/// <param name="rowSpan">The row span.</param>
+		/// <param name="columnSpan">The column span.</param>
+		protected void SetGridRowColumn(BindableObject control, int row, int column, int rowSpan = 0, int columnSpan = 0)
+		{
+			SetRow(control, row);
+
+			if (rowSpan > 0)
+			{
+				SetRowSpan(control, rowSpan);
+			}
+
+			SetColumn(control, column);
+
+			if (columnSpan > 0)
+			{
+				SetColumnSpan(control, columnSpan);
+			}
+		}
 		#endregion
 
 		#region Private methods
 		/// <summary>
 		/// Automatics the capitalization property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void AutoCapitalizationPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void AutoCapitalizationPropertyChanged(object oldValue, object newValue)
 		{
-			if (newValue != null)
+			if (oldValue != newValue && newValue != null)
 			{
-				((ValidEntry) bindable).textEntry.Keyboard = Keyboard.Create(KeyboardFlags.None);
+				textEntry.Keyboard = Keyboard.Create(KeyboardFlags.None);
 			}
 		}
 
@@ -240,12 +319,17 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="isPassword">if set to <c>true</c> [is password].</param>
 		private void CreateControl(Keyboard keyboard, bool isPassword)
 		{
+			if (RowDefinitions.Any())
+			{
+				return;
+			}
+
 			// Add rows and columns to grid
-			RowDefinitions.Add(new RowDefinition {Height = GridLength.Auto});
-			ColumnDefinitions.Add(new ColumnDefinition {Width = GridLength.Auto});
-			ColumnDefinitions.Add(new ColumnDefinition {Width = GridLength.Auto});
-			ColumnDefinitions.Add(new ColumnDefinition {Width = GridLength.Star});
-			ColumnDefinitions.Add(new ColumnDefinition {Width = GridLength.Auto});
+			RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+			ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+			ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+			ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+			ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
 			// Add entry field
 			textEntry = new Entry
@@ -253,10 +337,12 @@ namespace FBS.XF.Toolkit.Controls
 				BindingContext = this,
 				FontSize = FontSize > 0 ? FontSize : Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
 				FontFamily = FontFamily,
+				HorizontalTextAlignment = HorizontalTextAlignment,
 				IsPassword = isPassword,
 				Keyboard = keyboard,
 				Margin = new Thickness(0, -5, 0, 0),
-				ReturnType = ReturnType
+				ReturnType = ReturnType,
+				VerticalTextAlignment = VerticalTextAlignment,
 			};
 
 			textEntry.TextChanged += TextEntry_TextChanged;
@@ -283,7 +369,7 @@ namespace FBS.XF.Toolkit.Controls
 						WidthRequest = 16,
 					};
 
-					var showHideTap = new TapGestureRecognizer {NumberOfTapsRequired = 1};
+					showHideTap = new TapGestureRecognizer { NumberOfTapsRequired = 1 };
 					showHideTap.Tapped += Show_Tapped;
 					showImage.GestureRecognizers.Add(showHideTap);
 
@@ -291,13 +377,13 @@ namespace FBS.XF.Toolkit.Controls
 					SetGridRowColumn(showImage, 0, 3);
 					Children.Add(showImage);
 				}
-				else 
+				else
 				{
 					// Add show label
 					showLabel = new Label
 					{
 						FontFamily = FontFamily,
-						FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+						FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)),
 						HorizontalOptions = LayoutOptions.End,
 						Margin = new Thickness(0, 0, 5, 0),
 						Text = "Show",
@@ -305,7 +391,7 @@ namespace FBS.XF.Toolkit.Controls
 						VerticalOptions = LayoutOptions.Center
 					};
 
-					var showHideTap = new TapGestureRecognizer {NumberOfTapsRequired = 1};
+					showHideTap = new TapGestureRecognizer { NumberOfTapsRequired = 1 };
 					showHideTap.Tapped += Show_Tapped;
 					showLabel.GestureRecognizers.Add(showHideTap);
 
@@ -334,7 +420,7 @@ namespace FBS.XF.Toolkit.Controls
 						VerticalOptions = LayoutOptions.Center
 					};
 
-					var helpImageTap = new TapGestureRecognizer {NumberOfTapsRequired = 1};
+					helpImageTap = new TapGestureRecognizer { NumberOfTapsRequired = 1 };
 					helpImageTap.Tapped += HelpImage_Tapped;
 					helpImage.GestureRecognizers.Add(helpImageTap);
 
@@ -373,18 +459,17 @@ namespace FBS.XF.Toolkit.Controls
 		/// <summary>
 		/// Font family property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void FontFamilyPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void FontFamilyPropertyChanged(object oldValue, object newValue)
 		{
-			if (newValue != null && ((ValidEntry) bindable).textEntry != null)
+			if (oldValue != newValue && newValue != null && textEntry != null)
 			{
-				((ValidEntry) bindable).textEntry.FontFamily = (string) newValue;
+				textEntry.FontFamily = (string) newValue;
 
-				if (((ValidEntry) bindable).optionalLabel != null)
+				if (optionalLabel != null)
 				{
-					((ValidEntry) bindable).optionalLabel.FontFamily = (string) newValue;
+					optionalLabel.FontFamily = (string) newValue;
 				}
 			}
 		}
@@ -392,85 +477,109 @@ namespace FBS.XF.Toolkit.Controls
 		/// <summary>
 		/// Font size property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void FontSizePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void FontSizePropertyChanged(object oldValue, object newValue)
 		{
-			if (newValue != null && ((ValidEntry) bindable).textEntry != null)
+			if (oldValue != newValue && newValue != null && textEntry != null)
 			{
-				((ValidEntry) bindable).textEntry.FontSize = (double) newValue;
+				textEntry.FontSize = (double) newValue;
 
-				if (((ValidEntry) bindable).optionalLabel != null)
+				if (optionalLabel != null)
 				{
-					((ValidEntry) bindable).optionalLabel.FontSize = (double) newValue;
+					optionalLabel.FontSize = (double) newValue;
 				}
+			}
+		}
+
+		/// <summary>
+		/// Heights the request property changed.
+		/// </summary>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		private void HeightRequestPropertyChanged(object oldValue, object newValue)
+		{
+			if (oldValue != newValue && newValue != null)
+			{
+				textEntry.HeightRequest = (double) newValue;
+
+				if (optionalLabel != null)
+				{
+					optionalLabel.HeightRequest = (double) newValue;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Horizontals the text alignment property changed.
+		/// </summary>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		private void HorizontalTextAlignmentPropertyChanged(object oldValue, object newValue)
+		{
+			if (oldValue != newValue && newValue != null)
+			{
+				textEntry.HorizontalTextAlignment = (TextAlignment) newValue;
 			}
 		}
 
 		/// <summary>
 		/// Determines whether [is read only property changed] [the specified bindable].
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void IsEditablePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void IsEditablePropertyChanged(object oldValue, object newValue)
 		{
-			if ((bool) newValue)
+			if (oldValue != newValue && newValue != null)
 			{
-				var grid = (ValidEntry) bindable;
-
 				// Make text field readonly
-				grid.textEntry.IsReadOnly = true;
+				textEntry.IsReadOnly = true;
 			}
 		}
 
 		/// <summary>
 		/// Labels the property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void LabelPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void LabelPropertyChanged(object oldValue, object newValue)
 		{
-			if (newValue != null || oldValue != null)
+			if (oldValue != newValue && newValue != null)
 			{
-				var control = (ValidEntry) bindable;
-
 				// Add the label
-				if (control.textLabel == null)
+				if (textLabel == null)
 				{
 					// Add extra row
-					control.RowDefinitions.Add(new RowDefinition {Height = GridLength.Auto});
+					RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
 					// Adjust other controls
-					foreach (var childControl in control.Children)
+					foreach (var childControl in Children)
 					{
 						SetRow(childControl, GetRow(childControl) + 1);
 					}
 
 					// Now create text label
-					control.textLabel = new Label
+					textLabel = new Label
 					{
-						FontAttributes = control.FontAttributes,
-						FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+						FontAttributes = FontAttributes,
+						FontSize = FontSize > 0 ? FontSize : Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
 						Margin = new Thickness(3, 0, 0, 0),
 						Text = (string) newValue
 					};
 
-					control.SetGridRowColumn(control.textLabel, 0, 0, 0, 1);
-					control.Children.Add(control.textLabel);
+					SetGridRowColumn(textLabel, 0, 0, 0, 1);
+					Children.Add(textLabel);
 
 					// Do we need helptext
-					if (control.ShowHelpIcon)
+					if (ShowHelpIcon)
 					{
-						control.CreateHelpIconControl();
+						CreateHelpIconControl();
 					}
 
 					// Do we need optional?
-					if (control.ShowOptionalText)
+					if (ShowOptionalText)
 					{
-						control.CreateOptionalControl();
+						CreateOptionalControl();
 					}
 				}
 			}
@@ -479,18 +588,15 @@ namespace FBS.XF.Toolkit.Controls
 		/// <summary>
 		/// Labels the font attributes property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void LabelFontAttributesPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void LabelFontAttributesPropertyChanged(object oldValue, object newValue)
 		{
-			if (newValue != null || oldValue != null)
+			if (oldValue != newValue && newValue != null)
 			{
-				var control = (ValidEntry) bindable;
-
-				if (control.textLabel != null)
+				if (textLabel != null)
 				{
-					control.textLabel.FontAttributes = control.FontAttributes;
+					textLabel.FontAttributes = FontAttributes;
 				}
 			}
 		}
@@ -498,160 +604,118 @@ namespace FBS.XF.Toolkit.Controls
 		/// <summary>
 		/// Maximum length property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void MaxLengthPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void MaxLengthPropertyChanged(object oldValue, object newValue)
 		{
-			// Adjust max length behavior
-			((ValidEntry) bindable).textEntry.MaxLength = (int) newValue;
+			if (oldValue != newValue && newValue != null)
+			{
+				// Adjust max length behavior
+				textEntry.MaxLength = (int) newValue;
+			}
 		}
 
 		/// <summary>
 		/// Placeholder property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void PlaceholderPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void PlaceholderPropertyChanged(object oldValue, object newValue)
 		{
-			((ValidEntry) bindable).textEntry.Placeholder = newValue.ToString();
+			if (oldValue != newValue && newValue != null)
+			{
+				textEntry.Placeholder = newValue.ToString();
+			}
 		}
 
 		/// <summary>
 		/// Returns the type property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void ReturnTypePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void ReturnTypePropertyChanged(object oldValue, object newValue)
 		{
-			if (newValue != null)
+			if (oldValue != newValue && newValue != null)
 			{
-				((ValidEntry)bindable).textEntry.ReturnType = (ReturnType) newValue;
-			}
-		}
-
-		/// <summary>
-		/// Sets the grid row column.
-		/// </summary>
-		/// <param name="control">The control.</param>
-		/// <param name="row">The row.</param>
-		/// <param name="column">The column.</param>
-		/// <param name="rowSpan">The row span.</param>
-		/// <param name="columnSpan">The column span.</param>
-		protected void SetGridRowColumn(BindableObject control, int row, int column, int rowSpan = 0, int columnSpan = 0)
-		{
-			SetRow(control, row);
-
-			if (rowSpan > 0)
-			{
-				SetRowSpan(control, rowSpan);
-			}
-
-			SetColumn(control, column);
-
-			if (columnSpan > 0)
-			{
-				SetColumnSpan(control, columnSpan);
+				textEntry.ReturnType = (ReturnType) newValue;
 			}
 		}
 
 		/// <summary>
 		/// ShowErrorMessage property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void ShowErrorMessageVisiblePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void ShowErrorMessageVisiblePropertyChanged(object oldValue, object newValue)
 		{
-			((ValidEntry) bindable).errorLabel.IsVisible = (bool) newValue;
+			if (oldValue != newValue && newValue != null)
+			{
+				errorLabel.IsVisible = (bool) newValue;
+			}
 		}
 
 		/// <summary>
 		/// Helps the text property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void ShowHelpIconPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void ShowHelpIconPropertyChanged(object oldValue, object newValue)
 		{
-			if ((bool) newValue)
+			if (oldValue != newValue && newValue != null && (bool) newValue)
 			{
-				((ValidEntry) bindable).CreateHelpIconControl();
+				CreateHelpIconControl();
 			}
 		}
 
 		/// <summary>
 		/// Shows the optional text property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void ShowOptionalTextPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void ShowOptionalTextPropertyChanged(object oldValue, object newValue)
 		{
-			if ((bool) newValue)
+			if (oldValue != newValue && newValue != null && (bool) newValue)
 			{
-				((ValidEntry) bindable).CreateOptionalControl();
+				CreateOptionalControl();
 			}
 		}
 
 		/// <summary>
-		/// Texts the color changed.
+		/// Text color changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void TextColorChanged(BindableObject bindable, object oldValue, object newValue)
+		private void TextColorChanged(object oldValue, object newValue)
 		{
-			var validEntry = ((ValidEntry) bindable);
-
-			if (validEntry.textLabel != null)
+			if (oldValue != newValue && newValue != null)
 			{
-				validEntry.textLabel.TextColor = (Color) newValue;
-			}
+				if (textLabel != null)
+				{
+					textLabel.TextColor = (Color) newValue;
+				}
 
-			if (validEntry.textEntry != null)
-			{
-				validEntry.textEntry.PlaceholderColor = (Color) newValue;
-				validEntry.textEntry.TextColor = (Color) newValue;
+				if (textEntry != null)
+				{
+					textEntry.PlaceholderColor = (Color) newValue;
+					textEntry.TextColor = (Color) newValue;
+				}
 			}
 		}
 
 		/// <summary>
-		/// Handles the Unfocused event of the TextEntry control.
+		/// Text property changed.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="FocusEventArgs"/> instance containing the event data.</param>
-		private void TextEntry_Unfocused(object sender, FocusEventArgs e)
-		{
-			if (ValidateField)
-			{
-				// Validate the field
-
-				var propertyName = ValidatePropertyName(this);
-				viewModel?.ValidateCommand?.Execute(propertyName);
-			}
-		}
-
-		/// <summary>
-		/// Texts the property changing.
-		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void TextPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void TextPropertyChanged(object oldValue, object newValue)
 		{
-			if (newValue != null || oldValue != null)
+			if (oldValue != newValue && newValue != null)
 			{
-				// Get the control
-				var control = (ValidEntry) bindable;
-
-				if (control.ValidateField)
+				if (ValidateField)
 				{
 					// Validate the field
-					var propertyName = ValidatePropertyName(control);
-					control.viewModel?.ValidateCommand?.Execute(propertyName);
+					var propertyName = ValidatePropertyName(this);
+					viewModel?.ValidateCommand?.Execute(propertyName);
 				}
 			}
 		}
@@ -694,7 +758,7 @@ namespace FBS.XF.Toolkit.Controls
 
 					if (row >= RowDefinitions.Count)
 					{
-						RowDefinitions.Add(new RowDefinition {Height = GridLength.Auto});
+						RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 					}
 
 					SetGridRowColumn(errorLabel, row, 0, 0, 3);
@@ -717,31 +781,30 @@ namespace FBS.XF.Toolkit.Controls
 		/// <summary>
 		/// Validates the field property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldvalue">The oldvalue.</param>
 		/// <param name="newvalue">The newvalue.</param>
-		private static void ValidateFieldPropertyChanged(BindableObject bindable, object oldvalue, object newvalue)
+		private void ValidateFieldPropertyChanged(object oldValue, object newValue)
 		{
-			var control = (ValidEntry) bindable;
-
 			// If equal, do nothing
-			if (oldvalue == newvalue)
+			if (oldValue != newValue && newValue != null)
 			{
 				return;
 			}
 
 			// Save viewmodel if it is valid
-			if (control.BindingContext is IValidateViewModel model)
+			if (BindingContext is IValidateViewModel model)
 			{
-				control.viewModel = model;
+				viewModel = model;
 			}
 
-			if (control.BindingContext is INotifyDataErrorInfo errorModel)
+			if (BindingContext is INotifyDataErrorInfo errorModel)
 			{
-				errorModel.ErrorsChanged -= control.ValidateField_ErrorsChanged;
+				errorModel.ErrorsChanged -= ValidateField_ErrorsChanged;
 
-				if (bool.TryParse(newvalue.ToString(), out var validatesOnDataErrors) && validatesOnDataErrors)
-					errorModel.ErrorsChanged += control.ValidateField_ErrorsChanged;
+				if (bool.TryParse(newValue.ToString(), out var validatesOnDataErrors) && validatesOnDataErrors)
+				{
+					errorModel.ErrorsChanged += ValidateField_ErrorsChanged;
+				}
 			}
 		}
 
@@ -752,7 +815,7 @@ namespace FBS.XF.Toolkit.Controls
 		private static string ValidatePropertyName(ValidEntry validEntry)
 		{
 			// Get binding
-			validEntry.binding = validEntry.binding ?? validEntry.GetBinding(TextProperty);
+			validEntry.binding ??= validEntry.GetBinding(TextProperty);
 
 			if (string.IsNullOrWhiteSpace(validEntry.binding.Path))
 				throw new ArgumentNullException($"{nameof(validEntry.binding.Path)} cannot be null");
@@ -765,6 +828,19 @@ namespace FBS.XF.Toolkit.Controls
 
 			return validEntry.binding.Path;
 		}
+
+		/// <summary>
+		/// Verticals the text alignment property changed.
+		/// </summary>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		private void VerticalTextAlignmentPropertyChanged(object oldValue, object newValue)
+		{
+			if (oldValue != newValue && newValue != null)
+			{
+				textEntry.VerticalTextAlignment = (TextAlignment) newValue;
+			}
+		}
 		#endregion
 
 		#region Override methods
@@ -776,10 +852,8 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			base.OnBindingContextChanged();
 
-			ValidateFieldPropertyChanged(this, null, ValidateField);
+			ValidateFieldPropertyChanged(null, ValidateField);
 		}
-
-		
 		#endregion
 
 		#region Properties
@@ -787,9 +861,11 @@ namespace FBS.XF.Toolkit.Controls
 		/// Gets or sets a value indicating whether [automatic capitalization].
 		/// </summary>
 		/// <value><c>true</c> if [automatic capitalization]; otherwise, <c>false</c>.</value>
-		public bool AutoCapitalization {
+		public bool AutoCapitalization
+		{
 			get => (bool) GetValue(AutoCapitalizationProperty);
-			set => SetValue(AutoCapitalizationProperty, value); }
+			set => SetValue(AutoCapitalizationProperty, value);
+		}
 
 		/// <summary>
 		/// Gets or sets the font family.
@@ -812,6 +888,16 @@ namespace FBS.XF.Toolkit.Controls
 			set => SetValue(FontSizeProperty, value);
 		}
 
+		/// <summary>
+		/// Gets or sets the horizontal text alignment.
+		/// </summary>
+		/// <value>The horizontal text alignment.</value>
+		public TextAlignment HorizontalTextAlignment
+		{
+			get => (TextAlignment) GetValue(HorizontalTextAlignmentProperty);
+			set => SetValue(HorizontalTextAlignmentProperty, value);
+		}
+	
 		/// <summary>
 		/// Gets or sets a value indicating whether this instance is editable.
 		/// </summary>
@@ -878,7 +964,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// <value>The return key type.</value>
 		public ReturnType ReturnType
 		{
-			get => (ReturnType)GetValue(ReturnTypeProperty);
+			get => (ReturnType) GetValue(ReturnTypeProperty);
 			set => SetValue(ReturnTypeProperty, value);
 		}
 
@@ -942,14 +1028,25 @@ namespace FBS.XF.Toolkit.Controls
 			get => (bool) GetValue(ValidateFieldProperty);
 			set => SetValue(ValidateFieldProperty, value);
 		}
+
+		/// <summary>
+		/// Gets or sets the vertical text alignment.
+		/// </summary>
+		/// <value>The vertical text alignment.</value>
+		public TextAlignment VerticalTextAlignment
+		{
+			get => (TextAlignment) GetValue(VerticalTextAlignmentProperty);
+			set => SetValue(VerticalTextAlignmentProperty, value);
+		}
 		#endregion
 
 		#region Fields
-		//private static Assembly assembly = Assembly.GetExecutingAssembly();
 		private Binding binding;
 		private Image helpImage;
+		private TapGestureRecognizer helpImageTap;
 		private Label errorLabel;
 		private Label optionalLabel;
+		private TapGestureRecognizer showHideTap;
 		private Label showLabel;
 		private Image showImage;
 		private Entry textEntry;

@@ -1,4 +1,5 @@
 ﻿using System;
+using FBS.XF.Toolkit.Event;
 using PropertyChanged;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
@@ -16,7 +17,7 @@ namespace FBS.XF.Toolkit.Controls
 	public partial class CalendarPopup 
 	{
 		#region Events/Delegates
-		public event Action<EventArgs> DataChanged;
+		public event Action<CalendarEventArgs> DataChanged;
 		#endregion
 
 		#region Constructors
@@ -54,7 +55,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
 		private async void OKButton_Clicked(object sender, EventArgs e)
 		{
-			DataChanged?.Invoke(EventArgs.Empty);
+			DataChanged?.Invoke(new CalendarEventArgs { NewDate = SelectedDate });
 			await PopupNavigation.Instance.PopAsync();
 		}
 		#endregion

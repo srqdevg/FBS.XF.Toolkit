@@ -96,7 +96,7 @@ namespace FBS.XF.Toolkit.ViewModels
 		protected void AddErrorIfTrue(string passedPropertyName, string propertyName, string message, bool isTrue)
 		{
 			// Either we are validating all or a specific property
-			if (string.IsNullOrEmpty(passedPropertyName) || passedPropertyName.Equals(propertyName))
+			if (string.IsNullOrWhiteSpace(passedPropertyName) || passedPropertyName.Equals(propertyName))
 			{
 				// Failed?
 				if (isTrue)
