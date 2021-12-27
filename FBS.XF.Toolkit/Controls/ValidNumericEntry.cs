@@ -14,6 +14,12 @@ namespace FBS.XF.Toolkit.Controls
 	{
 		#region Bindable properties
 		/// <summary>
+		/// The allow decimals property
+		/// </summary>
+		public static readonly BindableProperty AllowDecimalsProperty =
+			BindableProperty.Create(nameof(AllowDecimals), typeof(bool), typeof(CustomButton), default(bool), BindingMode.TwoWay);
+
+		/// <summary>
 		/// The in error property
 		/// </summary>
 		public static readonly BindableProperty InErrorProperty =
@@ -64,26 +70,40 @@ namespace FBS.XF.Toolkit.Controls
 			// Do we have a max value and do we check it
 			if (!string.IsNullOrWhiteSpace(e.NewTextValue) )
 			{
-				// Parse text
-				if (int.TryParse(e.NewTextValue, out var value))
+				if (AllowDecimals)
+				{
+					// Parse decimal text
+					if (decimal.TryParse(e.NewTextValue, out var decimalValue))
+					{
+						if (MaxValue > 0)
+						{
+							InError = decimalValue > MaxValue;
+						}
+
+						return;
+					}
+				}
+				
+				// Parse integer text
+				if (int.TryParse(e.NewTextValue, out var intValue))
 				{
 					if (MaxValue > 0)
 					{
-						InError = value > MaxValue;
+						InError = intValue > MaxValue;
 						return;
 					}
 
 					if (ValidValues != null && ValidValues.Any())
 					{
-						InError = !ValidValues.Contains(value);
+						InError = !ValidValues.Contains(intValue);
 						return;
 					}
+
+					return;
 				}
-				else
-				{
-					// Reset value
-					Text = e.OldTextValue;
-				}
+				
+				// Reset value
+				Text = e.OldTextValue;
 			}
 
 			InError = false;
@@ -91,6 +111,16 @@ namespace FBS.XF.Toolkit.Controls
 		#endregion
 
 		#region Properties
+		/// <summary>
+		/// Gets or sets the allow decimals.
+		/// </summary>
+		/// <value>The allow decimals.</value>
+		public bool AllowDecimals
+		{
+			get => (bool)GetValue(AllowDecimalsProperty);
+			set => SetValue(AllowDecimalsProperty, value);
+		}
+
 		/// <summary>
 		/// Returns true if ... is valid.
 		/// </summary>

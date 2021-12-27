@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using FBS.XF.Toolkit.Models;
 using PropertyChanged;
 
 namespace FBS.XF.Toolkit.ViewModels
@@ -9,49 +10,62 @@ namespace FBS.XF.Toolkit.ViewModels
 	[AddINotifyPropertyChangedInterface]
 	public class PagingViewModel
 	{
-		#region Private methods
+		#region Constructor
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PagingViewModel"/> class.
+		/// </summary>
+		public PagingViewModel()
+		{
+			Pages = new List<IdText>();
+		}
+		#endregion
+
+		#region Public methods
 		/// <summary>
 		/// Gets the page list.
 		/// </summary>
 		/// <returns>List&lt;System.Int32&gt;.</returns>
-		private List<string> GetPageList()
+		public void GeneratePageList()
 		{
-			////// Calculate mid point
-			////var midPoint = ShowPages / 2;
-			////var startPage = 1;
-			////var totalPages = TotalItems / ItemsPerPage;
+			// Calculate mid point
+			var midPoint = ShowPages / 2;
+			var startPage = 1;
+			var totalPages = TotalItems / ItemsPerPage;
+		
+			// Make sure current page is within range
+			if (totalPages < CurrentPage)
+			{
+				CurrentPage = totalPages;
+			}
 
-			////if (CurrentPage > midPoint)
-			////{
-			////	if (CurrentPage + midPoint + 1 > totalPages)
-			////	{
-			////		if (totalPages - ShowPages > 1)
-			////		{
-			////			startPage = totalPages - ShowPages;
-			////		}
-			////	}
-			////	else if (CurrentPage - midPoint > 0)
-			////	{
-			////		startPage = CurrentPage - midPoint;
-			////	}
-			////}
+			if (CurrentPage > midPoint)
+			{
+				if (CurrentPage + midPoint + 1 > totalPages)
+				{
+					if (totalPages - ShowPages > 1)
+					{
+						startPage = totalPages - ShowPages;
+					}
+				}
+				else if (CurrentPage - midPoint > 0)
+				{
+					startPage = CurrentPage - midPoint;
+				}
+			}
 
-			////var maxPage = totalPages > ShowPages ? ShowPages : totalPages;
+			var maxPage = totalPages > ShowPages ? ShowPages : totalPages;
 
-			////Pages.Clear();
+			Pages = null;
 
-			////for (var p = 0; p < maxPage; p++)
-			////{
-			////	Pages.Add((startPage + p).ToString());
-			////}
+			var pages = new List<IdText>();
 
-			Pages.Clear();
-			Pages.Add("1");
-			Pages.Add("2");
-			Pages.Add("3");
+			for (var p = 0; p < maxPage; p++)
+			{
+				var pageNumber = startPage + p;
+				pages.Add(new IdText { Id = pageNumber.ToString(), IsSelected = CurrentPage.Equals(pageNumber), Text = pageNumber.ToString() });
+			}
 
-			// Total pages
-			return Pages;
+			Pages = pages;
 		}
 		#endregion
 
@@ -66,18 +80,18 @@ namespace FBS.XF.Toolkit.ViewModels
 		/// Gets or sets the current page.
 		/// </summary>
 		/// <value>The current page.</value>
-		public int ItemsPerPage { get; set; } = 10;
+		public int ItemsPerPage { get; set; } = 25;
 
 		/// <summary>
 		/// Gets or sets the pages.
 		/// </summary>
 		/// <value>The pages.</value>
-		public List<string> Pages => GetPageList();
+		public List<IdText> Pages { get; set; }
 
 		/// <summary>
-		/// Gets or sets the current page.
+		/// Gets or sets the show pages.
 		/// </summary>
-		/// <value>The current page.</value>
+		/// <value>The show pages.</value>
 		public int ShowPages { get; set; } = 5;
 
 		/// <summary>

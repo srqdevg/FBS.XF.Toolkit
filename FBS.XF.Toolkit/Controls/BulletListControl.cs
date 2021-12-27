@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using FBS.XF.Toolkit.Images;
 using Xamarin.Forms;
 
 namespace FBS.XF.Toolkit.Controls
 {
 	/// <summary>
-	/// BulletListControl.
+	/// Bullet List Control.
 	/// Implements the <see cref="Xamarin.Forms.ContentView" />
 	/// </summary>
 	/// <seealso cref="Xamarin.Forms.ContentView" />

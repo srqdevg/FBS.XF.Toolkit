@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.ObjectModel;
-using FBS.XF.Toolkit.Collections;
+using System.Linq;
 using Xamarin.Forms;
 
 namespace FBS.XF.Toolkit.Controls
@@ -19,6 +18,36 @@ namespace FBS.XF.Toolkit.Controls
 	/////////[ContentProperty("Contents")]
 	public class RepeaterView : StackLayout, IDisposable
 	{
+		#region Constructor methods
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RepeaterView"/> class.
+		/// </summary>
+		public RepeaterView()
+		{
+			Spacing = 0;
+			Padding = 0;
+		}
+		#endregion
+
+		#region IDisposable
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			foreach (var child in Children)
+			{
+				if (child.GestureRecognizers.Any())
+				{
+					foreach (var gestureRecognizer in child.GestureRecognizers)
+					{
+						((TapGestureRecognizer) gestureRecognizer).Tapped -= Item_Tapped;
+					}
+				}
+			}
+		}
+		#endregion
+
 		#region Events/Delegates
 		/// <summary>
 		/// Occurs when [selection changed].
@@ -31,8 +60,8 @@ namespace FBS.XF.Toolkit.Controls
 		/// The background color selected property
 		/// </summary>
 		public static readonly BindableProperty BackgroundColorSelectedProperty =
-			BindableProperty.Create(nameof(BackgroundColorSelected), typeof(Color), typeof(RepeaterView), Color.Default, 
-				propertyChanged: (bd, ov, nv) => ((RepeaterView) bd).ControlPropertyChanged(ov, nv)); 
+			BindableProperty.Create(nameof(BackgroundColorSelected), typeof(Color), typeof(RepeaterView), Color.Default,
+				propertyChanged: (bd, ov, nv) => ((RepeaterView) bd).ControlPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The items source property
@@ -59,21 +88,22 @@ namespace FBS.XF.Toolkit.Controls
 		/// The repeate visibility property
 		/// </summary>
 		public static readonly BindableProperty RepeatVisibilityProperty =
-			BindableProperty.Create(nameof(RepeatVisibility), typeof(RepeatVisibilityMode), typeof(RepeaterView), 
+			BindableProperty.Create(nameof(RepeatVisibility), typeof(RepeatVisibilityMode), typeof(RepeaterView),
 				RepeatVisibilityMode.All);
 
 		/// <summary>
 		/// The selected indexroperty
 		/// </summary>
 		public static readonly BindableProperty SelectedIndexProperty =
-			BindableProperty.Create(nameof(SelectedIndex), typeof(int), typeof(RepeaterView), -1, BindingMode.TwoWay, 
+			BindableProperty.Create(nameof(SelectedIndex), typeof(int), typeof(RepeaterView), -1, BindingMode.TwoWay,
 				propertyChanged: (bd, ov, nv) => ((RepeaterView) bd).SelectedItemPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The selected item property
 		/// </summary>
 		public static readonly BindableProperty SelectedItemProperty =
-			BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(RepeaterView), defaultBindingMode: BindingMode.TwoWay, 
+			BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(RepeaterView),
+				defaultBindingMode: BindingMode.TwoWay,
 				propertyChanged: (bd, ov, nv) => ((RepeaterView) bd).SelectedItemPropertyChanged(ov, nv));
 
 		/// <summary>
@@ -103,32 +133,10 @@ namespace FBS.XF.Toolkit.Controls
 			BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(RepeaterView), Color.Default);
 		#endregion
 
-		#region Constructor methods
-		/// <summary>
-		/// Initializes a new instance of the <see cref="RepeaterView"/> class.
-		/// </summary>
-		public RepeaterView()
-		{
-			Spacing = 0;
-			Padding = 0;
-		}
-		#endregion
-
-		#region IDisposable
-		/// <summary>
-		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-		/// </summary>
-		public void Dispose()
-		{
-			tapRecognizer.Tapped -= Item_Tapped;
-		}
-		#endregion
-
 		#region Private methods
 		/// <summary>
 		/// Called when [property changed].
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
 		private void ControlPropertyChanged(object oldValue, object newValue)
@@ -190,7 +198,7 @@ namespace FBS.XF.Toolkit.Controls
 									{
 										continue;
 									}
-									
+
 									// Create controls
 									itemView = (View) SeparatorTemplate.CreateContent();
 									itemView.BindingContext = item;
@@ -210,10 +218,12 @@ namespace FBS.XF.Toolkit.Controls
 										itemView = (View) ItemTemplate.CreateContent();
 									}
 
+									itemView.HorizontalOptions = LayoutOptions.FillAndExpand;
 									itemView.BindingContext = item;
+									itemView.VerticalOptions = LayoutOptions.FillAndExpand;
 
 									// Create tap recognizer
-									tapRecognizer = new TapGestureRecognizer();
+									var tapRecognizer = new TapGestureRecognizer();
 									tapRecognizer.Tapped += Item_Tapped;
 
 									// Bind it, add tap gesture and add it
@@ -235,14 +245,16 @@ namespace FBS.XF.Toolkit.Controls
 							var itemView = (View) ItemTemplate.CreateContent();
 
 							// Create tap recognizer
-							tapRecognizer = new TapGestureRecognizer();
+							var tapRecognizer = new TapGestureRecognizer();
 							tapRecognizer.Tapped += Item_Tapped;
 
 							// Bind it, add tap gesture and add it
 							itemView.GestureRecognizers.Add(tapRecognizer);
 
 							// Add item 
+							itemView.HorizontalOptions = LayoutOptions.FillAndExpand;
 							itemView.BindingContext = ItemsSource;
+							itemView.VerticalOptions = LayoutOptions.FillAndExpand;
 							Children.Add(itemView);
 						}
 					}
@@ -289,7 +301,7 @@ namespace FBS.XF.Toolkit.Controls
 			var itemList = (IList) ItemsSource;
 
 			// Get previous selection
-			var previousSelection = SelectedIndex >= 0 ? itemList[SelectedIndex] : null;
+			var previousSelection = SelectedIndex >= 0 && SelectedIndex < itemList.Count ? itemList[SelectedIndex] : null;
 
 			// Get current selection
 			var capturedIndex = Children.IndexOf(view);
@@ -324,12 +336,13 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		/// <param name="view">The view.</param>
 		/// <param name="color">The color.</param>
+		/// <param name="isSelected">if set to <c>true</c> [is selected].</param>
 		private static void ProcessChildControls(View view, Color color, bool isSelected)
 		{
 			if (view is Label label)
 			{
 				label.TextColor = color;
-			} 
+			}
 			else if (view is SvgImage image)
 			{
 				// UGLY, BUT WITH THEM WANTING WPF AND MAC, I CAN'T USE PROPER CONTROLS, SO ONE MORE HACK..
@@ -347,7 +360,6 @@ namespace FBS.XF.Toolkit.Controls
 		/// <summary>
 		/// Called when [selected item property changed].
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
 		private void SelectedItemPropertyChanged(object oldValue, object newValue)
@@ -510,7 +522,6 @@ namespace FBS.XF.Toolkit.Controls
 
 		#region Fields
 		private View selectedView;
-		private TapGestureRecognizer tapRecognizer;
 		#endregion
 	}
 }

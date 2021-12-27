@@ -61,7 +61,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		public static readonly BindableProperty ItemsSourceProperty =
 			BindableProperty.Create(nameof(ItemsSource), typeof(object), typeof(DropdownView),
-				propertyChanged: (bd, ov, nv) => ((DropdownView) bd).ControlPropertyChanged(ov, nv));
+				propertyChanged: (bd, ov, nv) => ((DropdownView) bd).ItemSourcePropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The image color property
@@ -256,13 +256,13 @@ namespace FBS.XF.Toolkit.Controls
 
 						Children.Add(headerStackLayout);
 					}
-				}
 
-				// Add gesture
-				GestureRecognizers.Clear();
-				dropDownTapGestureRecognizer = new TapGestureRecognizer();
-				dropDownTapGestureRecognizer.Tapped += DropdownTapGestureRecognizer_Tapped;
-				GestureRecognizers.Add(dropDownTapGestureRecognizer);
+					// Add gesture
+					GestureRecognizers.Clear();
+					dropDownTapGestureRecognizer = new TapGestureRecognizer();
+					dropDownTapGestureRecognizer.Tapped += DropdownTapGestureRecognizer_Tapped;
+					GestureRecognizers.Add(dropDownTapGestureRecognizer);
+				}
 
 				// Add either a label or a more complex header template
 				if (HeaderTemplate != null)
@@ -309,6 +309,22 @@ namespace FBS.XF.Toolkit.Controls
 					}
 
 					headerStackLayout.Children.Insert(0, headerLabel);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Items the source property changed.
+		/// </summary>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		private void ItemSourcePropertyChanged(object oldValue, object newValue)
+		{
+			if (oldValue != newValue)
+			{
+				if (dropdownItemsRepeaterView != null)
+				{
+					dropdownItemsRepeaterView.ItemsSource = newValue;
 				}
 			}
 		}

@@ -693,7 +693,7 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			if (newValue != oldValue)
 			{
-				buttonLabel.Text = IsToggled ? ToggleText : Text;
+				buttonLabel.Text = IsToggled && !string.IsNullOrWhiteSpace(ToggleText) ? ToggleText : Text;
 				buttonLabel.IsVisible = true;
 			}
 			else if (newValue == null)

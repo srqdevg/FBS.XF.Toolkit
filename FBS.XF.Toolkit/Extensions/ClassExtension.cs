@@ -15,8 +15,8 @@ namespace System
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="copyFrom">The copy from.</param>
-		/// <param name="copyTo">The copy to.</param>
-		/// <exception cref="ArgumentNullException">One or both arguments are null</exception>
+		/// <returns>T.</returns>
+		/// <exception cref="System.ArgumentNullException">copyFrom</exception>
 		public static T CopyProperties<T>(this T copyFrom)
 		{
 			// Check args
