@@ -10,6 +10,34 @@ namespace FBS.XF.Toolkit.Helpers
 	{
 		#region Public methods
 		/// <summary>
+		/// Gets the value as date time.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <param name="outValue">The out value.</param>
+		/// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+		public static bool GetValueAsDateTime(object value, out DateTime? outValue)
+		{
+			// ReSharper disable once RedundantNullableTypeMark
+			if (value is DateTime?)
+			{
+				outValue = (DateTime?) value;
+				return true;
+			}
+
+			if (value is string stringValue)
+			{
+				if (!string.IsNullOrWhiteSpace(stringValue) && DateTime.TryParse(stringValue, out var fieldValue))
+				{
+					outValue = fieldValue;
+					return true;
+				}
+			}
+
+			outValue = null;
+			return false;
+		}
+
+		/// <summary>
 		/// Gets the value as int.
 		/// </summary>
 		/// <param name="value">The value.</param>
