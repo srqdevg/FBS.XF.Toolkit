@@ -18,18 +18,25 @@ namespace FBS.XF.Toolkit.Controls
 
 		#region Bindable Properties
 		/// <summary>
+		/// The show underline property
+		/// </summary>
+		public static readonly BindableProperty ShowUnderlineProperty =
+			BindableProperty.Create(nameof(ShowUnderline), typeof(bool), typeof(LinkLabel), true,
+				propertyChanged: (bd, ov, nv) => ((LinkLabel) bd).TextPropertyChanged(ov, nv));
+
+		/// <summary>
 		/// The text property
 		/// </summary>
 		public new static readonly BindableProperty TextProperty =
 			BindableProperty.Create(nameof(Text), typeof(string), typeof(LinkLabel), default(string),
-				propertyChanged: TextPropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((LinkLabel) bd).TextPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The text link color property
 		/// </summary>
 		public static readonly BindableProperty TextLinkColorProperty =
-			BindableProperty.Create(nameof(TextLinkColor), typeof(Color), typeof(LinkLabel), default(Color),
-				propertyChanged: TextLinkColorPropertyChanged);
+			BindableProperty.Create(nameof(TextLinkColor), typeof(Color), typeof(LinkLabel), Color.Blue,
+				propertyChanged: (bd, ov, nv) => ((LinkLabel) bd).TextPropertyChanged(ov, nv));
 		#endregion
 
 		#region Constructors
@@ -55,9 +62,21 @@ namespace FBS.XF.Toolkit.Controls
 		}
 		#endregion
 
+		#region UI methods
+		/// <summary>
+		/// Handles the <see cref="E:ItemTapped" /> event.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+		private void OnLink_Tapped(object sender, EventArgs e)
+		{
+			Tapped?.Invoke(this, new ItemTappedEventArgs(Text, Id, 0));
+		}
+		#endregion
+
 		#region Private methods
 		/// <summary>
-		/// Creates the control.
+		/// Creates the 
 		/// </summary>
 		private void CreateControl()
 		{
@@ -76,64 +95,50 @@ namespace FBS.XF.Toolkit.Controls
 		}
 
 		/// <summary>
-		/// Texts the link color property changed.
-		/// </summary>
-		/// <param name="bindable">The bindable.</param>
-		/// <param name="oldValue">The old value.</param>
-		/// <param name="newValue">The new value.</param>
-		private static void TextLinkColorPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-		{
-			RebuildFormattedString(bindable);
-		}
-
-		/// <summary>
 		/// Rebuilds the formatted string.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
-		private static void RebuildFormattedString(BindableObject bindable)
+		private void RebuildFormattedString()
 		{
-			// Get control and new value
-			var control = (LinkLabel)bindable;
-
 			// Now clear links 
-			control.FormattedText.Spans.Clear();
+			FormattedText.Spans.Clear();
 
 			// Any text?
-			if (!string.IsNullOrWhiteSpace(control.Text))
+			if (!string.IsNullOrWhiteSpace(Text))
 			{
 				// Do we have an emebedded link?
-				if (control.Text.Contains("[") && control.Text.Contains("]"))
+				if (Text.Contains("[") && Text.Contains("]"))
 				{
 					// Get start and end of link
-					var startIndex = control.Text.IndexOf('[');
-					var endIndex = control.Text.IndexOf(']');
+					var startIndex = Text.IndexOf('[');
+					var endIndex = Text.IndexOf(']');
 
 					// Get text elements
-					var preLinkText = control.Text.Left(startIndex);
-					var linkText = control.Text.Substring(startIndex + 1, endIndex - startIndex - 1);
-					var postLinkText = control.Text.Right(control.Text.Length - endIndex - 1);
+					var preLinkText = Text.Left(startIndex);
+					var linkText = Text.Substring(startIndex + 1, endIndex - startIndex - 1);
+					var postLinkText = Text.Right(Text.Length - endIndex - 1);
 
 					if (!string.IsNullOrWhiteSpace(preLinkText))
 					{
-						control.preLinkSpan.Text = preLinkText;
-						control.FormattedText.Spans.Add(control.preLinkSpan);
+						preLinkSpan.Text = preLinkText;
+						FormattedText.Spans.Add(preLinkSpan);
 					}
 
-					control.linkSpan.Text = linkText;
-					control.linkSpan.TextColor = control.TextLinkColor;
-					control.FormattedText.Spans.Add(control.linkSpan);
+					linkSpan.Text = linkText;
+					linkSpan.TextColor = TextLinkColor;
+					linkSpan.TextDecorations = ShowUnderline ? TextDecorations.Underline : TextDecorations.None;
+					FormattedText.Spans.Add(linkSpan);
 
 					if (!string.IsNullOrWhiteSpace(postLinkText))
 					{
-						control.postLinkSpan.Text = postLinkText;
-						control.FormattedText.Spans.Add(control.postLinkSpan);
+						postLinkSpan.Text = postLinkText;
+						FormattedText.Spans.Add(postLinkSpan);
 					}
 				}
 				else
 				{
-					control.linkSpan.Text = control.Text;
-					control.linkSpan.TextColor = control.TextLinkColor;
-					control.FormattedText.Spans.Add(control.linkSpan);
+					linkSpan.Text = Text;
+					linkSpan.TextColor = TextLinkColor;
+					FormattedText.Spans.Add(linkSpan);
 				}
 			}
 		}
@@ -141,31 +146,28 @@ namespace FBS.XF.Toolkit.Controls
 		/// <summary>
 		/// Texts the property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
-		private static void TextPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		private void TextPropertyChanged(object oldValue, object newValue)
 		{
-			if (!string.IsNullOrWhiteSpace(newValue.ToString()))
+			if (!string.IsNullOrWhiteSpace(newValue.ToString()) && newValue != oldValue)
 			{
-				RebuildFormattedString(bindable);
+				RebuildFormattedString();
 			}
-		}
-		#endregion
-		
-		#region UI methods
-		/// <summary>
-		/// Handles the <see cref="E:ItemTapped" /> event.
-		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-		private void OnLink_Tapped(object sender, EventArgs e)
-		{
-			Tapped?.Invoke(this, new ItemTappedEventArgs(Text, Id, 0));
 		}
 		#endregion
 
 		#region Properties
+		/// <summary>
+		/// Gets or sets the show underline.
+		/// </summary>
+		/// <value>The show underline.</value>
+		public bool ShowUnderline
+		{
+			get => (bool) GetValue(ShowUnderlineProperty);
+			set => SetValue(ShowUnderlineProperty, value);
+		}
+
 		/// <summary>
 		/// Gets or sets the static text.
 		/// </summary>

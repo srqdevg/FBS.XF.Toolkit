@@ -8,11 +8,11 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageId>FBS.Toolkit</PackageId>
     <Description>Library containing several controls and helper classess to support Xamarin Forms development</Description>
-    <AssemblyVersion>1.5.0.0</AssemblyVersion>
-    <FileVersion>1.5.0.0</FileVersion>
+    <AssemblyVersion>1.6.0.0</AssemblyVersion>
+    <FileVersion>1.6.0.0</FileVersion>
     <AssemblyName>FBS.XF.Toolkit</AssemblyName>
     <RootNamespace>FBS.XF.Toolkit</RootNamespace>
-    <Version>1.5</Version>
+    <Version>1.6</Version>
   </PropertyGroup>
 
   <ItemGroup>

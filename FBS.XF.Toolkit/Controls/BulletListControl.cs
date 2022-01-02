@@ -26,7 +26,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		public static readonly BindableProperty ItemsProperty = 
 			BindableProperty.Create(nameof(Items), typeof(IEnumerable<string>), typeof(BulletListControl), new List<string>(),
-				propertyChanged: ItemsPropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((BulletListControl) bd).ItemsPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The bullet image property
@@ -39,21 +39,21 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		public static readonly BindableProperty BulletCharacterProperty = 
 			BindableProperty.Create(nameof(BulletCharacter), typeof(string), typeof(string),
-			propertyChanged: BulletCharacterPropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((BulletListControl) bd).BulletCharacterPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The bullet character font size property
 		/// </summary>
 		public static readonly BindableProperty BulletCharacterFontSizeProperty =
-			BindableProperty.Create(nameof(BulletCharacterFontSize), typeof(double), typeof(double), 
-				propertyChanged: BulletCharacterFontSizePropertyChanged);
+			BindableProperty.Create(nameof(BulletCharacterFontSize), typeof(double), typeof(double),
+				propertyChanged: (bd, ov, nv) => ((BulletListControl) bd).BulletCharacterFontSizePropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The list item font size property
 		/// </summary>
 		public static readonly BindableProperty ListItemFontSizeProperty = 
 			BindableProperty.Create(nameof(ListItemFontSize), typeof(double), typeof(double),
-			propertyChanged: ListItemFontSizePropertyChanged);
+				propertyChanged: (bd, ov, nv) => ((BulletListControl) bd).ListItemFontSizePropertyChanged(ov, nv));
 		#endregion
 
 		#region Constructors
@@ -71,64 +71,56 @@ namespace FBS.XF.Toolkit.Controls
 		/// <summary>
 		/// Handles changing the bullet character font size.
 		/// </summary>
-		/// <param name="bindable"></param>
-		/// <param name="oldValue"></param>
-		/// <param name="newValue"></param>
-		private static void BulletCharacterFontSizePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		private void BulletCharacterFontSizePropertyChanged(object oldValue, object newValue)
 		{
-			if (newValue is double value)
+			if (newValue != oldValue && newValue is double value)
 			{
-				var control = (BulletListControl) bindable;
-				control.BulletCharacterFontSize = value;
-				control.Render();
+				BulletCharacterFontSize = value;
+				Render();
 			}
 		}
 
 		/// <summary>
 		/// Handles changing the character used for bullets.
 		/// </summary>
-		/// <param name="bindable"></param>
-		/// <param name="oldValue"></param>
-		/// <param name="newValue"></param>
-		private static void BulletCharacterPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		private void BulletCharacterPropertyChanged(object oldValue, object newValue)
 		{
-			if (newValue is string value)
+			if (newValue != oldValue && newValue is string value)
 			{
-				var control = (BulletListControl) bindable;
-				control.BulletCharacter = value;
-				control.Render();
+				BulletCharacter = value;
+				Render();
 			}
 		}
 
 		/// <summary>
 		/// Handles new bound item data coming in.
 		/// </summary>
-		/// <param name="bindable"></param>
-		/// <param name="oldValue"></param>
-		/// <param name="newValue"></param>
-		private static void ItemsPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		private void ItemsPropertyChanged(object oldValue, object newValue)
 		{
-			if (newValue is IEnumerable<string> value)
+			if (newValue != oldValue && newValue is IEnumerable<string> value)
 			{
-				var control = (BulletListControl) bindable;
-				control.Items = value;
-				control.Render();
+				Items = value;
+				Render();
 			}
 		}
 
 		/// <summary>
 		/// Handles changing the list item font size.
 		/// </summary>
-		/// <param name="bindable"></param>
-		/// <param name="oldValue"></param>
-		/// <param name="newValue"></param>
-		private static void ListItemFontSizePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		private void ListItemFontSizePropertyChanged(object oldValue, object newValue)
 		{
-			if (newValue is double value)
+			if (newValue != oldValue && newValue is double value)
 			{
-				var control = (BulletListControl) bindable;
-				control.ListItemFontSize = value;
-				control.Render();
+				ListItemFontSize = value;
+				Render();
 			}
 		}
 
@@ -170,7 +162,7 @@ namespace FBS.XF.Toolkit.Controls
 					: new Image { Source = ImageSource.FromStream(() => BulletImage) };
 
 				// Create label
-				var label = new Label
+				var label = new CustomLabel
 				{
 					FontSize = ListItemFontSize,
 					Margin = new Thickness(10, 0, 10, 0),

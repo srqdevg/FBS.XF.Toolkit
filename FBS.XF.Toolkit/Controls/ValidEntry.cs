@@ -6,9 +6,7 @@ using FBS.XF.Toolkit.Images;
 using FBS.XF.Toolkit.Interfaces;
 using FluentValidation.Results;
 using Xamarin.Essentials;
-using Xamarin.Forms; /// <summary>
-/// The Controls namespace.
-/// </summary>
+using Xamarin.Forms;
 
 namespace FBS.XF.Toolkit.Controls
 {
@@ -332,7 +330,7 @@ namespace FBS.XF.Toolkit.Controls
 			ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
 			// Add entry field
-			textEntry = new Entry
+			textEntry = new CustomEntry
 			{
 				BindingContext = this,
 				FontSize = FontSize > 0 ? FontSize : Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
@@ -781,8 +779,8 @@ namespace FBS.XF.Toolkit.Controls
 		/// <summary>
 		/// Validates the field property changed.
 		/// </summary>
-		/// <param name="oldvalue">The oldvalue.</param>
-		/// <param name="newvalue">The newvalue.</param>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
 		private void ValidateFieldPropertyChanged(object oldValue, object newValue)
 		{
 			// If equal, do nothing
@@ -1049,7 +1047,7 @@ namespace FBS.XF.Toolkit.Controls
 		private TapGestureRecognizer showHideTap;
 		private Label showLabel;
 		private Image showImage;
-		private Entry textEntry;
+		private CustomEntry textEntry;
 		private Label textLabel;
 		private IValidateViewModel viewModel;
 		#endregion
