@@ -1,8 +1,8 @@
-﻿using System;
+﻿using FBS.XF.Toolkit.Images;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using FBS.XF.Toolkit.Images;
 using Xamarin.Forms;
 
 namespace FBS.XF.Toolkit.Controls
@@ -79,11 +79,6 @@ namespace FBS.XF.Toolkit.Controls
 				source = source.Substring(0, source.LastIndexOf('.'));
 			}
 
-			if (source.StartsWith("test"))
-			{
-				source = source;
-			}
-
 			if (Device.RuntimePlatform == Device.WPF)
 			{
 				switch (WPFMode)
@@ -106,12 +101,11 @@ namespace FBS.XF.Toolkit.Controls
 		/// <summary>
 		/// Sources the property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
 		private void ColorPropertyChanged(object oldValue, object newValue)
 		{
-			/// Do we have a new value
+			// Do we have a new value
 			if (newValue != oldValue)
 			{
 				actualColor = newValue is Color value ? value : DetermineColor((string) newValue);
@@ -242,7 +236,6 @@ namespace FBS.XF.Toolkit.Controls
 		/// <summary>
 		/// Called when [property changed].
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
 		private void SourcePropertyChanged(object oldValue, object newValue)
@@ -255,34 +248,7 @@ namespace FBS.XF.Toolkit.Controls
 		}
 		#endregion
 
-		//protected override void OnPropertyChanged(
-		//	[CallerMemberName] string propertyName = null)
-		//{
-		//	base.OnPropertyChanged(propertyName);
-
-		//	if (propertyName == "Renderer")
-		//	{
-		//		// CONTROL IS BEING RENDERED!!!
-		//		propertyName = propertyName;
-
-		//		//if (!_animationStarted)
-		//		//{
-		//		//	// start the animation on element rendering
-		//		//	_animationStarted = true;
-
-		//		//	RunAnimations();
-		//		//}
-		//		//else
-		//		//{
-		//		//	// abort the animation on element disposing
-		//		//	this.AbortAnimation(
-		//		//		"loadingIndicatorPulseAnimation");
-		//		//}
-		//	}
-		//}
-
-		#region Override methods//rotation = new Animation(v => LabelRotateIcon.Rotation = v, 0, 360);
-
+		#region Override methods
 		/// <summary>
 		/// This method is called when the size of the element is set during a layout cycle. This method is called directly before the
 		/// <see cref="E:Xamarin.Forms.VisualElement.SizeChanged" /> event is emitted. Implement this method to add class handling for this event.
@@ -396,13 +362,12 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			#region Constructor
 			/// <summary>
-			/// Initializes a new instance of the <see cref="CachedImageSource"/> class.
+			/// Initializes a new instance of the <see cref="CachedImageSource" /> class.
 			/// </summary>
 			/// <param name="name">The name.</param>
 			/// <param name="width">The width.</param>
 			/// <param name="height">The height.</param>
 			/// <param name="color">The color.</param>
-			/// <param name="image">The image.</param>
 			public CachedImageSource(string name, double width, double height, Color color)
 			{
 				Color = Color;
@@ -421,7 +386,6 @@ namespace FBS.XF.Toolkit.Controls
 			/// <param name="width">The width.</param>
 			/// <param name="height">The height.</param>
 			/// <param name="color">The color.</param>
-			/// <param name="image">The image.</param>
 			/// <param name="cachedImages">The cached images.</param>
 			/// <returns>CachedImageSource.</returns>
 			public static CachedImageSource FindOrAddImage(string name, double width, double height, Color color, List<CachedImageSource> cachedImages)
@@ -438,24 +402,6 @@ namespace FBS.XF.Toolkit.Controls
 				}
 
 				return foundImage;
-			}
-
-			/// <summary>
-			/// Finds the image.
-			/// </summary>
-			/// <param name="name">The name.</param>
-			/// <param name="width">The width.</param>
-			/// <param name="height">The height.</param>
-			/// <param name="color">The color.</param>
-			/// <param name="cachedImages">The cached images.</param>
-			/// <returns>CachedImageSource.</returns>
-			public CachedImageSource FindImage(string name, double width, double height, Color color, List<CachedImageSource> cachedImages)
-			{
-				var image = cachedImages.FirstOrDefault(ci => ci.Name.Equals(name, StringComparison.OrdinalIgnoreCase) &&
-															  ci.Color.Equals(color) &&
-															  ci.Height.Equals(height) &&
-															  ci.Width.Equals(width));
-				return image;
 			}
 			#endregion
 

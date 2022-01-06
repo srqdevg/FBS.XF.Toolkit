@@ -167,6 +167,7 @@ namespace FBS.XF.Toolkit.ViewModels
 		/// <value><c>true</c> if this instance is mobile; otherwise, <c>false</c>.</value>
 		public bool IsMobile => Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Android;
 
+		/// <summary>
 		/// Gets or sets a value indicating whether this instance is saving.
 		/// </summary>
 		/// <value><c>true</c> if this instance is saving; otherwise, <c>false</c>.</value>

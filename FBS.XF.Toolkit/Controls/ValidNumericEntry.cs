@@ -90,7 +90,11 @@ namespace FBS.XF.Toolkit.Controls
 					if (MaxValue > 0)
 					{
 						InError = intValue > MaxValue;
-						return;
+
+						if (InError)
+						{
+							return;
+						}
 					}
 
 					if (ValidValues != null && ValidValues.Any())

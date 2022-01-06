@@ -171,7 +171,6 @@ namespace FBS.XF.Toolkit.Controls
 				{
 					BackgroundColor = Application.Current.RequestedTheme == OSAppTheme.Dark ? Color.Black : Color.White,
 					Orientation = StackOrientation.Vertical,
-					
 				};
 
 				// Dropdown items repeater view

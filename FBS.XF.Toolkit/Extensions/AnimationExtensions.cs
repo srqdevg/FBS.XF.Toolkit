@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace FBS.XF.Toolkit.Extensions
@@ -7,91 +8,97 @@ namespace FBS.XF.Toolkit.Extensions
 	/// <summary>
 	/// Animation Extensions.
 	/// </summary>
+	/// <remarks>
+	/// ColorTo from https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/animation/custom
+	/// </remarks>
 	public static class AnimationExtensions
 	{
 		#region Public methods
 		/// <summary>
-		/// Changes the background color to.
+		/// Boings the animation.
 		/// </summary>
 		/// <param name="self">The self.</param>
-		/// <param name="newColor">The new color.</param>
+		public static void BoingAnimation(this VisualElement self)
+		{
+			var parentAnimation = new Animation();
+			var scaleUpAnimation = new Animation(v => self.Scale = v, 1, 1.5, Easing.SpringIn);
+			var scaleDownAnimation = new Animation(v => self.Scale = v, 1.5, 1, Easing.SpringOut);
+
+			parentAnimation.Add(0, 0.5, scaleUpAnimation);
+			parentAnimation.Add(0.5, 1, scaleDownAnimation);
+
+			parentAnimation.Commit(self, "Boing", 16, 2000, null, repeat: () => true);
+		}
+
+		/// <summary>
+		/// Cancels the boing.
+		/// </summary>
+		/// <param name="self">The self.</param>
+		public static void CancelBoing(this VisualElement self)
+		{
+			self.AbortAnimation("Boing");
+		}
+
+		/// <summary>
+		/// Cancels the color to animation.
+		/// </summary>
+		/// <param name="self">The self.</param>
+		public static void CancelColorTo(this VisualElement self)
+		{
+			self.AbortAnimation("ColorTo");
+		}
+
+		/// <summary>
+		/// Colors to.
+		/// </summary>
+		/// <param name="self">The self.</param>
+		/// <param name="fromColor">From color.</param>
+		/// <param name="toColor">To color.</param>
+		/// <param name="callback">The callback.</param>
 		/// <param name="length">The length.</param>
 		/// <param name="easing">The easing.</param>
 		/// <returns>Task&lt;System.Boolean&gt;.</returns>
-		public static Task<bool> ChangeBackgroundColorTo(this VisualElement self, Color newColor, uint length = 250, Easing easing = null)
+		/// <remarks>
+		/// Examples:
+		///    await Task.WhenAll(
+		///       label.ColorTo(Color.Red, Color.Blue, c => label.TextColor = c, 5000),
+		///       label.ColorTo(Color.Blue, Color.Red, c => label.BackgroundColor = c, 5000));
+		///    await this.ColorTo(Color.FromRgb(0, 0, 0), Color.FromRgb(255, 255, 255), c => BackgroundColor = c, 5000);
+		///    await boxView.ColorTo(Color.Blue, Color.Red, c => boxView.Color = c, 4000);
+		/// </remarks>
+		public static Task<bool> ColorTo(this VisualElement self, Color fromColor, Color toColor, Action<Color> callback, uint length = 250, Easing easing = null)
 		{
-			var result = new Task<bool>(() => false);
+			Color Transform(double t) => 
+				Color.FromRgba(
+					fromColor.R + t * (toColor.R - fromColor.R), 
+					fromColor.G + t * (toColor.G - fromColor.G), 
+					fromColor.B + t * (toColor.B - fromColor.B), 
+					fromColor.A + t * (toColor.A - fromColor.A));
 
-			if (!self.AnimationIsRunning(nameof(ChangeBackgroundColorTo)))
-			{
-				Color fromColor = self.BackgroundColor;
-
-				try
-				{
-					Color Transform(double t) => Color.FromRgba(
-						fromColor.R + t * (newColor.R - fromColor.R),
-						fromColor.G + t * (newColor.G - fromColor.G),
-						fromColor.B + t * (newColor.B - fromColor.B),
-						fromColor.A + t * (newColor.A - fromColor.A));
-
-					result = TransmuteColorAnimation(self, nameof(ChangeBackgroundColorTo), Transform, length, easing);
-				}
-				catch (Exception ex)
-				{
-					// To supress animation overlapping errors 
-					self.BackgroundColor = fromColor;
-				}
-			}
-
-			return result;
+			return ColorToAnimation(self, "ColorTo", Transform, callback, length, easing);
 		}
 		#endregion
 
 		#region Private methods
 		/// <summary>
-		/// Transmutes the color animation.
+		/// Colors to animation.
 		/// </summary>
-		/// <param name="button">The button.</param>
+		/// <param name="element">The element.</param>
 		/// <param name="name">The name.</param>
 		/// <param name="transform">The transform.</param>
+		/// <param name="callback">The callback.</param>
 		/// <param name="length">The length.</param>
 		/// <param name="easing">The easing.</param>
 		/// <returns>Task&lt;System.Boolean&gt;.</returns>
-		private static Task<bool> TransmuteColorAnimation(VisualElement element, string name, Func<double, Color> transform, uint length, Easing easing)
+		private static Task<bool> ColorToAnimation(VisualElement element, string name, Func<double, Color> transform, 
+			Action<Color> callback, uint length, Easing easing)
 		{
 			easing ??= Easing.Linear;
 			var taskCompletionSource = new TaskCompletionSource<bool>();
 
-			element.Animate(name, transform, color => { element.BackgroundColor = color; }, 16, length, easing, (v, c) => taskCompletionSource.SetResult(c));
+			element.Animate(name, transform, callback, 16, length, easing, (v, c) => taskCompletionSource.SetResult(c));
 			return taskCompletionSource.Task;
 		}
 		#endregion
-
-
-		 public static Task<bool> ColorTo(this VisualElement self, Color fromColor, Color toColor, Action<Color> callback, uint length = 250, Easing easing = null)
-		 {
-			 Color Transform(double t) => Color.FromRgba(
-				 fromColor.R + t * (toColor.R - fromColor.R), 
-				 fromColor.G + t * (toColor.G - fromColor.G), 
-				 fromColor.B + t * (toColor.B - fromColor.B), 
-				 fromColor.A + t * (toColor.A - fromColor.A));
-
-			 return ColorAnimation(self, "ColorTo", Transform, callback, length, easing);
-		 }
-
-    public static void CancelAnimation(this VisualElement self)
-    {
-        self.AbortAnimation("ColorTo");
-    }
-
-    public static Task<bool> ColorAnimation(VisualElement element, string name, Func<double, Color> transform, Action<Color> callback, uint length, Easing easing)
-    {
-        easing ??= Easing.Linear;
-        var taskCompletionSource = new TaskCompletionSource<bool>();
-
-        element.Animate(name, transform, callback, 16, length, easing, (v, c) => taskCompletionSource.SetResult(c));
-
-        return taskCompletionSource.Task;
-    }
 	}
 }
