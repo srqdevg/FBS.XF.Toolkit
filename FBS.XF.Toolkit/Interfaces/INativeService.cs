@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace FBS.XF.Toolkit.Interfaces
 {
@@ -67,6 +68,13 @@ namespace FBS.XF.Toolkit.Interfaces
 		/// <param name="photofilePath">The photofile path.</param>
 		/// <returns>System.Int32.</returns>
 		int GetRotation(string photofilePath);
+
+		/// <summary>
+		/// Gets the width of the text.
+		/// </summary>
+		/// <param name="text">The text.</param>
+		/// <returns>System.Double.</returns>
+		double GetTextWidth(string text);
 		#endregion
 	}
 }

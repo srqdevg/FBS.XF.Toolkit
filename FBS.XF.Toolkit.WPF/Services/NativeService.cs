@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.Reflection;
+using System.Windows.Controls;
+using System.Windows.Media;
 using FBS.XF.Toolkit.Interfaces;
 using FBS.XF.Toolkit.WPF.Services;
 using Xamarin.Forms;
@@ -115,6 +118,22 @@ namespace FBS.XF.Toolkit.WPF.Services
 		public int GetRotation(string photofilePath)
 		{
 			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Gets the width of the text.
+		/// </summary>
+		/// <param name="text">The text.</param>
+		/// <returns>System.Double.</returns>
+		public double GetTextWidth(string text)
+		{
+			var comboBox = new ComboBox();
+
+			var formattedText = new FormattedText(text, CultureInfo.GetCultureInfo("en-us"),
+				System.Windows.FlowDirection.LeftToRight, new Typeface("Verdana"), 16, Brushes.Black,
+				VisualTreeHelper.GetDpi(comboBox).PixelsPerDip);
+
+			return Math.Round(formattedText.WidthIncludingTrailingWhitespace + 1);
 		}
 		#endregion
 	}

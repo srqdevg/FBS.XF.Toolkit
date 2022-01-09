@@ -67,10 +67,7 @@ namespace FBS.XF.Toolkit.Helpers
 									if (columnValue.Name.Equals("Int64"))
 									{
 										columns.Add(dbDataReader.GetName(i), dbDataReader.GetInt64(i).ToString());
-										continue;
 									}
-
-									Console.WriteLine($"Column {columnValue.Name}");
 								}
 							}
 

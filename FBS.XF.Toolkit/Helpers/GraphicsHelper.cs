@@ -89,7 +89,6 @@ namespace FBS.XF.Toolkit.Helpers
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.Message);
 				return null;
 			}
 		}

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Reflection;
 using Android.Accounts;
 using Android.Content;
@@ -174,6 +173,11 @@ namespace FBS.XF.Toolkit.Android.Services
 				exif.Dispose();
 			}
 		}
+
+		public double GetTextWidth(string text)
+		{
+			throw new NotImplementedException();
+		}
 		#endregion
 
 		#region Private methods
@@ -205,9 +209,9 @@ namespace FBS.XF.Toolkit.Android.Services
 					}
 				}
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				Console.WriteLine("GetBaseFolderPath caused the follwing exception: {0}", ex);
+				return null;
 			}
 
 			// This is a full path for the application, now get the top (global) level

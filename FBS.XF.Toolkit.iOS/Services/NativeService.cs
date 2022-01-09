@@ -141,6 +141,11 @@ namespace FBS.XF.Toolkit.iOS.Services
 			return 0;
 		}
 
+		public double GetTextWidth(string text)
+		{
+			throw new NotImplementedException();
+		}
+
 		/// <summary>
 		/// Hides the keyboard.
 		/// </summary>
