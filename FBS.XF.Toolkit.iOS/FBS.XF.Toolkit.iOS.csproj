@@ -49,10 +49,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Syncfusion.Xamarin.SfListView">
-      <Version>19.3.0.45</Version>
+      <Version>19.4.0.41</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>5.0.0.2012</Version>
+      <Version>5.0.0.2291</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Plugin.Calendar">
       <Version>1.4.5304</Version>
