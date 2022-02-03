@@ -191,7 +191,7 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			textEntry.TextChanged -= TextEntry_TextChanged;
 			textEntry.Unfocused -= TextEntry_Unfocused;
-
+			
 			if (showHideTap != null)
 			{
 				showHideTap.Tapped -= Show_Tapped;

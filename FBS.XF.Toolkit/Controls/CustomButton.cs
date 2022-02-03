@@ -406,6 +406,7 @@ namespace FBS.XF.Toolkit.Controls
 			// Create image
 			buttonImage = new SvgImage
 			{
+				BackgroundColor = Color.Transparent,
 				HorizontalOptions = LayoutOptions.CenterAndExpand,
 				IsVisible = false,
 				VerticalOptions = LayoutOptions.CenterAndExpand
@@ -586,6 +587,7 @@ namespace FBS.XF.Toolkit.Controls
 
 					if (buttonImage != null)
 					{
+						buttonImage.BackgroundColor = Color.Transparent;
 						buttonImage.Color = ToggleImageColor;
 					}
 
@@ -602,6 +604,7 @@ namespace FBS.XF.Toolkit.Controls
 
 					if (buttonImage != null)
 					{
+						buttonImage.BackgroundColor = Color.Transparent;
 						buttonImage.Color = ImageColor;
 					}
 

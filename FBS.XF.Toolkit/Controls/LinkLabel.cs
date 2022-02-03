@@ -150,7 +150,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void TextPropertyChanged(object oldValue, object newValue)
 		{
-			if (!string.IsNullOrWhiteSpace(newValue.ToString()) && newValue != oldValue)
+			if (newValue != null && !string.IsNullOrWhiteSpace(newValue.ToString()) && newValue != oldValue)
 			{
 				RebuildFormattedString();
 			}

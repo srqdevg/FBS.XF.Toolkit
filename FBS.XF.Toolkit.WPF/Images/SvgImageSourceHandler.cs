@@ -17,16 +17,15 @@ namespace FBS.XF.Toolkit.WPF.Images
 		/// <summary>
 		/// Loads the image async.
 		/// </summary>
-		/// <returns>The image async.</returns>
 		/// <param name="imagesource">Imagesource.</param>
-		/// <param name="context">Context.</param>
 		/// <param name="cancelationToken">Cancelation token.</param>
+		/// <returns>The image async.</returns>
 		public async Task<ImageSource> LoadImageAsync(Xamarin.Forms.ImageSource imagesource, CancellationToken cancelationToken = default(CancellationToken))
 		{
 			var svgImageSource = imagesource as SvgImageSource;
 
 			// ReSharper disable once PossibleNullReferenceException
-			using (var stream = await svgImageSource.GetImageStreamAsync(cancelationToken).ConfigureAwait(false))
+			await using (var stream = await svgImageSource.GetImageStreamAsync(cancelationToken).ConfigureAwait(false))
 			{
 				if (stream == null)
 				{
@@ -40,7 +39,6 @@ namespace FBS.XF.Toolkit.WPF.Images
 				// Populate with the stream
 				bitmapImage.StreamSource = stream;
 				bitmapImage.EndInit();
-
 
 				return bitmapImage;
 			}
