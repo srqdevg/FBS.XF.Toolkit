@@ -163,9 +163,6 @@ namespace FBS.XF.Toolkit.Controls
 					IsVisible = false
 				};
 
-				AbsoluteLayout.SetLayoutBounds(dropdownContentView, new Rectangle(0, 0, 1, 1));
-				AbsoluteLayout.SetLayoutFlags(dropdownContentView, AbsoluteLayoutFlags.All);
-
 				// Dropdown stacklayout
 				var dropDownStackLayout = new StackLayout
 				{
