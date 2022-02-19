@@ -1,7 +1,7 @@
 ﻿namespace FBS.XF.Toolkit.Interfaces
 {
 	/// <summary>
-	/// Interface IUtilityHelper
+	/// IUtility Helper
 	/// </summary>
 	public interface IUtilityHelper
 	{

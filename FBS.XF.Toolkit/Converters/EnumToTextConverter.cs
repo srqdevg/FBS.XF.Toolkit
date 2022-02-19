@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
-using FBS.XF.Toolkit.Helpers;
 using Xamarin.Forms;
+using FBS.XF.Toolkit.Helpers;
 
 namespace FBS.XF.Toolkit.Converters
 {

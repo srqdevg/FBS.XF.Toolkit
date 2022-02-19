@@ -130,7 +130,7 @@ namespace FBS.XF.Toolkit.Helpers
 		/// <summary>
 		/// Generates the salt.
 		/// </summary>
-		/// <param name="saltByteSize">Size of the salt byte.</param>
+		/// <param name="salt">The salt.</param>
 		/// <returns>System.Byte[].</returns>
 		public static byte[] GenerateSalt(string salt)
 		{
@@ -221,7 +221,7 @@ namespace FBS.XF.Toolkit.Helpers
 		#endregion
 
 		#region Fields
-		private static byte[] defaultSalt = {0x4d, 0x49, 0x76, 0x61, 0x65, 0x76, 0x20, 0x65, 0x64, 0x76, 0x64, 0x6e, 0x65, 0x64, 0x76, 0x61};
+		private static readonly byte[] defaultSalt = {0x4d, 0x49, 0x76, 0x61, 0x65, 0x76, 0x20, 0x65, 0x64, 0x76, 0x64, 0x6e, 0x65, 0x64, 0x76, 0x61};
 		#endregion
 	}
 }

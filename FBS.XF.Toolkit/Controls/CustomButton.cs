@@ -1,6 +1,6 @@
 ﻿using System;
-using FBS.XF.Toolkit.Extensions;
 using Xamarin.Forms;
+using FBS.XF.Toolkit.Extensions;
 
 namespace FBS.XF.Toolkit.Controls
 {

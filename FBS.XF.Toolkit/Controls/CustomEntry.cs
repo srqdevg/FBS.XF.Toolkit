@@ -3,7 +3,7 @@
 namespace FBS.XF.Toolkit.Controls
 {
 	/// <summary>
-	/// CustomEntry.
+	/// Custom Entry.
 	/// Implements the <see cref="Xamarin.Forms.Entry" />
 	/// </summary>
 	/// <seealso cref="Xamarin.Forms.Entry" />

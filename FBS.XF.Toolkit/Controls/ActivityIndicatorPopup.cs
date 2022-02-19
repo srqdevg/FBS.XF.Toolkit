@@ -11,9 +11,6 @@ namespace FBS.XF.Toolkit.Controls
 	/// <seealso cref="Xamarin.Forms.ContentView" />
 	public class ActivityIndicatorPopup : ContentView
 	{
-		#region Constants/Enumerations
-		#endregion
-
 		#region Bindable properties
 		/// <summary>
 		/// The background color property
@@ -72,20 +69,14 @@ namespace FBS.XF.Toolkit.Controls
 				propertyChanged: TextColorPropertyChanged);
 		#endregion
 
-		#region Events/Delegates
-		#endregion
-
 		#region Constructors
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ActivityIndicatorPopup"/> class.
+		/// </summary>
 		public ActivityIndicatorPopup()
 		{
 			CreateControl();
 		}
-		#endregion
-
-		#region UI methods
-		#endregion
-
-		#region Public methods
 		#endregion
 
 		#region Private methods
@@ -353,9 +344,6 @@ namespace FBS.XF.Toolkit.Controls
 		private Label label;
 		private PopupPage popupPage;
 		private StackLayout stackLayout;
-		#endregion
-
-		#region Nested types
 		#endregion
 	}
 }

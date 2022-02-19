@@ -67,7 +67,7 @@ namespace FBS.XF.Toolkit.Images
 			{
 				Stream imageStream;
 
-				using (var stream = await StreamFunc(CancellationTokenSource.Token).ConfigureAwait(false))
+				await using (var stream = await StreamFunc(CancellationTokenSource.Token).ConfigureAwait(false))
 				{
 					if (stream == null)
 					{
@@ -103,11 +103,12 @@ namespace FBS.XF.Toolkit.Images
 		/// <summary>
 		/// Froms the svg.
 		/// </summary>
-		/// <returns>The svg.</returns>
 		/// <param name="resource">Resource.</param>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
 		/// <param name="color">Color.</param>
+		/// <param name="resourceType">Type of the resource.</param>
+		/// <returns>The svg.</returns>
 		public static ImageSource FromSvgResource(string resource, double width, double height, Color color = default, Type resourceType = null)
 		{
 			var assembly = resourceType != null ? resourceType.GetTypeInfo().Assembly : registeredAssembly ?? Assembly.GetCallingAssembly();
@@ -117,9 +118,10 @@ namespace FBS.XF.Toolkit.Images
 		/// <summary>
 		/// Froms the svg.
 		/// </summary>
-		/// <returns>The svg.</returns>
 		/// <param name="resource">Resource.</param>
 		/// <param name="color">Color.</param>
+		/// <param name="resourceType">Type of the resource.</param>
+		/// <returns>The svg.</returns>
 		public static ImageSource FromSvgResource(string resource, Color color = default, Type resourceType = null)
 		{
 			var assembly = resourceType != null ? resourceType.GetTypeInfo().Assembly : registeredAssembly ?? Assembly.GetCallingAssembly();
@@ -142,15 +144,15 @@ namespace FBS.XF.Toolkit.Images
 		/// <summary>
 		/// Froms the svg stream.
 		/// </summary>
-		/// <returns>The svg stream.</returns>
 		/// <param name="streamFunc">Stream func.</param>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
 		/// <param name="color">Color.</param>
 		/// <param name="key">Key.</param>
+		/// <returns>The svg stream.</returns>
 		public static ImageSource FromSvgStream(Func<Stream> streamFunc, double width, double height, Color color, string key = null)
 		{
-			return new SvgImageSource { StreamFunc = token => Task.Run(streamFunc), Width = width, Height = height, Color = color };
+			return new SvgImageSource { StreamFunc = token => Task.Run(streamFunc, token), Width = width, Height = height, Color = color };
 		}
 		#endregion
 
@@ -159,6 +161,7 @@ namespace FBS.XF.Toolkit.Images
 		/// Gets the resource stream function.
 		/// </summary>
 		/// <param name="resource">The resource.</param>
+		/// <param name="assembly">The assembly.</param>
 		/// <returns>Func&lt;CancellationToken, Task&lt;Stream&gt;&gt;.</returns>
 		private static Func<CancellationToken, Task<Stream>> GetResourceStreamFunc(string resource, Assembly assembly)
 		{
@@ -199,6 +202,7 @@ namespace FBS.XF.Toolkit.Images
 		/// Gets the real resource.
 		/// </summary>
 		/// <param name="resource">The resource.</param>
+		/// <param name="assembly">The assembly.</param>
 		/// <returns>System.String.</returns>
 		private static string GetRealResource(string resource, Assembly assembly)
 		{

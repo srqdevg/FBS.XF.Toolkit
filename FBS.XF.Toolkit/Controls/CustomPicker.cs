@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections;
-using System.Drawing;
-using System.Globalization;
 using System.Linq;
-using FBS.XF.Toolkit.Interfaces;
 using Xamarin.Forms;
+using FBS.XF.Toolkit.Interfaces;
 
 namespace FBS.XF.Toolkit.Controls
 {
@@ -16,14 +14,28 @@ namespace FBS.XF.Toolkit.Controls
 	/// <remarks>Used to fix issues in MS version of controls</remarks>
 	public class CustomPicker : Picker
 	{
+		#region Dependency properties
+		/// <summary>
+		/// The size to fit property
+		/// </summary>
 		public static readonly BindableProperty SizeToFitProperty =
 			BindableProperty.Create(nameof(SizeToFit), typeof(bool), typeof(CustomPicker), default(bool), BindingMode.OneWay,
-				propertyChanged: (bd, ov, nv) => ((CustomPicker) bd).PropertyChanged(ov, nv));
+				propertyChanged: (bd, ov, nv) => ((CustomPicker)bd).PropertyChanged(ov, nv));
 
+		/// <summary>
+		/// The items source property{CC2D43FA-BBC4-448A-9D0B-7B57ADF2655C}
+		/// </summary>
 		public new static readonly BindableProperty ItemsSourceProperty =
-			BindableProperty.Create(nameof(ItemsSource), typeof(IList), typeof(CustomPicker), null, BindingMode.OneWay,
-				propertyChanged: (bd, ov, nv) => ((CustomPicker) bd).PropertyChanged(ov, nv));
+					BindableProperty.Create(nameof(ItemsSource), typeof(IList), typeof(CustomPicker), null, BindingMode.OneWay,
+						propertyChanged: (bd, ov, nv) => ((CustomPicker)bd).PropertyChanged(ov, nv));
+		#endregion
 
+		#region Private methods
+		/// <summary>
+		/// Properties the changed.
+		/// </summary>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
 		private new void PropertyChanged(object oldValue, object newValue)
 		{
 			if (SizeToFit && ItemsSource != null)
@@ -45,7 +57,7 @@ namespace FBS.XF.Toolkit.Controls
 					{
 						var type = item.GetType();
 						var properties = type.GetProperties();
-						var property = properties.FirstOrDefault(p => p.Name.Equals(((Binding) ItemDisplayBinding).Path));
+						var property = properties.FirstOrDefault(p => p.Name.Equals(((Binding)ItemDisplayBinding).Path));
 						var value = property?.GetValue(item);
 
 						if (value is int i)
@@ -54,12 +66,12 @@ namespace FBS.XF.Toolkit.Controls
 						}
 						else
 						{
-							textValue = (string) value;
+							textValue = (string)value;
 						}
 					}
 					else
 					{
-						textValue = (string) item;
+						textValue = (string)item;
 					}
 
 					// Get text width 
@@ -71,21 +83,28 @@ namespace FBS.XF.Toolkit.Controls
 					}
 				}
 
-				// TODO: FIDDLE THE WIDTH DOWN A BIT, IT"S TOO WIDE 
 				WidthRequest = Math.Round(comboBoxWidth + width);
 			}
 		}
-		
+		#endregion
+
+		#region Properties
+		/// <summary>
+		/// Gets or sets a value indicating whether [size to fit].
+		/// </summary>
+		/// <value><c>true</c> if [size to fit]; otherwise, <c>false</c>.</value>
 		public bool SizeToFit
 		{
-			get => (bool) GetValue(SizeToFitProperty);
+			get => (bool)GetValue(SizeToFitProperty);
 			set => SetValue(SizeToFitProperty, value);
 		}
 
+		/// <inheritdoc />
 		public new IList ItemsSource
 		{
-			get => (IList) GetValue(ItemsSourceProperty);
+			get => (IList)GetValue(ItemsSourceProperty);
 			set => SetValue(ItemsSourceProperty, value);
 		}
+		#endregion
 	}
 }

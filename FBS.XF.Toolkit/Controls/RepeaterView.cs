@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using FBS.XF.Toolkit.Event;
 using Xamarin.Forms;
 
 namespace FBS.XF.Toolkit.Controls
@@ -15,7 +16,6 @@ namespace FBS.XF.Toolkit.Controls
 	///	https://github.com/xamarinhowto/DataTemplateRepeaterControlExample
 	/// https://stackoverflow.com/questions/41233767/xamarin-forms-create-instance-of-a-datatemplate
 	/// </remarks>
-	/////////[ContentProperty("Contents")]
 	public class RepeaterView : StackLayout, IDisposable
 	{
 		#region Constructor methods
@@ -375,7 +375,6 @@ namespace FBS.XF.Toolkit.Controls
 					if (child.BindingContext.Equals(newValue) || tabindex.Equals(selectedTabIndex))
 					{
 						child.BackgroundColor = BackgroundColorSelected;
-						//SelectedIndex = Children.IndexOf(child);
 
 						if (RepeatVisibility.Equals(RepeatVisibilityMode.SelectedOnly))
 						{

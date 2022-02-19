@@ -112,7 +112,6 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		public static readonly BindableProperty TintColorProperty = 
 			BindableProperty.Create(nameof(TintColor), typeof(Color), typeof(SegmentedControl), Color.Blue);
-
 		#endregion
 
 		#region Events/Delegates
@@ -460,20 +459,5 @@ namespace FBS.XF.Toolkit.Controls
 			set => SetValue(TintColorProperty, value);
 		}
 		#endregion
-
-		#region Fields
-		#endregion
-
-
-	
-
-
-
-
-		
-
-		
-
-		
 	}
 }

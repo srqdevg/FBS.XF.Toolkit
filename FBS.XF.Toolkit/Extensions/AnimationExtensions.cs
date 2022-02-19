@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace FBS.XF.Toolkit.Extensions

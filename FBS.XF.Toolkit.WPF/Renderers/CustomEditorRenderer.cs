@@ -1,33 +1,25 @@
-﻿using System;
-using System.Windows;
+﻿using Xamarin.Forms;
+using Xamarin.Forms.Platform.WPF;
 using FBS.XF.Toolkit.Controls;
 using FBS.XF.Toolkit.WPF.Renderers;
-using Xamarin.Forms;
-using Xamarin.Forms.Platform.WPF;
-using Xamarin.Forms.PlatformConfiguration;
-using Size = Xamarin.Forms.Size;
 
 [assembly: ExportRenderer(typeof(CustomEditor), typeof(CustomEditorRenderer))]
-
 namespace FBS.XF.Toolkit.WPF.Renderers
 {
+	/// <summary>
+	/// Custom Editor Renderer.
+	/// Implements the <see cref="Xamarin.Forms.Platform.WPF.EditorRenderer" />
+	/// </summary>
+	/// <seealso cref="Xamarin.Forms.Platform.WPF.EditorRenderer" />
 	public class CustomEditorRenderer : EditorRenderer
 	{
-		protected override void OnElementChanged(ElementChangedEventArgs<Editor> e)
-		{
-			var firstTime = Control == null;
-
-			base.OnElementChanged(e);
-
-			if (e.NewElement != null)
-			{
-				if (Control != null && firstTime)
-				{
-					Control.SpellCheck.IsEnabled = true;
-				}
-			}
-		}
-
+		#region Overrides
+		/// <summary>
+		/// Gets the size of the desired.
+		/// </summary>
+		/// <param name="widthConstraint">The width constraint.</param>
+		/// <param name="heightConstraint">The height constraint.</param>
+		/// <returns>SizeRequest.</returns>
 		public override SizeRequest GetDesiredSize(double widthConstraint, double heightConstraint)
 		{
 			var size = base.GetDesiredSize(widthConstraint, heightConstraint);
@@ -46,5 +38,25 @@ namespace FBS.XF.Toolkit.WPF.Renderers
 				return newSize;
 			}
 		}
+
+		/// <summary>
+		/// Called when [element changed].
+		/// </summary>
+		/// <param name="e">The e.</param>
+		protected override void OnElementChanged(ElementChangedEventArgs<Editor> e)
+		{
+			var firstTime = Control == null;
+
+			base.OnElementChanged(e);
+
+			if (e.NewElement != null)
+			{
+				if (Control != null && firstTime)
+				{
+					Control.SpellCheck.IsEnabled = true;
+				}
+			}
+		}
+		#endregion
 	}
 }

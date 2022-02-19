@@ -4,7 +4,7 @@ using Xamarin.Essentials;
 namespace FBS.XF.Toolkit.Interfaces
 {
 	/// <summary>
-	/// Interface IFilePickerDialog
+	/// IFile Picker Dialog
 	/// </summary>
 	public interface IFilePickerDialog
 	{

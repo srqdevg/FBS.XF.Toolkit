@@ -3,7 +3,7 @@
 namespace FBS.XF.Toolkit.Interfaces
 {
 	/// <summary>
-	/// Interface IValidateViewModel
+	/// IValidate ViewModel
 	/// </summary>
 	interface IValidateViewModel
 	{

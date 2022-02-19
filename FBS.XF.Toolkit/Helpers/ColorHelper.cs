@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using Color = Xamarin.Forms.Color;
 
 namespace FBS.XF.Toolkit.Helpers
@@ -17,7 +18,7 @@ namespace FBS.XF.Toolkit.Helpers
 		/// <param name="oldColor">The old color.</param>
 		/// <param name="NewColor">Creates new color.</param>
 		/// <returns>System.Drawing.Image.</returns>
-		public static System.Drawing.Image ColorReplace(this System.Drawing.Image inputImage, int tolerance, Color oldColor, Color NewColor)
+		public static Image ColorReplace(this Image inputImage, int tolerance, Color oldColor, Color NewColor)
 		{
 			var outputImage = new Bitmap(inputImage.Width, inputImage.Height);
 			var graphics = Graphics.FromImage(outputImage);
@@ -52,10 +53,10 @@ namespace FBS.XF.Toolkit.Helpers
 		/// </summary>
 		/// <param name="color">The color.</param>
 		/// <returns>System.String.</returns>
+		[SuppressMessage("ReSharper", "PossiblyImpureMethodCallOnReadonlyVariable")]
 		public static string ColorToName(Color color)
 		{
 			// Get hex value
-			var colorString = color.ToString();
 			var colorHex = color.ToHex();
 
 			if (Color.AliceBlue.ToHex() == colorHex)

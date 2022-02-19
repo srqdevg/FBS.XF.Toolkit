@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using FBS.XF.Toolkit.Event;
 using Xamarin.Forms;
 
 namespace FBS.XF.Toolkit.Controls
@@ -220,7 +221,7 @@ namespace FBS.XF.Toolkit.Controls
 				if (headerStackLayout == null)
 				{
 					// Do we need a frame?
-					if (BorderColor != null && BorderColor != Color.Default)
+					if (BorderColor != Color.Default)
 					{
 						// Create container
 						headerStackLayout = new StackLayout

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using Xamarin.Forms;
 
 namespace FBS.XF.Toolkit.Converters

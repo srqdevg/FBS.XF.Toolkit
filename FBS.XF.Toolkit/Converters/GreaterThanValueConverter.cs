@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using Xamarin.Forms;
 
 namespace FBS.XF.Toolkit.Converters
@@ -22,7 +21,7 @@ namespace FBS.XF.Toolkit.Converters
 		/// <returns>A converted value. If the method returns null, the valid null value is used.</returns>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (value != null && value is int v)
+			if (value is int v)
 			{
 				// Is parameter an int or string
 				if (parameter is int ip)

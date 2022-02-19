@@ -1,7 +1,7 @@
 ﻿namespace FBS.XF.Toolkit.Interfaces
 {
 	/// <summary>
-	/// Interface IForceOrientation
+	/// IForce Orientation
 	/// </summary>
 	/// <remarks>
 	/// All rights belong to 

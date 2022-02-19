@@ -1,10 +1,9 @@
-﻿using System;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace FBS.XF.Toolkit.Controls
 {
 	/// <summary>
-	/// CustomEditor.
+	/// Custom Editor.
 	/// Implements the <see cref="Xamarin.Forms.Editor" />
 	/// </summary>
 	/// <seealso cref="Xamarin.Forms.Editor" />

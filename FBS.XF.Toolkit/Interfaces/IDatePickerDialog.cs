@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace FBS.XF.Toolkit.Interfaces
 {
 	/// <summary>
-	/// Interface IDatePickerDialog
+	/// IDate Picker Dialog
 	/// </summary>
 	public interface IDatePickerDialog
 	{

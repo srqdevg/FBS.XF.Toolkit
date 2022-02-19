@@ -1,7 +1,7 @@
 ﻿namespace FBS.XF.Toolkit.Interfaces
 {
 	/// <summary>
-	/// IBiometricService
+	/// IBiometric Service
 	/// </summary>
 	public interface IBiometricService
 	{

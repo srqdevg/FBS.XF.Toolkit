@@ -7,8 +7,6 @@ using System.Windows.Media;
 using FBS.XF.Toolkit.Interfaces;
 using FBS.XF.Toolkit.WPF.Controls;
 using Xamarin.Forms;
-using Application = Xamarin.Forms.Application;
-using Color = Xamarin.Forms.Color;
 using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventArgs;
 using SolidColorBrush = System.Windows.Media.SolidColorBrush;
 using Thickness = System.Windows.Thickness;
@@ -97,6 +95,7 @@ namespace FBS.XF.Toolkit.WPF.Controls
 
 			if (result.HasValue && result.Value)
 			{
+				// ReSharper disable once ConditionIsAlwaysTrueOrFalse
 				taskCompletionSource.SetResult(result.Value);
 			}
 			else

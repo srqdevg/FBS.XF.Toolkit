@@ -404,7 +404,6 @@ namespace FBS.XF.Toolkit.Controls
 		/// <summary>
 		/// Titles the property changed.
 		/// </summary>
-		/// <param name="bindable">The bindable.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
 		private void TitlePropertyChanged(object oldValue, object newValue)

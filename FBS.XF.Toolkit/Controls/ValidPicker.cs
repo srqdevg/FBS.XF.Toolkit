@@ -12,7 +12,7 @@ namespace FBS.XF.Toolkit.Controls
 	/// <summary>
 	/// Valid Picker.
 	/// </summary>
-	/// <seealso cref="Xamarin.Forms.Grid" />
+	/// <seealso cref="Grid" />
 	public class ValidPicker : Grid, IDisposable
 	{
 		#region Bindable properties
@@ -136,10 +136,7 @@ namespace FBS.XF.Toolkit.Controls
 		public ValidPicker()
 		{
 			// Add entry
-			if (picker == null)
-			{
-				CreateControl();
-			}
+			CreateControl();
 		}
 		#endregion
 
@@ -593,7 +590,7 @@ namespace FBS.XF.Toolkit.Controls
 		private static string ValidatePropertyName(ValidPicker validPicker)
 		{
 			// Get binding
-			validPicker.binding = validPicker.binding ?? validPicker.GetBinding(SelectedItemProperty);
+			validPicker.binding ??= validPicker.GetBinding(SelectedItemProperty);
 
 			if (string.IsNullOrWhiteSpace(validPicker.binding.Path))
 				throw new ArgumentNullException($"{nameof(validPicker.binding.Path)} cannot be null");

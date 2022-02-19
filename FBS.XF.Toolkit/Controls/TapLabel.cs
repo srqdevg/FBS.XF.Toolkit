@@ -22,10 +22,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		public TapLabel()
 		{
-			if (tapRecognizer == null)
-			{
-				CreateControl();
-			}
+			CreateControl();
 		}
 		#endregion
 

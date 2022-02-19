@@ -4,7 +4,7 @@ using System.Reflection;
 namespace FBS.XF.Toolkit.Interfaces
 {
 	/// <summary>
-	/// Interface INativeServices
+	/// INative Services
 	/// </summary>
 	/// <remarks>
 	/// Define various helper methods to get information from the native device

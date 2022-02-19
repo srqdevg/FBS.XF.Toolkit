@@ -5,32 +5,11 @@ using SkiaSharp;
 namespace FBS.XF.Toolkit.Helpers
 {
 	/// <summary>
-	/// GraphicsHelper.
+	/// Graphics Helper.
 	/// </summary>
 	public static class GraphicsHelper
 	{
 		#region Public methods
-		///// <summary>
-		///// Locations the pin.
-		///// </summary>
-		///// <param name="project">The project.</param>
-		///// <returns>CustomPin.</returns>
-		//public static CustomPin LocationPin(Project project)
-		//{
-		//	return new CustomPin
-		//	{
-		//		Type = PinType.Place,
-		//		Position = new Position(project.Latitude, project.Longtitude),
-		//		Label = project.PinLabel,
-		//		MarkerId = project.PinMarker,
-		//		ProjectTitle = project.Name,
-		//		ProjectStatus = EnumHelper.GetEnumDescription(typeof(ProjectStatus), project.ProjectStatus),
-		//		ProjectFunding = EnumHelper.GetEnumDescription(typeof(ProjectFunding), project.ProjectFunding),
-		//		// For IOS until we figure out how to create a custom view
-		//		Address = $"{project.Name}/{project.ProjectStatus}/{project.ProjectFunding}"
-		//	};
-		//}
-
 		/// <summary>
 		/// Resizes the image.
 		/// </summary>
@@ -41,55 +20,49 @@ namespace FBS.XF.Toolkit.Helpers
 		/// <returns>Stream.</returns>
 		public static Stream ResizeImage(string fileName, double height, double width, int rotate = 0)
 		{
-			try
+			// Load file into stream
+			using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
 			{
-				// Load file into stream
-				using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+				// Load into SKBitmap
+				var sourceImage = SKBitmap.Decode(stream);
+
+				if (rotate > 0)
 				{
-					// Load into SKBitmap
-					var sourceImage = SKBitmap.Decode(stream);
+					sourceImage = Rotate(sourceImage, rotate);
+				}
 
-					if (rotate > 0)
+				// Crop it to the correct ratio
+				sourceImage = CropBitmap(sourceImage, width, height);
+
+				// Figure out resize
+				var resizedWidth = (int) width;
+				var resizedHeight = (int) height;
+				var imageInfo = new SKImageInfo(resizedWidth, resizedHeight, SKImageInfo.PlatformColorType,
+					SKAlphaType.Premul);
+
+				// Resize 
+				using (var surface = SKSurface.Create(imageInfo))
+				{
+					using (var paint = new SKPaint())
 					{
-						sourceImage = Rotate(sourceImage, rotate);
-					}
+						// High quality with antialiasing
+						paint.IsAntialias = true;
+						paint.FilterQuality = SKFilterQuality.High;
 
-					// Crop it to the correct ratio
-					sourceImage = CropBitmap(sourceImage, width, height);
+						// draw the bitmap to fill the surface
+						surface.Canvas.DrawBitmap(sourceImage, new SKRectI(0, 0, resizedWidth, resizedHeight), paint);
+						surface.Canvas.Flush();
 
-					// Figure out resize
-					var resizedWidth = (int) width;
-					var resizedHeight = (int) height;
-					var imageInfo = new SKImageInfo(resizedWidth, resizedHeight, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
-
-					// Resize 
-					using (var surface = SKSurface.Create(imageInfo))
-					{
-						using (var paint = new SKPaint())
+						// Save
+						using (var data = surface.Snapshot().Encode(SKEncodedImageFormat.Png, 100))
 						{
-							// High quality with antialiasing
-							paint.IsAntialias = true;
-							paint.FilterQuality = SKFilterQuality.High;
-
-							// draw the bitmap to fill the surface
-							surface.Canvas.DrawBitmap(sourceImage, new SKRectI(0, 0, resizedWidth, resizedHeight), paint);
-							surface.Canvas.Flush();
-
-							// Save
-							using (var data = surface.Snapshot().Encode(SKEncodedImageFormat.Png, 100))
-							{
-								var memoryStream = new MemoryStream();
-								data.SaveTo(memoryStream);
-								memoryStream.Position = 0;
-								return memoryStream;
-							}
+							var memoryStream = new MemoryStream();
+							data.SaveTo(memoryStream);
+							memoryStream.Position = 0;
+							return memoryStream;
 						}
 					}
 				}
-			}
-			catch (Exception ex)
-			{
-				return null;
 			}
 		}
 
@@ -184,51 +157,6 @@ namespace FBS.XF.Toolkit.Helpers
 
 			return croppedBitmap;
 		}
-		#endregion
-
-		#region Properties
-		////public static Stream OverlayTextOnImage(string imageName, string textOverlay, float textSize, Color textColor, string fontName, int x, int y)
-		////{
-		////	var bitmap = SKBitmap.Decode(imageName);
-		////	var toBitmap = new SKBitmap(bitmap.Width, bitmap.Height, bitmap.ColorType, bitmap.AlphaType);
-
-		////	var canvas = new SKCanvas(toBitmap);
-		////	// Draw a bitmap rescaled
-		////	//canvas.SetMatrix(SKMatrix.MakeScale(resizeFactor, resizeFactor));
-		////	canvas.DrawBitmap(bitmap, 0, 0);
-		////	canvas.ResetMatrix();
-
-		////	var font = SKTypeface.FromFamilyName(fontName);
-
-		////	var fontBrush = new SKPaint
-		////	{
-		////		Typeface = font,
-		////		TextSize = textSize,
-		////		IsAntialias = true,
-		////		Color = textColor.ToSKColor()
-		////	};
-
-		////	canvas.DrawText(textOverlay, x, y, fontBrush);
-
-		////	canvas.Flush();
-
-		////	var image = SKImage.FromBitmap(toBitmap);
-		////	var data = image.Encode(SKEncodedImageFormat.Png, 96);
-
-		////	var stream = new MemoryStream();
-		////	data.SaveTo(stream);
-		////	stream.Position = 0;
-
-		////	data.Dispose();
-		////	image.Dispose();
-		////	canvas.Dispose();
-		////	fontBrush.Dispose();
-		////	font.Dispose();
-		////	toBitmap.Dispose();
-		////	bitmap.Dispose();
-
-		////	return stream;
-		////}
 		#endregion
 	}
 }

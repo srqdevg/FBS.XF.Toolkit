@@ -32,7 +32,6 @@
 		/// <param name="id">The identifier.</param>
 		/// <param name="text">The name.</param>
 		/// <param name="isSelected">if set to <c>true</c> [is selected].</param>
-		/// <param name="isVisible">if set to <c>true</c> [is visible].</param>
 		public IdText(string id, string text, bool isSelected = true)
 		{
 			Id = id;

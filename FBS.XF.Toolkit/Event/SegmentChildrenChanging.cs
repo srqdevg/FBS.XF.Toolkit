@@ -4,6 +4,11 @@ using FBS.XF.Toolkit.Controls;
 
 namespace FBS.XF.Toolkit.Event
 {
+	/// <summary>
+	/// Segment Children Changing.
+	/// Implements the <see cref="System.EventArgs" />
+	/// </summary>
+	/// <seealso cref="System.EventArgs" />
 	[Preserve(AllMembers = true)]
 	public class SegmentChildrenChanging : EventArgs
 	{

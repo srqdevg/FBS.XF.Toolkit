@@ -56,7 +56,6 @@ namespace FBS.XF.Toolkit.Controls
 		/// <summary>
 		/// Controls the property changed.
 		/// </summary>
-		/// <param name="propertyName">Name of the property.</param>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
 		private void ControlPropertyChanged(object oldValue, object newValue)

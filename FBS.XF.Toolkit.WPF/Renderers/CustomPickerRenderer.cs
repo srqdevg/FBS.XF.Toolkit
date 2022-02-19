@@ -1,17 +1,35 @@
-﻿using FBS.XF.Toolkit.Controls;
-using FBS.XF.Toolkit.WPF.Renderers;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Platform.WPF;
+using FBS.XF.Toolkit.Controls;
+using FBS.XF.Toolkit.WPF.Renderers;
 
 [assembly: ExportRenderer(typeof(CustomPicker), typeof(CustomPickerRenderer))]
 namespace FBS.XF.Toolkit.WPF.Renderers
 {
 	public class CustomPickerRenderer : PickerRenderer
 	{
+		#region Override methods
+		/// <summary>
+		/// Gets the size of the desired.
+		/// </summary>
+		/// <param name="widthConstraint">The width constraint.</param>
+		/// <param name="heightConstraint">The height constraint.</param>
+		/// <returns>SizeRequest.</returns>
+		public override SizeRequest GetDesiredSize(double widthConstraint, double heightConstraint)
+		{
+			var size = base.GetDesiredSize(widthConstraint, heightConstraint);
+			var newSize = new SizeRequest(size.Request, new Size(200, size.Request.Height - 2));
+			return newSize;
+		}
+
+		/// <summary>
+		/// Called when [element changed].
+		/// </summary>
+		/// <param name="e">The e.</param>
 		protected override void OnElementChanged(ElementChangedEventArgs<Picker> e)
 		{
 			base.OnElementChanged(e);
-			
+
 			if (e.NewElement != null)
 			{
 				if (Control != null)
@@ -20,12 +38,6 @@ namespace FBS.XF.Toolkit.WPF.Renderers
 				}
 			}
 		}
-
-		public override SizeRequest GetDesiredSize(double widthConstraint, double heightConstraint)
-		{
-			var size = base.GetDesiredSize(widthConstraint, heightConstraint);
-			var newSize = new SizeRequest(size.Request,new Xamarin.Forms.Size(200, size.Request.Height -2));
-			return newSize;
-		}
+		#endregion
 	}
 }
