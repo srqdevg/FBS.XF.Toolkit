@@ -3,19 +3,23 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
-    <FileVersion>1.6.0.0</FileVersion>
-    <AssemblyVersion>1.6.0.0</AssemblyVersion>
-    <Version>1.6</Version>
+    <FileVersion>1.7.0.0</FileVersion>
+    <AssemblyVersion>1.7.0.0</AssemblyVersion>
+    <Version>1.7.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\copy.png" />
     <None Remove="Resources\eye.png" />
+    <None Remove="Resources\paste.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Resources\eye.png">
+    <Resource Include="Resources\copy.png" />
+    <Resource Include="Resources\eye.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </Resource>
+    <Resource Include="Resources\paste.png" />
   </ItemGroup>
 
   <ItemGroup>

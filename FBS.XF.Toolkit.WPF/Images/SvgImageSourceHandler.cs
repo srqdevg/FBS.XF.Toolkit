@@ -20,7 +20,7 @@ namespace FBS.XF.Toolkit.WPF.Images
 		/// <param name="imagesource">Imagesource.</param>
 		/// <param name="cancelationToken">Cancelation token.</param>
 		/// <returns>The image async.</returns>
-		public async Task<ImageSource> LoadImageAsync(Xamarin.Forms.ImageSource imagesource, CancellationToken cancelationToken = default(CancellationToken))
+		public async Task<ImageSource> LoadImageAsync(Xamarin.Forms.ImageSource imagesource, CancellationToken cancelationToken = default)
 		{
 			var svgImageSource = imagesource as SvgImageSource;
 

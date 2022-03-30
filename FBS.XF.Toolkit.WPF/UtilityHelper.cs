@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Windows;
 using FBS.XF.Toolkit.Interfaces;
 using FBS.XF.Toolkit.WPF;
