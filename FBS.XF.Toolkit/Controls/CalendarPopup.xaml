@@ -22,11 +22,12 @@
 			                   HorizontalOptions="Center"
 			                   MaximumDate="{Binding MaximumDate}"
 			                   MinimumDate="{Binding MinimumDate}"
-			                   MonthYear="{Binding MonthYear}"
+							   Month="{Binding Month}"
 			                   Padding="10,0"
 			                   SelectedDate="{Binding SelectedDate}"
 			                   VerticalOptions="Center"
-			                   WidthRequest="320">
+			                   WidthRequest="320" 
+                               Year="{Binding Year}">
 				<controls:Calendar.HeaderSectionTemplate>
 					<DataTemplate>
 						<Grid HorizontalOptions="FillAndExpand"

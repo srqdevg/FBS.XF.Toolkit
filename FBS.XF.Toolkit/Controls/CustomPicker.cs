@@ -79,7 +79,7 @@ namespace FBS.XF.Toolkit.Controls
 
 					if (formattedWidth > width)
 					{
-						width = formattedWidth + 10;
+						width = formattedWidth + 30;
 					}
 				}
 

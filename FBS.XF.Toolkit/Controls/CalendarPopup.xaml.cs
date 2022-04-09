@@ -28,7 +28,8 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			InitializeComponent();
 
-			MonthYear = DateTime.Now;
+			Month = DateTime.Now.Month;
+			Year = DateTime.Now.Year;
 			BackgroundColor = Application.Current.RequestedTheme == OSAppTheme.Light ? Color.White : Color.Black;
 			TitleBackgroundColor = Application.Current.RequestedTheme == OSAppTheme.Light ? Color.DarkGray : Color.DarkSlateGray;
 			ButtonTextColor = Color.FromHex("#FF2066");
@@ -92,10 +93,10 @@ namespace FBS.XF.Toolkit.Controls
 		public Color MonthLabelColor { get; set; }
 
 		/// <summary>
-		/// Gets or sets the month year.
+		/// Gets or sets the month.
 		/// </summary>
-		/// <value>The month year.</value>
-		public DateTime? MonthYear { get; set; }
+		/// <value>The month.</value>
+		public int Month { get; set; }
 
 		/// <summary>
 		/// Gets or sets the selected date.
@@ -114,6 +115,12 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		/// <value>The color of the title background.</value>
 		public Color TitleBackgroundColor { get; set; }
+
+		/// <summary>
+		/// Gets or sets the year.
+		/// </summary>
+		/// <value>The year.</value>
+		public int Year { get; set; }
 		#endregion
 	}
 }
