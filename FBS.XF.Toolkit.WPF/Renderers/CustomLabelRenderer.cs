@@ -1,10 +1,14 @@
-﻿using System.Windows;
+﻿using System;
+using System.Globalization;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.WPF;
 using FBS.XF.Toolkit.Controls;
 using FBS.XF.Toolkit.WPF.Renderers;
 using MenuItem = System.Windows.Controls.MenuItem;
+using Size = System.Windows.Size;
 
 [assembly: ExportRenderer(typeof(CustomLabel), typeof(CustomLabelRenderer))]
 namespace FBS.XF.Toolkit.WPF.Renderers
@@ -17,7 +21,6 @@ namespace FBS.XF.Toolkit.WPF.Renderers
 	public class CustomLabelRenderer : LabelRenderer
 	{
 		#region Override methods
-		
 		/// <summary>
 		/// Gets the size of the desired.
 		/// </summary>
@@ -26,10 +29,31 @@ namespace FBS.XF.Toolkit.WPF.Renderers
 		/// <returns>SizeRequest.</returns>
 		public override SizeRequest GetDesiredSize(double widthConstraint, double heightConstraint)
 		{
-			
 			var size = base.GetDesiredSize(widthConstraint, heightConstraint);
-			var newSize = new SizeRequest(size.Request, new Xamarin.Forms.Size(200, size.Request.Height - 2));
-			return newSize;
+
+			//if (Element.Text.StartsWith("The Stone House Hotel is a "))
+			//{
+			//	var stackLayout = (StackLayout) Element.Parent;
+
+			//	if (stackLayout.Width > 0)
+			//	{
+			//		var comboBox = new ComboBox();
+			//		var formattedText = new FormattedText(Element.Text, CultureInfo.GetCultureInfo("en-us"),
+			//			System.Windows.FlowDirection.LeftToRight, new Typeface("OpenSans"), 16, Brushes.Black,
+			//			VisualTreeHelper.GetDpi(comboBox).PixelsPerDip);
+
+			//		var width = Math.Round(formattedText.WidthIncludingTrailingWhitespace + 1);
+			//		var height = Math.Round(formattedText.Height + 1);
+
+			//		var newValue = Math.Round(width / size.Request.Width + 0.5) * height;
+			//		var newSize = new SizeRequest(
+			//			new Xamarin.Forms.Size(size.Request.Width, newValue),
+			//			new Xamarin.Forms.Size(size.Request.Width, newValue));
+			//		return newSize;
+			//	}
+			//}
+
+			return size;
 		}
 
 		/// <summary>

@@ -6,6 +6,11 @@ using FBS.XF.Toolkit.WPF.Renderers;
 [assembly: ExportRenderer(typeof(CustomPicker), typeof(CustomPickerRenderer))]
 namespace FBS.XF.Toolkit.WPF.Renderers
 {
+	/// <summary>
+	/// CustomPickerRenderer.
+	/// Implements the <see cref="Xamarin.Forms.Platform.WPF.PickerRenderer" />
+	/// </summary>
+	/// <seealso cref="Xamarin.Forms.Platform.WPF.PickerRenderer" />
 	public class CustomPickerRenderer : PickerRenderer
 	{
 		#region Override methods

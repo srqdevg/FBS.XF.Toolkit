@@ -45,45 +45,49 @@ namespace FBS.XF.Toolkit.Controls
 					base.ItemsSource = ItemsSource;
 				}
 
-				var comboBoxWidth = WidthRequest;
-				double width = 0;
-				var nativeService = DependencyService.Resolve<INativeService>();
-
-				foreach (var item in ItemsSource)
+				if (Device.RuntimePlatform == Device.WPF)
 				{
-					string textValue;
+					var comboBoxWidth = WidthRequest;
+					double width = 0;
+					var nativeService = DependencyService.Resolve<INativeService>();
 
-					if (ItemDisplayBinding != null)
+					foreach (var item in ItemsSource)
 					{
-						var type = item.GetType();
-						var properties = type.GetProperties();
-						var property = properties.FirstOrDefault(p => p.Name.Equals(((Binding)ItemDisplayBinding).Path));
-						var value = property?.GetValue(item);
+						string textValue;
 
-						if (value is int i)
+						if (ItemDisplayBinding != null)
 						{
-							textValue = Convert.ToString(i);
+							var type = item.GetType();
+							var properties = type.GetProperties();
+							var property =
+								properties.FirstOrDefault(p => p.Name.Equals(((Binding) ItemDisplayBinding).Path));
+							var value = property?.GetValue(item);
+
+							if (value is int i)
+							{
+								textValue = Convert.ToString(i);
+							}
+							else
+							{
+								textValue = (string) value;
+							}
 						}
 						else
 						{
-							textValue = (string)value;
+							textValue = (string) item;
+						}
+
+						// Get text width 
+						var formattedWidth = nativeService.GetTextWidth(textValue);
+
+						if (formattedWidth > width)
+						{
+							width = formattedWidth + 30;
 						}
 					}
-					else
-					{
-						textValue = (string)item;
-					}
 
-					// Get text width 
-					var formattedWidth = nativeService.GetTextWidth(textValue);
-
-					if (formattedWidth > width)
-					{
-						width = formattedWidth + 30;
-					}
+					WidthRequest = Math.Round(comboBoxWidth + width);
 				}
-
-				WidthRequest = Math.Round(comboBoxWidth + width);
 			}
 		}
 		#endregion
