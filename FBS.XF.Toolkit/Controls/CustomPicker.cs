@@ -23,7 +23,7 @@ namespace FBS.XF.Toolkit.Controls
 				propertyChanged: (bd, ov, nv) => ((CustomPicker)bd).PropertyChanged(ov, nv));
 
 		/// <summary>
-		/// The items source property{CC2D43FA-BBC4-448A-9D0B-7B57ADF2655C}
+		/// The items source property
 		/// </summary>
 		public new static readonly BindableProperty ItemsSourceProperty =
 					BindableProperty.Create(nameof(ItemsSource), typeof(IList), typeof(CustomPicker), null, BindingMode.OneWay,
@@ -103,7 +103,11 @@ namespace FBS.XF.Toolkit.Controls
 			set => SetValue(SizeToFitProperty, value);
 		}
 
-		/// <inheritdoc />
+		/// <summary>
+		/// Gets or sets the items source.
+		/// </summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		public new IList ItemsSource
 		{
 			get => (IList)GetValue(ItemsSourceProperty);

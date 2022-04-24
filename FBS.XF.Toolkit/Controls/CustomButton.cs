@@ -10,22 +10,6 @@ namespace FBS.XF.Toolkit.Controls
 	/// <seealso cref="Xamarin.Forms.Frame" />
 	public class CustomButton : Frame
 	{
-		#region Events/Delegates
-		public event EventHandler<ClickedEventArgs> Clicked;
-		#endregion
-
-		#region IDisposable
-		/// <summary>
-		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-		/// </summary>
-		public void Dispose()
-		{
-			tapGestureRecognizer.Tapped -= TapRecognizer_Tapped;
-			touchGestureRecognizer.TouchDown -= Button_TouchDown;
-			touchGestureRecognizer.TouchUp -= Button_TouchUp;
-		}
-		#endregion
-
 		#region Bindable Properties
 		/// <summary>
 		/// The background color property
@@ -229,6 +213,10 @@ namespace FBS.XF.Toolkit.Controls
 				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).WPFModePropertyChanged(ov, nv));
 		#endregion
 
+		#region Events/Delegates
+		public event EventHandler<ClickedEventArgs> Clicked;
+		#endregion
+
 		#region Constructors
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CustomButton"/> class.
@@ -307,6 +295,18 @@ namespace FBS.XF.Toolkit.Controls
 
 				Clicked?.Invoke(this, null);
 			}
+		}
+		#endregion
+
+		#region IDisposable
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			tapGestureRecognizer.Tapped -= TapRecognizer_Tapped;
+			touchGestureRecognizer.TouchDown -= Button_TouchDown;
+			touchGestureRecognizer.TouchUp -= Button_TouchUp;
 		}
 		#endregion
 

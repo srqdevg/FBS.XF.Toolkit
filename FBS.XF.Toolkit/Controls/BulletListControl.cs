@@ -32,28 +32,35 @@ namespace FBS.XF.Toolkit.Controls
 		/// The bullet image property
 		/// </summary>
 		public static readonly BindableProperty BulletImageProperty = 
-			BindableProperty.Create(nameof(BulletImageProperty), typeof(Stream), typeof(Stream));
+			BindableProperty.Create(nameof(BulletImageProperty), typeof(Stream), typeof(BulletListControl));
 
 		/// <summary>
 		/// The bullet character property
 		/// </summary>
 		public static readonly BindableProperty BulletCharacterProperty = 
-			BindableProperty.Create(nameof(BulletCharacter), typeof(string), typeof(string),
+			BindableProperty.Create(nameof(BulletCharacter), typeof(string), typeof(BulletListControl),
 				propertyChanged: (bd, ov, nv) => ((BulletListControl) bd).BulletCharacterPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The bullet character font size property
 		/// </summary>
 		public static readonly BindableProperty BulletCharacterFontSizeProperty =
-			BindableProperty.Create(nameof(BulletCharacterFontSize), typeof(double), typeof(double),
+			BindableProperty.Create(nameof(BulletCharacterFontSize), typeof(double), typeof(BulletListControl),
 				propertyChanged: (bd, ov, nv) => ((BulletListControl) bd).BulletCharacterFontSizePropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The list item font size property
 		/// </summary>
 		public static readonly BindableProperty ListItemFontSizeProperty = 
-			BindableProperty.Create(nameof(ListItemFontSize), typeof(double), typeof(double),
+			BindableProperty.Create(nameof(ListItemFontSize), typeof(double), typeof(BulletListControl),
 				propertyChanged: (bd, ov, nv) => ((BulletListControl) bd).ListItemFontSizePropertyChanged(ov, nv));
+
+		/// <summary>
+		/// The show bullete property
+		/// </summary>
+		public static readonly BindableProperty ShowBulleteProperty = 
+			BindableProperty.Create(nameof(ListItemFontSize), typeof(bool), typeof(BulletListControl),
+				propertyChanged: (bd, ov, nv) => ((BulletListControl) bd).ShowBulletPropertyChanged(ov, nv));
 		#endregion
 
 		#region Constructors
@@ -97,6 +104,23 @@ namespace FBS.XF.Toolkit.Controls
 		}
 
 		/// <summary>
+		/// Gets the row definitions.
+		/// </summary>
+		/// <param name="count">The count.</param>
+		/// <returns>RowDefinitionCollection.</returns>
+		private RowDefinitionCollection GetRowDefinitions(int count)
+		{
+			var rows = new RowDefinitionCollection();
+
+			for (var r = 0; r < count; r++)
+			{
+				rows.Add(new RowDefinition { Height = GridLength.Auto });
+			}
+
+			return rows;
+		}
+
+		/// <summary>
 		/// Handles new bound item data coming in.
 		/// </summary>
 		/// <param name="oldValue">The old value.</param>
@@ -125,6 +149,20 @@ namespace FBS.XF.Toolkit.Controls
 		}
 
 		/// <summary>
+		/// Shows the bullet property changed.
+		/// </summary>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		private void ShowBulletPropertyChanged(object oldValue, object newValue)
+		{
+			if (newValue != oldValue && newValue is bool value)
+			{
+				ShowBullet = value;
+				Render();
+			}
+		}
+
+		/// <summary>
 		/// Renders this instance.
 		/// </summary>
 		private void Render()
@@ -135,31 +173,44 @@ namespace FBS.XF.Toolkit.Controls
 			}
 
 			// Create the container.
-			var parentLayout = new StackLayout 
-			{ 
-				HorizontalOptions = LayoutOptions.Fill, 
-				Padding = new Thickness(1) 
+			var parentLayout = new Grid 
+			{
+				ColumnDefinitions = new ColumnDefinitionCollection {
+					new ColumnDefinition { Width = GridLength.Auto },
+					new ColumnDefinition { Width = GridLength.Star }
+				},
+				Padding = new Thickness(1),
+				RowDefinitions = GetRowDefinitions(Items.Count())
 			};
+
+			var row = 0;
 
 			// Render the list.
 			foreach (var item in Items)
 			{
-				// Make sure they provided a good bullet.
-				if (string.IsNullOrWhiteSpace(BulletCharacter) && BulletImage == null)
+				if (ShowBullet)
 				{
-					BulletCharacter = DefaultBulletCharacter;
-				}
+					// Make sure they provided a good bullet.
+					if (string.IsNullOrWhiteSpace(BulletCharacter) && BulletImage == null)
+					{
+						BulletCharacter = DefaultBulletCharacter;
+					}
 
-				// Choose the bullet. Default to text if no image defined.
-				var bullet = !string.IsNullOrWhiteSpace(BulletCharacter) && BulletImage == null
-					? (View) new Label 
+					// Choose the bullet. Default to text if no image defined.
+					var bullet = !string.IsNullOrWhiteSpace(BulletCharacter) && BulletImage == null
+						? (View) new Label
 						{
 							FontSize = BulletCharacterFontSize,
 							Margin = ListLayoutPadding,
-							Text = BulletCharacter,  
-							VerticalTextAlignment = TextAlignment.Start 
+							Text = BulletCharacter,
+							VerticalTextAlignment = TextAlignment.Start
 						}
-					: new Image { Source = ImageSource.FromStream(() => BulletImage) };
+						: new Image {Source = ImageSource.FromStream(() => BulletImage)};
+
+					parentLayout.Children.Add(bullet);
+					Grid.SetRow(bullet, row);
+					Grid.SetColumn(bullet, 0);
+				}
 
 				// Create label
 				var label = new CustomLabel
@@ -168,19 +219,15 @@ namespace FBS.XF.Toolkit.Controls
 					Margin = new Thickness(10, 0, 10, 0),
 					LineBreakMode = LineBreakMode.WordWrap,
 					Text = item,
-					VerticalTextAlignment = TextAlignment.Start
+					VerticalTextAlignment = TextAlignment.Start,
+					VerticalOptions = LayoutOptions.StartAndExpand
 				};
 
-				// Create the horizontal container.
-				var container = new StackLayout 
-				{
-					HorizontalOptions = LayoutOptions.Fill, 
-					Orientation = StackOrientation.Horizontal 
-				};
+				parentLayout.Children.Add(label);
+				Grid.SetRow(label, row);
+				Grid.SetColumn(label, 1);
 
-				container.Children.Add(bullet);
-				container.Children.Add(label);
-				parentLayout.Children.Add(container);
+				row++;
 			}
 
 			// Render.
@@ -234,6 +281,12 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		/// <value>The list layout padding.</value>
 		public Thickness ListLayoutPadding { get; set; } = new Thickness(1);
+
+		/// <summary>
+		/// Gets or sets a value indicating whether [show bullet].
+		/// </summary>
+		/// <value><c>true</c> if [show bullet]; otherwise, <c>false</c>.</value>
+		public bool ShowBullet { get; set; } = true;
 		#endregion
 	}
 }

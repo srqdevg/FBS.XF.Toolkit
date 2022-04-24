@@ -7,7 +7,7 @@ namespace FBS.XF.Toolkit.Controls
 	/// LinkLabel.
 	/// </summary>
 	/// <seealso cref="Label" />
-	public class LinkLabel : Label, IDisposable
+	public class LinkLabel : CustomLabel, IDisposable
 	{
 		#region Events/Delegates
 		/// <summary>
@@ -86,6 +86,7 @@ namespace FBS.XF.Toolkit.Controls
 			
 			// Create content
 			FormattedText = new FormattedString();
+			VerticalOptions=LayoutOptions.StartAndExpand;
 
 			// Create spans and add tap gesture to the link span
 			linkSpan = new Span();
