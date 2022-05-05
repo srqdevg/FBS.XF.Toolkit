@@ -86,7 +86,7 @@ namespace FBS.XF.Toolkit.Controls
 						}
 					}
 
-					WidthRequest = Math.Round(comboBoxWidth + width);
+					WidthRequest = Math.Round(width + 30);
 				}
 			}
 		}
