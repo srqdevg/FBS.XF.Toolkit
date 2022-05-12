@@ -67,7 +67,7 @@ namespace FBS.XF.Toolkit.Converters
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			// Do nothing
-			return value;
+			return null;
 		}
 		#endregion
 

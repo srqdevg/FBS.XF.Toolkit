@@ -47,7 +47,6 @@ namespace FBS.XF.Toolkit.Controls
 
 				if (Device.RuntimePlatform == Device.WPF)
 				{
-					var comboBoxWidth = WidthRequest;
 					double width = 0;
 					var nativeService = DependencyService.Resolve<INativeService>();
 
@@ -86,7 +85,14 @@ namespace FBS.XF.Toolkit.Controls
 						}
 					}
 
-					WidthRequest = Math.Round(width + 30);
+					var requestWidth = Math.Round(width + 30);
+
+					if (requestWidth < MinimumWidthRequest)
+					{
+						requestWidth = MinimumWidthRequest;
+					}
+
+					WidthRequest = requestWidth;
 				}
 			}
 		}

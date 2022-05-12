@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using Xamarin.Forms.Platform.WPF;
 using FBS.XF.Toolkit.Controls;
 using FBS.XF.Toolkit.WPF.Renderers;
+using Xamarin.Forms;
 using MenuItem = System.Windows.Controls.MenuItem;
 
 [assembly: ExportRenderer(typeof(CustomLabel), typeof(CustomLabelRenderer))]
