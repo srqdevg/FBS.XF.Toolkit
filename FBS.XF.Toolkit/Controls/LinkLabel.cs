@@ -83,10 +83,10 @@ namespace FBS.XF.Toolkit.Controls
 			// Create a tap recognizer
 			tapRecognizer = new TapGestureRecognizer();
 			tapRecognizer.Tapped += OnLink_Tapped;
-			
+
 			// Create content
 			FormattedText = new FormattedString();
-			VerticalOptions=LayoutOptions.StartAndExpand;
+			VerticalOptions = LayoutOptions.StartAndExpand;
 
 			// Create spans and add tap gesture to the link span
 			linkSpan = new Span();

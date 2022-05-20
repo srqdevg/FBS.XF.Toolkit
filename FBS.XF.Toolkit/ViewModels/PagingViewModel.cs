@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FBS.XF.Toolkit.Models;
 using PropertyChanged;
 
@@ -30,8 +31,13 @@ namespace FBS.XF.Toolkit.ViewModels
 			// Calculate mid point
 			var midPoint = ShowPages / 2;
 			var startPage = 1;
-			var totalPages = TotalItems / ItemsPerPage;
-		
+			var totalPages = Math.DivRem(TotalItems, ItemsPerPage, out var remainder);
+
+			if (remainder > 0)
+			{
+				totalPages++;
+			}
+
 			// Make sure current page is within range
 			if (totalPages < CurrentPage)
 			{
@@ -44,7 +50,7 @@ namespace FBS.XF.Toolkit.ViewModels
 				{
 					if (totalPages - ShowPages > 1)
 					{
-						startPage = totalPages - ShowPages;
+						startPage = (totalPages +1 )- ShowPages;
 					}
 				}
 				else if (CurrentPage - midPoint > 0)

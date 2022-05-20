@@ -15,9 +15,28 @@ namespace FBS.XF.Toolkit.Helpers
 		/// Executes the SQL command.
 		/// </summary>
 		/// <param name="context">The context.</param>
+		/// <param name="sql">The SQL.</param>
+		/// <returns>List&lt;Dictionary&lt;System.String, System.String&gt;&gt;.</returns>
+		public static void ExecuteSQLCommand(DbContext context, string sql)
+		{
+			// Create row container
+			using (var command = context.Database.GetDbConnection().CreateCommand())
+			{
+				command.CommandText = sql;
+				command.CommandType = CommandType.Text;
+
+				context.Database.OpenConnection();
+				command.ExecuteNonQuery();
+			}
+		}
+
+		/// <summary>
+		/// Executes the SQL command.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		/// <param name="query">The query.</param>
 		/// <returns>List&lt;Dictionary&lt;System.String, System.String&gt;&gt;.</returns>
-		public static List<Dictionary<string, string>> ExecuteSQLCommand(DbContext context, string query)
+		public static List<Dictionary<string, string>> ExecuteSQLQueryCommand(DbContext context, string query)
 		{
 			// Create row container
 			var rows = new List<Dictionary<string, string>>();
