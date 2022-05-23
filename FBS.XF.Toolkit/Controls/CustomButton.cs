@@ -172,6 +172,13 @@ namespace FBS.XF.Toolkit.Controls
 				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).IsToggledPropertyChanged(ov, nv));
 
 		/// <summary>
+		/// The toggle image property
+		/// </summary>
+		public static readonly BindableProperty ToggleImageProperty =
+			BindableProperty.Create(nameof(ToggleImage), typeof(string), typeof(CustomButton), null,
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).IsToggledPropertyChanged(ov, nv));
+
+		/// <summary>
 		/// The toggle text property property
 		/// </summary>
 		public static readonly BindableProperty ToggleTextProperty =
@@ -589,6 +596,7 @@ namespace FBS.XF.Toolkit.Controls
 					{
 						buttonImage.BackgroundColor = Color.Transparent;
 						buttonImage.Color = ToggleImageColor;
+						buttonImage.Source = ToggleImage ?? Image;
 					}
 
 					if (buttonLabel != null)
@@ -606,6 +614,7 @@ namespace FBS.XF.Toolkit.Controls
 					{
 						buttonImage.BackgroundColor = Color.Transparent;
 						buttonImage.Color = ImageColor;
+						buttonImage.Source = Image;
 					}
 
 					if (buttonLabel != null)
@@ -693,6 +702,7 @@ namespace FBS.XF.Toolkit.Controls
 			{
 				button.buttonStackLayout.Orientation = StackOrientation.Horizontal;
 				button.buttonStackLayout.Children.Clear();
+				button.buttonLabel.Margin = new Thickness(0, 0, 4, 0);
 				button.buttonStackLayout.Children.Add(button.buttonLabel);
 				button.buttonStackLayout.Children.Add(button.buttonImage);
 			}
@@ -701,6 +711,7 @@ namespace FBS.XF.Toolkit.Controls
 				button.buttonStackLayout.Orientation = StackOrientation.Horizontal;
 				button.buttonStackLayout.Children.Clear();
 				button.buttonStackLayout.Children.Add(button.buttonImage);
+				button.buttonLabel.Margin = new Thickness(4, 0, 0, 0);
 				button.buttonStackLayout.Children.Add(button.buttonLabel);
 			}
 		}
@@ -886,6 +897,16 @@ namespace FBS.XF.Toolkit.Controls
 		}
 
 		/// <summary>
+		/// Gets or sets the image.
+		/// </summary>
+		/// <value>The image.</value>
+		public string Image
+		{
+			get => (string) GetValue(ImageProperty);
+			set => SetValue(ImageProperty, value);
+		}
+
+		/// <summary>
 		/// Gets or sets the color of the image.
 		/// </summary>
 		/// <value>The color of the image.</value>
@@ -903,16 +924,6 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			get => (int) GetValue(ImageHeightProperty);
 			set => SetValue(ImageHeightProperty, value);
-		}
-
-		/// <summary>
-		/// Gets or sets the image.
-		/// </summary>
-		/// <value>The image.</value>
-		public string Image
-		{
-			get => (string) GetValue(ImageProperty);
-			set => SetValue(ImageProperty, value);
 		}
 
 		/// <summary>
@@ -1034,6 +1045,16 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			get => (Color) GetValue(ToggleBorderColorProperty);
 			set => SetValue(ToggleBorderColorProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the toggle image.
+		/// </summary>
+		/// <value>The toggle image.</value>
+		public string ToggleImage
+		{
+			get => (string) GetValue(ToggleImageProperty);
+			set => SetValue(ToggleImageProperty, value);
 		}
 
 		/// <summary>

@@ -3,16 +3,17 @@ using FBS.XF.Toolkit.Controls;
 using FBS.XF.Toolkit.WPF.Renderers;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.WPF;
+using Label = Xamarin.Forms.Label;
 
-[assembly: ExportRenderer(typeof(CustomButton), typeof(CustomButtonRenderer))]
+[assembly: ExportRenderer(typeof(LinkLabel), typeof(LinkLabelRenderer))]
 namespace FBS.XF.Toolkit.WPF.Renderers
 {
 	/// <summary>
-	/// Custom Button Renderer.
-	/// Implements the <see cref="Xamarin.Forms.Platform.WPF.FrameRenderer" />
+	/// Link Label Renderer.
+	/// Implements the <see cref="Xamarin.Forms.Label" />
 	/// </summary>
-	/// <seealso cref="Xamarin.Forms.Platform.WPF.FrameRenderer" />
-	public class CustomButtonRenderer : FrameRenderer
+	/// <seealso cref="Xamarin.Forms.Label" />
+	public class LinkLabelRenderer : LabelRenderer
 	{
 		#region UI methods
 		/// <summary>
@@ -24,11 +25,6 @@ namespace FBS.XF.Toolkit.WPF.Renderers
 		{
 			prevCursor = Control.Cursor;
 			Control.Cursor = Cursors.Hand;
-
-			if (customButton.IsEnabled && !customButton.IsToggled)
-			{
-				VisualStateManager.GoToState(Element, "Pressed");
-			}
 		}
 
 		/// <summary>
@@ -39,7 +35,6 @@ namespace FBS.XF.Toolkit.WPF.Renderers
 		private void ControlOnMouseLeave(object sender, MouseEventArgs e)
 		{
 			Control.Cursor = prevCursor;
-			VisualStateManager.GoToState(Element, customButton.IsEnabled ? "Normal" : "Disabled");
 		}
 		#endregion
 
@@ -47,8 +42,7 @@ namespace FBS.XF.Toolkit.WPF.Renderers
 		/// <summary>
 		/// Releases unmanaged and - optionally - managed resources.
 		/// </summary>
-		/// <param name="disposing"><c>true</c> to release both managed and unmanaged resources;
-		/// <c>false</c> to release only unmanaged resources.</param>
+		/// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
 		protected override void Dispose(bool disposing)
 		{
 			if (Control != null && Device.RuntimePlatform == Device.WPF)
@@ -64,7 +58,7 @@ namespace FBS.XF.Toolkit.WPF.Renderers
 		/// Called when [element changed].
 		/// </summary>
 		/// <param name="e">The e.</param>
-		protected override void OnElementChanged(ElementChangedEventArgs<Frame> e)
+		protected override void OnElementChanged(ElementChangedEventArgs<Label> e)
 		{
 			base.OnElementChanged(e);
 
@@ -74,15 +68,12 @@ namespace FBS.XF.Toolkit.WPF.Renderers
 				{
 					Control.MouseEnter += ControlOnMouseEnter;
 					Control.MouseLeave += ControlOnMouseLeave;
-
-					customButton = (CustomButton) Element;
 				}
 			}
 		}
 		#endregion
 
 		#region Fields
-		private CustomButton customButton;
 		private Cursor prevCursor;
 		#endregion
 	}

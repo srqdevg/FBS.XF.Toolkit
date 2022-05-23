@@ -26,7 +26,7 @@ namespace FBS.XF.Toolkit.WPF.Controls
 			};
 			var result = openFileDialog.ShowDialog();
 
-			if (result.HasValue && result == true)
+			if (result == true)
 			{
 				var provider = new FileExtensionContentTypeProvider();
 

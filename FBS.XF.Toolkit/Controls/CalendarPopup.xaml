@@ -118,12 +118,13 @@
             <local:CustomButton BackgroundColor="Transparent"
                                 Clicked="CancelButton_Clicked"
                                 FontSize="12"
-                                Text="CANCEL" TextColor="{Binding ButtonTextColor}" />
+                                Style="{DynamicResource NormalButton}"
+                                Text="CANCEL" />
             <local:CustomButton BackgroundColor="Transparent"
                                 Clicked="OKButton_Clicked"
                                 FontSize="12"
                                 Padding="20,0"
-                                Text="OK" TextColor="{Binding ButtonTextColor}" />
+                                Text="OK"  />
         </StackLayout>
     </StackLayout>
 </pages:PopupPage>

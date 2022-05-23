@@ -20,11 +20,11 @@ namespace FBS.XF.Toolkit.Extensions
 		public static void BoingAnimation(this VisualElement self)
 		{
 			var parentAnimation = new Animation();
-			var scaleUpAnimation = new Animation(v => self.Scale = v, 1, 1.5, Easing.SpringIn);
-			var scaleDownAnimation = new Animation(v => self.Scale = v, 1.5, 1, Easing.SpringOut);
+			var scaleDownAnimation = new Animation(v => self.Scale = v, 1, 0.5, Easing.SpringOut);
+			var scaleUpAnimation = new Animation(v => self.Scale = v, 0.5, 1.0, Easing.SpringIn);
 
-			parentAnimation.Add(0, 0.5, scaleUpAnimation);
-			parentAnimation.Add(0.5, 1, scaleDownAnimation);
+			parentAnimation.Add(0, 0.5, scaleDownAnimation);
+			parentAnimation.Add(0.5, 1, scaleUpAnimation);
 
 			parentAnimation.Commit(self, "Boing", 16, 2000, null, repeat: () => true);
 		}

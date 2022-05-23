@@ -78,10 +78,11 @@ namespace FBS.XF.Toolkit.WPF.Controls
 			// Date picker 
 			datePicker = new Calendar
 			{
-				IsTodayHighlighted = true,
 				DisplayDate = startDateTime ?? DateTime.Now,
+				FontSize = 15,
+				IsTodayHighlighted = true,
 				SelectedDate = SelectedDate,
-				VerticalContentAlignment = VerticalAlignment.Center
+				VerticalContentAlignment = VerticalAlignment.Center,
 			};
 
 			datePicker.SelectedDatesChanged += DatePicker_SelectedDatesChanged;

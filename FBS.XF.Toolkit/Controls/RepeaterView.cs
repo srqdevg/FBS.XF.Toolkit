@@ -107,6 +107,12 @@ namespace FBS.XF.Toolkit.Controls
 				propertyChanged: (bd, ov, nv) => ((RepeaterView) bd).SelectedItemPropertyChanged(ov, nv));
 
 		/// <summary>
+		/// The select mode property
+		/// </summary>
+		public static readonly BindableProperty SelectionModeProperty =
+			BindableProperty.Create(nameof(SelectionMode), typeof(SelectionMode), typeof(RepeaterView), SelectionMode.Single);
+
+		/// <summary>
 		/// The selected text color property
 		/// </summary>
 		public static readonly BindableProperty SelectedTextColorProperty =
@@ -131,6 +137,22 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		public static readonly BindableProperty TextColorProperty =
 			BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(RepeaterView), Color.Default);
+		#endregion
+
+		#region UI methods
+		/// <summary>
+		/// Buttons the on clicked.
+		/// </summary>
+		/// <param name="sender">The sender.</param>
+		/// <param name="e">The <see cref="ClickedEventArgs"/> instance containing the event data.</param>
+		private void ButtonOnClicked(object sender, ClickedEventArgs e)
+		{
+			// Find parent 
+			var button = (CustomButton) sender;
+
+			// And invoke on the parent i.e. us
+			Item_Tapped(button.Parent, e);
+		}
 		#endregion
 
 		#region Private methods
@@ -222,12 +244,33 @@ namespace FBS.XF.Toolkit.Controls
 									itemView.BindingContext = item;
 									itemView.VerticalOptions = LayoutOptions.FillAndExpand;
 
-									// Create tap recognizer
-									var tapRecognizer = new TapGestureRecognizer();
-									tapRecognizer.Tapped += Item_Tapped;
+									// Does the item view contain a clickable action, if so we want
+									// to attach to that as we won't see the action bubbled up to us
+									var foundAction = false;
 
-									// Bind it, add tap gesture and add it
-									itemView.GestureRecognizers.Add(tapRecognizer);
+									if (itemView is Layout layout)
+									{
+										foreach (var child in layout.Children)
+										{
+											// Yes, becuase I know that controls I:ve used for this, I'm cheating and looking for specifics
+											if (child is CustomButton button)
+											{
+												button.Clicked += ButtonOnClicked;
+												foundAction = true;
+											}
+										}
+									}
+
+									// If no actionable items found then add tap recognition
+									if (!foundAction)
+									{
+										// Create tap recognizer
+										var tapRecognizer = new TapGestureRecognizer();
+										tapRecognizer.Tapped += Item_Tapped;
+
+										// Bind it, add tap gesture and add it
+										itemView.GestureRecognizers.Add(tapRecognizer);
+									}
 								}
 
 								// Add item 
@@ -348,6 +391,11 @@ namespace FBS.XF.Toolkit.Controls
 				// UGLY, BUT WITH THEM WANTING WPF AND MAC, I CAN'T USE PROPER CONTROLS, SO ONE MORE HACK..
 				image.IsSelected = isSelected;
 			}
+			else if (view is CustomButton button)
+			{
+				// UGLY, BUT WITH THEM WANTING WPF AND MAC, I CAN'T USE PROPER CONTROLS, SO ONE MORE HACK..
+				button.IsToggled = isSelected;
+			}
 			else if (view is StackLayout stackLayout)
 			{
 				foreach (var child in stackLayout.Children)
@@ -398,7 +446,10 @@ namespace FBS.XF.Toolkit.Controls
 							view.IsVisible = false;
 						}
 
-						ProcessChildControls(child, TextColor, false);
+						if (SelectionMode.Equals(SelectionMode.Single))
+						{
+							ProcessChildControls(child, TextColor, false);
+						}
 					}
 
 					tabindex++;
@@ -466,6 +517,16 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			get => (int) GetValue(SelectedIndexProperty);
 			set => SetValue(SelectedIndexProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the selection mode.
+		/// </summary>
+		/// <value>The selection mode.</value>
+		public SelectionMode SelectionMode
+		{
+			get => (SelectionMode) GetValue(SelectionModeProperty);
+			set => SetValue(SelectionModeProperty, value);
 		}
 
 		/// <summary>
