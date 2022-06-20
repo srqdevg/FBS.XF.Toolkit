@@ -12,6 +12,19 @@ namespace FBS.XF.Toolkit.Controls
 	{
 		#region Bindable Properties
 		/// <summary>
+		/// The animation run property
+		/// </summary>
+		public static readonly BindableProperty AnimationRunProperty =
+			BindableProperty.Create(nameof(AnimationType), typeof(bool), typeof(CustomButton), false, BindingMode.TwoWay,
+				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).AnimationRunPropertyChanged(ov, nv));
+
+		/// <summary>
+		/// The animation type property
+		/// </summary>
+		public static readonly BindableProperty AnimationTypeProperty =
+			BindableProperty.Create(nameof(AnimationType), typeof(AnimationType), typeof(CustomButton), AnimationType.Opacity);
+
+		/// <summary>
 		/// The background color property
 		/// </summary>
 		public new static readonly BindableProperty BackgroundColorProperty =
@@ -114,13 +127,6 @@ namespace FBS.XF.Toolkit.Controls
 		public new static readonly BindableProperty PaddingProperty =
 			BindableProperty.Create(nameof(Padding), typeof(Thickness), typeof(CustomButton), default(Thickness),
 				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).PaddingPropertyChanged(ov, nv));
-
-		/// <summary>
-		/// The pulse property
-		/// </summary>
-		public static readonly BindableProperty PulseProperty =
-			BindableProperty.Create(nameof(Pulse), typeof(bool), typeof(CustomButton), default(bool), BindingMode.TwoWay,
-				propertyChanged: (bd, ov, nv) => ((CustomButton) bd).PulsePropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The toggle background color property
@@ -295,7 +301,7 @@ namespace FBS.XF.Toolkit.Controls
 
 				Highlight(false);
 
-				if (Mode == ButtonMode.Toggle)
+				if (Mode == ButtonMode.Toggle && IsEnabled)
 				{
 					IsToggled = !IsToggled;
 				}
@@ -318,6 +324,40 @@ namespace FBS.XF.Toolkit.Controls
 		#endregion
 
 		#region Private methods
+		/// <summary>
+		/// Animations the run property changed.
+		/// </summary>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		private void AnimationRunPropertyChanged(object oldValue, object newValue)
+		{
+			if (newValue != oldValue)
+			{
+				if ((bool) newValue)
+				{
+					if (AnimationType.Equals(AnimationType.Scale))
+					{
+						buttonStackLayout.BoingAnimationStart();
+					}
+					else
+					{
+						buttonStackLayout.OpacityAnimationStart();
+					}
+				}
+				else
+				{
+					if (AnimationType.Equals(AnimationType.Scale))
+					{
+						buttonStackLayout.BoingAnimationCancel();
+					}
+					else
+					{
+						buttonStackLayout.OpacityAnimationCancel();
+					}
+				}
+			}
+		}
+
 		/// <summary>
 		/// Creates color with corrected brightness.
 		/// </summary>
@@ -659,25 +699,6 @@ namespace FBS.XF.Toolkit.Controls
 		}
 
 		/// <summary>
-		/// Pulses the property changed.
-		/// </summary>
-		/// <param name="oldValue">The old value.</param>
-		/// <param name="newValue">The new value.</param>
-		private void PulsePropertyChanged(object oldValue, object newValue)
-		{
-			if (newValue != oldValue)
-			{
-				if ((bool) newValue)
-				{
-					this.BoingAnimation();
-					return;
-				}
-			}
-
-			this.CancelBoing();
-		}
-
-		/// <summary>
 		/// Sets the layout.
 		/// </summary>
 		/// <param name="button">The button.</param>
@@ -823,6 +844,26 @@ namespace FBS.XF.Toolkit.Controls
 		#endregion
 
 		#region Properties
+		/// <summary>
+		/// Gets or sets a value indicating whether [animation run].
+		/// </summary>
+		/// <value><c>true</c> if [animation run]; otherwise, <c>false</c>.</value>
+		public bool AnimationRun
+		{
+			get => (bool) GetValue(AnimationRunProperty);
+			set => SetValue(AnimationRunProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the type of the animation.
+		/// </summary>
+		/// <value>The type of the animation.</value>
+		public AnimationType AnimationType
+		{
+			get => (AnimationType) GetValue(AnimationTypeProperty);
+			set => SetValue(AnimationTypeProperty, value);
+		}
+
 		/// <summary>
 		/// Gets or sets the color which will fill the background of a VisualElement. This is a bindable property.
 		/// </summary>
@@ -974,16 +1015,6 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			get => (Thickness) GetValue(PaddingProperty);
 			set => SetValue(PaddingProperty, value);
-		}
-
-		/// <summary>
-		/// Gets or sets a value indicating whether this <see cref="CustomButton"/> is pulse.
-		/// </summary>
-		/// <value><c>true</c> if pulse; otherwise, <c>false</c>.</value>
-		public bool Pulse
-		{
-			get => (bool) GetValue(PulseProperty);
-			set => SetValue(PulseProperty, value);
 		}
 
 		/// <summary>

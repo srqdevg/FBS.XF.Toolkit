@@ -391,7 +391,7 @@ namespace FBS.XF.Toolkit.Controls
 				// UGLY, BUT WITH THEM WANTING WPF AND MAC, I CAN'T USE PROPER CONTROLS, SO ONE MORE HACK..
 				image.IsSelected = isSelected;
 			}
-			else if (view is CustomButton button)
+			else if (view is CustomButton {IsEnabled: true} button)
 			{
 				// UGLY, BUT WITH THEM WANTING WPF AND MAC, I CAN'T USE PROPER CONTROLS, SO ONE MORE HACK..
 				button.IsToggled = isSelected;

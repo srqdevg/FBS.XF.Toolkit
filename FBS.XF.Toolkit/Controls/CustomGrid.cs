@@ -9,5 +9,6 @@ namespace FBS.XF.Toolkit.Controls
 	/// <seealso cref="Grid" />
 	public class CustomGrid : Grid
 	{
+		
 	}
 }

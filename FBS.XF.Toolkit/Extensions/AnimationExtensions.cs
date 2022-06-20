@@ -14,14 +14,24 @@ namespace FBS.XF.Toolkit.Extensions
 	{
 		#region Public methods
 		/// <summary>
-		/// Boings the animation.
+		/// Cancel boing the animation
 		/// </summary>
 		/// <param name="self">The self.</param>
-		public static void BoingAnimation(this VisualElement self)
+		public static void BoingAnimationCancel(this VisualElement self)
+		{
+			self.AbortAnimation("Boing");
+			self.Scale = 1;
+		}
+
+		/// <summary>
+		/// Start boing the animation.
+		/// </summary>
+		/// <param name="self">The self.</param>
+		public static void BoingAnimationStart(this VisualElement self)
 		{
 			var parentAnimation = new Animation();
-			var scaleDownAnimation = new Animation(v => self.Scale = v, 1, 0.5, Easing.SpringOut);
-			var scaleUpAnimation = new Animation(v => self.Scale = v, 0.5, 1.0, Easing.SpringIn);
+			var scaleDownAnimation = new Animation(v => self.Scale = v, 1, 0.5, Easing.Linear);
+			var scaleUpAnimation = new Animation(v => self.Scale = v, 0.5, 1.0, Easing.Linear);
 
 			parentAnimation.Add(0, 0.5, scaleDownAnimation);
 			parentAnimation.Add(0.5, 1, scaleUpAnimation);
@@ -30,25 +40,16 @@ namespace FBS.XF.Toolkit.Extensions
 		}
 
 		/// <summary>
-		/// Cancels the boing.
-		/// </summary>
-		/// <param name="self">The self.</param>
-		public static void CancelBoing(this VisualElement self)
-		{
-			self.AbortAnimation("Boing");
-		}
-
-		/// <summary>
 		/// Cancels the color to animation.
 		/// </summary>
 		/// <param name="self">The self.</param>
-		public static void CancelColorTo(this VisualElement self)
+		public static void ColorToCancel(this VisualElement self)
 		{
 			self.AbortAnimation("ColorTo");
 		}
 
 		/// <summary>
-		/// Colors to.
+		/// Starts the color to.
 		/// </summary>
 		/// <param name="self">The self.</param>
 		/// <param name="fromColor">From color.</param>
@@ -65,7 +66,8 @@ namespace FBS.XF.Toolkit.Extensions
 		///    await this.ColorTo(Color.FromRgb(0, 0, 0), Color.FromRgb(255, 255, 255), c => BackgroundColor = c, 5000);
 		///    await boxView.ColorTo(Color.Blue, Color.Red, c => boxView.Color = c, 4000);
 		/// </remarks>
-		public static Task<bool> ColorTo(this VisualElement self, Color fromColor, Color toColor, Action<Color> callback, uint length = 250, Easing easing = null)
+		public static Task<bool> ColorToStart(this VisualElement self, Color fromColor, Color toColor, Action<Color> callback, 
+			uint length = 250, Easing easing = null)
 		{
 			Color Transform(double t) => 
 				Color.FromRgba(
@@ -75,6 +77,31 @@ namespace FBS.XF.Toolkit.Extensions
 					fromColor.A + t * (toColor.A - fromColor.A));
 
 			return ColorToAnimation(self, "ColorTo", Transform, callback, length, easing);
+		}
+
+		/// <summary>
+		/// Opacities the animation cancel.
+		/// </summary>
+		/// <param name="self">The self.</param>
+		public static void OpacityAnimationCancel(this VisualElement self)
+		{
+			self.AbortAnimation("Opacity");
+			self.Opacity = 1;
+		}
+		/// <summary>
+		/// Starts the opacity animation.
+		/// </summary>
+		/// <param name="self">The self.</param>
+		public static void OpacityAnimationStart(this VisualElement self)
+		{
+			var parentAnimation = new Animation();
+			var opacityDownAnimation = new Animation(v => self.Opacity = v, 1, 0.1, Easing.Linear);
+			var opacityUpAnimation = new Animation(v => self.Opacity = v, 0.1, 1.0, Easing.Linear);
+
+			parentAnimation.Add(0, 0.5, opacityDownAnimation);
+			parentAnimation.Add(0.5, 1, opacityUpAnimation);
+
+			parentAnimation.Commit(self, "Opacity", 16, 2000, null, repeat: () => true);
 		}
 		#endregion
 
