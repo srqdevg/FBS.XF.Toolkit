@@ -343,6 +343,11 @@ namespace FBS.XF.Toolkit.Controls
 			// Get items
 			var itemList = (IList) ItemsSource;
 
+			if (itemList.Count == 0)
+			{
+				return;
+			}
+
 			// Get previous selection
 			var previousSelection = SelectedIndex >= 0 && SelectedIndex < itemList.Count ? itemList[SelectedIndex] : null;
 

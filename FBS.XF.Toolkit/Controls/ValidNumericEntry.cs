@@ -67,8 +67,14 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="e">The <see cref="Xamarin.Forms.TextChangedEventArgs"/> instance containing the event data.</param>
 		private void ValidNumericEntry_TextChanged(object sender, TextChangedEventArgs e)
 		{
+			// Spaces?
+			if (e.NewTextValue.Contains(' '))
+			{
+				Text = e.NewTextValue.Trim();
+			}
+
 			// Do we have a max value and do we check it
-			if (!string.IsNullOrWhiteSpace(e.NewTextValue) )
+			if (!string.IsNullOrWhiteSpace(e.NewTextValue))
 			{
 				if (AllowDecimals)
 				{
