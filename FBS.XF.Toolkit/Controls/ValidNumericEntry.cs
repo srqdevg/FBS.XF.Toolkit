@@ -67,6 +67,12 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="e">The <see cref="Xamarin.Forms.TextChangedEventArgs"/> instance containing the event data.</param>
 		private void ValidNumericEntry_TextChanged(object sender, TextChangedEventArgs e)
 		{
+			// Nothing?
+			if (e.NewTextValue == null)
+			{
+				return;
+			}
+
 			// Spaces?
 			if (e.NewTextValue.Contains(' '))
 			{

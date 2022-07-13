@@ -599,9 +599,17 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			if (newValue != oldValue)
 			{
-				buttonImage.IsVisible = true;
-				buttonImage.Source = newValue.ToString();
-				SetLayout(this, TextLocation);
+				if (newValue == null)
+				{
+					buttonImage.IsVisible = false;
+					buttonImage.Source = null;
+				}
+				else
+				{
+					buttonImage.IsVisible = true;
+					buttonImage.Source = newValue.ToString();
+					SetLayout(this, TextLocation);
+				}
 			}
 		}
 

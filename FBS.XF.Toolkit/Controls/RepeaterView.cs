@@ -149,6 +149,7 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			// Find parent 
 			var button = (CustomButton) sender;
+			
 
 			// And invoke on the parent i.e. us
 			Item_Tapped(button.Parent, e);
@@ -169,6 +170,11 @@ namespace FBS.XF.Toolkit.Controls
 				if (ItemTemplate == null)
 				{
 					return;
+				}
+
+				if (Tag == "XXXX")
+				{
+					Console.WriteLine("X");
 				}
 
 				// If we have an old data then clear out the controls
@@ -252,11 +258,27 @@ namespace FBS.XF.Toolkit.Controls
 									{
 										foreach (var child in layout.Children)
 										{
-											// Yes, becuase I know that controls I:ve used for this, I'm cheating and looking for specifics
+											// Yes, becuase I know that controls I've used for this, I'm cheating and looking for specifics
 											if (child is CustomButton button)
 											{
 												button.Clicked += ButtonOnClicked;
 												foundAction = true;
+											}
+										}
+
+										// If we have found buttons, then look for a layout within to add tap to, i.e. not the outer
+										if (foundAction)
+										{
+											foreach (var child in layout.Children)
+											{
+												if (child is StackLayout childLayout)
+												{
+													var childtapRecognizer = new TapGestureRecognizer();
+													childtapRecognizer.Tapped += Item_Tapped;
+
+													// Bind it, add tap gesture and add it
+													childLayout.GestureRecognizers.Add(childtapRecognizer);
+												}
 											}
 										}
 									}
@@ -352,7 +374,18 @@ namespace FBS.XF.Toolkit.Controls
 			var previousSelection = SelectedIndex >= 0 && SelectedIndex < itemList.Count ? itemList[SelectedIndex] : null;
 
 			// Get current selection
-			var capturedIndex = Children.IndexOf(view);
+			var capturedIndex = Children.IndexOf(view) ;
+
+			if (capturedIndex == -1)
+			{
+				capturedIndex = Children.IndexOf(view.Parent as View);
+				
+				if (capturedIndex == -1)
+				{
+					return;
+				}
+			}
+
 			var currentSelection = itemList[capturedIndex];
 
 			// Show/hide ?
@@ -415,50 +448,47 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
+		// ReSharper disable once UnusedParameter.Local
 		private void SelectedItemPropertyChanged(object oldValue, object newValue)
 		{
-			// Get control
-			//if (oldValue != newValue)
+			var tabindex = 0;
+			var selectedTabIndex = newValue as int? ?? -1;
+
+			foreach (var child in Children)
 			{
-				var tabindex = 0;
-				var selectedTabIndex = newValue as int? ?? -1;
-
-				foreach (var child in Children)
+				if (child.BindingContext.Equals(newValue) || tabindex.Equals(selectedTabIndex))
 				{
-					if (child.BindingContext.Equals(newValue) || tabindex.Equals(selectedTabIndex))
+					child.BackgroundColor = BackgroundColorSelected;
+
+					if (RepeatVisibility.Equals(RepeatVisibilityMode.SelectedOnly))
 					{
-						child.BackgroundColor = BackgroundColorSelected;
-
-						if (RepeatVisibility.Equals(RepeatVisibilityMode.SelectedOnly))
-						{
-							selectedView = Children[tabindex];
-							selectedView.IsVisible = true;
-						}
-
-						if (SelectedTextColor != Color.Default)
-						{
-							ProcessChildControls(child, SelectedTextColor, true);
-						}
-					}
-					else
-					{
-						child.BackgroundColor = BackgroundColor;
-
-						if (RepeatVisibility.Equals(RepeatVisibilityMode.SelectedOnly))
-						{
-							var index = Children.IndexOf(child);
-							var view = Children[index];
-							view.IsVisible = false;
-						}
-
-						if (SelectionMode.Equals(SelectionMode.Single))
-						{
-							ProcessChildControls(child, TextColor, false);
-						}
+						selectedView = Children[tabindex];
+						selectedView.IsVisible = true;
 					}
 
-					tabindex++;
+					if (SelectedTextColor != Color.Default)
+					{
+						ProcessChildControls(child, SelectedTextColor, true);
+					}
 				}
+				else
+				{
+					child.BackgroundColor = BackgroundColor;
+
+					if (RepeatVisibility.Equals(RepeatVisibilityMode.SelectedOnly))
+					{
+						var index = Children.IndexOf(child);
+						var view = Children[index];
+						view.IsVisible = false;
+					}
+
+					if (SelectionMode.Equals(SelectionMode.Single))
+					{
+						ProcessChildControls(child, TextColor, false);
+					}
+				}
+
+				tabindex++;
 			}
 		}
 		#endregion
@@ -582,6 +612,15 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			get => (Color) GetValue(TextColorProperty);
 			set => SetValue(TextColorProperty, value);
+		}
+
+		public static readonly BindableProperty TagProperty =
+			BindableProperty.Create(nameof(Tag), typeof(string), typeof(RepeaterView));
+
+		public string Tag
+		{
+			get => (string) GetValue(TagProperty);
+			set => SetValue(TagProperty, value);
 		}
 		#endregion
 
