@@ -10,6 +10,17 @@ namespace FBS.XF.Toolkit.Converters
 	/// <seealso cref="Xamarin.Forms.IValueConverter" />
 	public class IsNotNullOrEmptyConverter : IValueConverter
 	{
+		#region Constructor
+		/// <summary>
+		/// Initializes a new instance of the <see cref="IsNotNullOrEmptyConverter" /> class.
+		/// </summary>
+		public IsNotNullOrEmptyConverter()
+		{
+			FalseValue = false;
+			TrueValue = true;
+		}
+		#endregion
+
 		#region Public methods
 		/// <summary>
 		/// Converts a value.
@@ -27,32 +38,17 @@ namespace FBS.XF.Toolkit.Converters
 				{
 					if (value is string stringValue)
 					{
-						return !string.IsNullOrWhiteSpace(stringValue);
+						return InvertReturnValue ? string.IsNullOrWhiteSpace(stringValue) : !string.IsNullOrWhiteSpace(stringValue);
 					}
 
-					if (value is DateTime)
-					{
-						var dateTimeValue = (DateTime?) value;
-						return dateTimeValue.HasValue;
-					}
-
-					if (value is int)
-					{
-						var intValue = (int?) value;
-						return intValue.HasValue;
-					}
-
-					if (value != null)
-					{
-						return true;
-					}
+					return !InvertReturnValue;
 				}
 
-				return false;
+				return InvertReturnValue;
 			}
 			catch
 			{
-				return false;
+				return InvertReturnValue;
 			}
 		}
 
@@ -73,10 +69,22 @@ namespace FBS.XF.Toolkit.Converters
 
 		#region Properties
 		/// <summary>
+		/// Gets or sets the false value.
+		/// </summary>
+		/// <value>The false value.</value>
+		public object FalseValue { get; set; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether [invert return value].
 		/// </summary>
 		/// <value><c>true</c> if [invert return value]; otherwise, <c>false</c>.</value>
 		public bool InvertReturnValue { get; set; }
+
+		/// <summary>
+		/// Gets or sets the true value.
+		/// </summary>
+		/// <value>The true value.</value>
+		public object TrueValue { get; set; }
 		#endregion
 	}
 }

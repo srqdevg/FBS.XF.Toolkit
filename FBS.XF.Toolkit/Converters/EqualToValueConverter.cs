@@ -37,7 +37,7 @@ namespace FBS.XF.Toolkit.Converters
 			{
 				if (value != null)
 				{
-					// Is parameter an int or string
+					// Is parameter an int or a string or ....
 					if (value is int v && parameter is int p)
 					{
 						var isEqual = v.Equals(p);
@@ -95,16 +95,16 @@ namespace FBS.XF.Toolkit.Converters
 
 		#region Properties
 		/// <summary>
-		/// Gets or sets a value indicating whether [invert return value].
-		/// </summary>
-		/// <value><c>true</c> if [invert return value]; otherwise, <c>false</c>.</value>
-		public bool InvertReturnValue { get; set; }
-
-		/// <summary>
 		/// Gets or sets the false value.
 		/// </summary>
 		/// <value>The false value.</value>
 		public object FalseValue { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether [invert return value].
+		/// </summary>
+		/// <value><c>true</c> if [invert return value]; otherwise, <c>false</c>.</value>
+		public bool InvertReturnValue { get; set; }
 
 		/// <summary>
 		/// Gets or sets the true value.
