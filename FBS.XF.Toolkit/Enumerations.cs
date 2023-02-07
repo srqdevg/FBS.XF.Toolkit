@@ -19,6 +19,17 @@
 	}
 
 	/// <summary>
+	/// Enum DecimalTypes
+	/// </summary>
+	public enum DecimalTypes
+	{
+		All,
+		Halves,
+		Quarters,
+		Tenths
+	}
+
+	/// <summary>
 	/// Enum Repeat Visibility Mode
 	/// </summary>
 	public enum RepeatVisibilityMode

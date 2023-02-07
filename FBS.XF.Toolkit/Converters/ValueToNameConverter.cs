@@ -29,17 +29,17 @@ namespace FBS.XF.Toolkit.Converters
 				if (value is string stringValue)
 				{
 					var index = valueList.IndexOf(stringValue);
-					return index == -1 ? string.Empty : namesList[index];
+					return index == -1 ? value : namesList[index];
 				}
 
 				if (value is int intValue)
 				{
 					var index = valueList.IndexOf(intValue.ToString());
-					return index == -1 ? string.Empty : namesList[index];
+					return index == -1 ? value : namesList[index];
 				}
 			}
 
-			return null;
+			return NullName;
 		}
 
 		/// <summary>
@@ -63,6 +63,12 @@ namespace FBS.XF.Toolkit.Converters
 		/// </summary>
 		/// <value>The names.</value>
 		public string Names { set => namesList = value.Split(',').ToList(); }
+
+		/// <summary>
+		/// Gets or sets the name of the null.
+		/// </summary>
+		/// <value>The name of the null.</value>
+		public string NullName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the values.

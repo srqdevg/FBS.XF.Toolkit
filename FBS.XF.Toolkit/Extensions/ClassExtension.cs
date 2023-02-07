@@ -5,7 +5,7 @@ using Xamarin.Forms.Internals;
 namespace System
 {
 	/// <summary>
-	/// ClassExtension.
+	/// Class Extension.
 	/// </summary>
 	public static class ClassExtension
 	{

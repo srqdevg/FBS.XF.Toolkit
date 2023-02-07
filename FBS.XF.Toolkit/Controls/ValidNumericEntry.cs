@@ -20,6 +20,20 @@ namespace FBS.XF.Toolkit.Controls
 			BindableProperty.Create(nameof(AllowDecimals), typeof(bool), typeof(CustomButton), default(bool), BindingMode.TwoWay);
 
 		/// <summary>
+		/// The decimal places property
+		/// </summary>
+		public static readonly BindableProperty DecimalPlacesProperty =
+			BindableProperty.Create(nameof(DecimalPlaces), typeof(int), typeof(CustomButton), default(int), BindingMode.OneWay,
+				propertyChanged: (bd, ov, nv) => ((ValidNumericEntry) bd).DecimalPlacesPropertyChanged(ov, nv));
+
+		/// <summary>
+		/// The decimal types property
+		/// </summary>
+		public static readonly BindableProperty DecimalTypeProperty =
+			BindableProperty.Create(nameof(DecimalType), typeof(DecimalTypes), typeof(CustomButton), default, BindingMode.OneWay,
+			propertyChanged: (bd, ov, nv) => ((ValidNumericEntry) bd).DecimalTypePropertyChanged(ov, nv));
+
+		/// <summary>
 		/// The in error property
 		/// </summary>
 		public static readonly BindableProperty InErrorProperty =
@@ -61,6 +75,44 @@ namespace FBS.XF.Toolkit.Controls
 
 		#region Private methods
 		/// <summary>
+		/// Decimals the places property changed.
+		/// </summary>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		private void DecimalPlacesPropertyChanged(object oldValue, object newValue)
+		{
+			if (oldValue != newValue && newValue != null)
+			{
+				decimalPlacesFormat = $"{0}.{new string('0', (int) newValue)}";
+			}
+		}
+
+		/// <summary>
+		/// Decimals the type property changed.
+		/// </summary>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		private void DecimalTypePropertyChanged(object oldValue, object newValue)
+		{
+			if (oldValue != newValue && newValue != null)
+			{
+				switch ((DecimalTypes) newValue)
+				{
+					case DecimalTypes.Halves:
+					case DecimalTypes.Tenths:
+						DecimalPlaces = 1;
+						break;
+					case DecimalTypes.Quarters:
+						DecimalPlaces = 2;
+						break;
+					default:
+						DecimalPlaces = 0;
+						break;
+				}
+			}
+		}
+
+		/// <summary>
 		/// Valids the numeric entry text changed.
 		/// </summary>
 		/// <param name="sender">The sender.</param>
@@ -90,6 +142,53 @@ namespace FBS.XF.Toolkit.Controls
 						if (MaxValue > 0)
 						{
 							InError = decimalValue > MaxValue;
+						}
+
+						if (DecimalPlaces > 0 && e.NewTextValue.Contains("."))
+						{
+							var places = e.NewTextValue.Split('.');
+
+							switch (DecimalType)
+							{
+								case DecimalTypes.Halves:
+									// Must be at most one character after the decimal and character must be 5
+									if (places[^1].Length > 1 || 
+									    (places[^1].Length == 1 && !"05".Contains(places[^1])))
+									{
+										// Reset value
+										Text = e.OldTextValue;
+									}
+
+									break;
+								case DecimalTypes.Tenths:
+									// Must be at most one character after the decimal, any value allowed
+									if (places[^1].Length > 1)
+									{
+										// Reset value
+										Text = e.OldTextValue;
+									}
+
+									break;
+								case DecimalTypes.Quarters:
+									// Must be at most twos character after the decimal, only 25,5,50 and 75 allowed
+									if (places[^1].Length > 2 ||
+									    (places[^1].Length == 1 && places[^1] != "0") ||
+									    (places[^1].Length == 1 && places[^1] != "5") ||
+									    (places[^1].Length == 2 && places[^1] != "25" || places[^1] != "50" || places[^1] != "75"))
+									{
+										// Reset value
+										Text = e.OldTextValue;
+									}
+
+									break;
+								default:
+									if (places[^1].Length > DecimalPlaces)
+									{
+										Text = Math.Round(decimalValue, DecimalPlaces).ToString(decimalPlacesFormat);
+									}
+
+									break;
+							}
 						}
 
 						return;
@@ -138,6 +237,26 @@ namespace FBS.XF.Toolkit.Controls
 		}
 
 		/// <summary>
+		/// Gets or sets the decimal places.
+		/// </summary>
+		/// <value>The decimal places.</value>
+		public int DecimalPlaces
+		{
+			get => (int) GetValue(DecimalPlacesProperty);
+			set => SetValue(DecimalPlacesProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the type of the decimal.
+		/// </summary>
+		/// <value>The type of the decimal.</value>
+		public DecimalTypes DecimalType
+		{
+			get => (DecimalTypes) GetValue(DecimalTypeProperty);
+			set => SetValue(DecimalTypeProperty, value);
+		}
+
+		/// <summary>
 		/// Returns true if ... is valid.
 		/// </summary>
 		/// <value><c>true</c> if this instance is valid; otherwise, <c>false</c>.</value>
@@ -166,6 +285,10 @@ namespace FBS.XF.Toolkit.Controls
 			get => (List<int>) GetValue(ValidValuesProperty);
 			set => SetValue(ValidValuesProperty, value);
 		}
+		#endregion
+
+		#region Fields
+		private string decimalPlacesFormat;
 		#endregion
 	}
 }

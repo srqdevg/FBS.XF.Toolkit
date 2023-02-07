@@ -38,6 +38,40 @@ namespace FBS.XF.Toolkit.Helpers
 		}
 
 		/// <summary>
+		/// Gets the value as decimal.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <param name="outValue">The out value.</param>
+		/// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+		public static bool GetValueAsDecimal(object value, out decimal? outValue)
+		{
+			// ReSharper disable once RedundantNullableTypeMark
+			if (value is decimal?)
+			{
+				outValue = (decimal?) value;
+				return true;
+			}
+
+			if (value is int? && ((int?) value).HasValue)
+			{
+				outValue = Convert.ToDecimal((int?) value);
+				return true;
+			}
+
+			if (value is string stringValue)
+			{
+				if (!string.IsNullOrWhiteSpace(stringValue) && decimal.TryParse(stringValue, out var fieldValue))
+				{
+					outValue = fieldValue;
+					return true;
+				}
+			}
+
+			outValue = null;
+			return false;
+		}
+
+		/// <summary>
 		/// Gets the value as int.
 		/// </summary>
 		/// <param name="value">The value.</param>
