@@ -5,14 +5,14 @@ using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-[assembly: ExportRenderer(typeof(CustomButton), typeof(ExtendedButtonRenderer))]
+[assembly: ExportRenderer(typeof(CustomButton), typeof(CustomButtonRenderer))]
 namespace FBS.XF.Toolkit.iOS.Renderers
 {
 	/// <summary>
-	/// Extended Button Renderer.
+	/// Custom Button Renderer.
 	/// </summary>
 	/// <seealso cref="FrameRenderer" />
-	public class ExtendedButtonRenderer : FrameRenderer
+	public class CustomButtonRenderer : FrameRenderer
 	{
 		#region Override methods
 		/// <summary>

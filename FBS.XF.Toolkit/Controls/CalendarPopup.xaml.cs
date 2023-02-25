@@ -30,9 +30,7 @@ namespace FBS.XF.Toolkit.Controls
 
 			Month = DateTime.Now.Month;
 			Year = DateTime.Now.Year;
-			BackgroundColor = Application.Current.RequestedTheme == OSAppTheme.Light ? Color.White : Color.Black;
 			TitleBackgroundColor = Application.Current.RequestedTheme == OSAppTheme.Light ? Color.DarkGray : Color.DarkSlateGray;
-			ButtonTextColor = Color.FromHex("#FF2066");
 			BindingContext = this;
 		}
 		#endregion
@@ -63,18 +61,6 @@ namespace FBS.XF.Toolkit.Controls
 
 		#region Properties
 		/// <summary>
-		/// Gets or sets the color of the background.
-		/// </summary>
-		/// <value>The color of the background.</value>
-		public new Color BackgroundColor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the color of the button text.
-		/// </summary>
-		/// <value>The color of the button text.</value>
-		public Color ButtonTextColor { get; set; }
-
-		/// <summary>
 		/// Gets or sets the maximum date.
 		/// </summary>
 		/// <value>The maximum date.</value>
@@ -93,9 +79,16 @@ namespace FBS.XF.Toolkit.Controls
 		public Color MonthLabelColor { get; set; }
 
 		/// <summary>
+		/// Gets the display date.
+		/// </summary>
+		/// <value>The display date.</value>
+		public DateTime DisplayDate => Year == 0 || Month == 0 ? new DateTime(2021, 1, 1) : new DateTime(Year, Month, 1);
+
+		/// <summary>
 		/// Gets or sets the month.
 		/// </summary>
 		/// <value>The month.</value>
+		[AlsoNotifyFor(nameof(DisplayDate))]
 		public int Month { get; set; }
 
 		/// <summary>
@@ -120,6 +113,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// Gets or sets the year.
 		/// </summary>
 		/// <value>The year.</value>
+		[AlsoNotifyFor(nameof(DisplayDate))]
 		public int Year { get; set; }
 		#endregion
 	}

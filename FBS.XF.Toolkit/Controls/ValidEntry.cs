@@ -26,7 +26,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		public event EventHandler<TextChangedEventArgs> TextChanged;
 		#endregion
-
+		
 		#region Bindable properties
 		/// <summary>
 		/// The automatic capitalization property
@@ -34,6 +34,13 @@ namespace FBS.XF.Toolkit.Controls
 		public static readonly BindableProperty AutoCapitalizationProperty =
 			BindableProperty.Create(nameof(AutoCapitalization), typeof(bool), typeof(ValidEntry), true,
 				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).AutoCapitalizationPropertyChanged(ov, nv));
+
+		/// <summary>
+		/// The background color property
+		/// </summary>
+		public new static readonly BindableProperty BackgroundColorProperty =
+			BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(CustomButton), Color.Default,
+				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).BackgroundColorPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The font family property
@@ -304,9 +311,22 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void AutoCapitalizationPropertyChanged(object oldValue, object newValue)
 		{
-			if (oldValue != newValue && newValue != null)
+			if (oldValue != newValue && newValue != null && textEntry != null)
 			{
 				textEntry.Keyboard = Keyboard.Create(KeyboardFlags.None);
+			}
+		}
+
+		/// <summary>
+		/// Backgrounds the color property changed.
+		/// </summary>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		private void BackgroundColorPropertyChanged(object oldValue, object newValue)
+		{
+			if (oldValue != newValue && newValue != null && textEntry != null)
+			{
+				textEntry.BackgroundColor = (Color) newValue;
 			}
 		}
 
@@ -323,15 +343,16 @@ namespace FBS.XF.Toolkit.Controls
 			}
 
 			// Add rows and columns to grid
-			RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-			ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-			ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-			ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
-			ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+			RowDefinitions.Add(new RowDefinition {Height = GridLength.Auto});
+			ColumnDefinitions.Add(new ColumnDefinition {Width = GridLength.Auto});
+			ColumnDefinitions.Add(new ColumnDefinition {Width = GridLength.Auto});
+			ColumnDefinitions.Add(new ColumnDefinition {Width = GridLength.Star});
+			ColumnDefinitions.Add(new ColumnDefinition {Width = GridLength.Auto});
 
 			// Add entry field
 			textEntry = new CustomEntry
 			{
+				BackgroundColor = BackgroundColor,
 				BindingContext = this,
 				FontSize = FontSize > 0 ? FontSize : Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
 				FontFamily = FontFamily,
@@ -340,6 +361,7 @@ namespace FBS.XF.Toolkit.Controls
 				Keyboard = keyboard,
 				Margin = new Thickness(0, -5, 0, 0),
 				ReturnType = ReturnType,
+				TextColor = TextColor,
 				VerticalTextAlignment = VerticalTextAlignment,
 			};
 
@@ -347,8 +369,26 @@ namespace FBS.XF.Toolkit.Controls
 			textEntry.SetBinding(Entry.TextProperty, "Text", BindingMode.TwoWay);
 			textEntry.SetBinding(Entry.IsFocusedProperty, "IsFocused", BindingMode.OneWayToSource);
 			textEntry.Unfocused += TextEntry_Unfocused;
-			SetGridRowColumn(textEntry, 0, 0, 0, 4);
-			Children.Add(textEntry);
+
+			////if (Device.RuntimePlatform == Device.iOS)
+			////{
+			////	// We need a frame around the text box
+			////	frame = new Frame
+			////	{
+			////		BorderColor = TextColor,
+			////		WidthRequest = 1
+			////	};
+
+			////	SetGridRowColumn(frame, 0, 0, 0, 4);
+			////	Children.Add(frame);
+
+			////	frame.Content = textEntry;
+			////}
+			////else
+			////{
+				SetGridRowColumn(textEntry, 0, 0, 0, 4);
+				Children.Add(textEntry);
+			////}
 
 			// Is this a password
 			if (isPassword)
@@ -497,7 +537,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void HeightRequestPropertyChanged(object oldValue, object newValue)
 		{
-			if (oldValue != newValue && newValue != null)
+			if (oldValue != newValue && newValue != null && textEntry != null)
 			{
 				textEntry.HeightRequest = (double) newValue;
 
@@ -515,7 +555,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void HorizontalTextAlignmentPropertyChanged(object oldValue, object newValue)
 		{
-			if (oldValue != newValue && newValue != null)
+			if (oldValue != newValue && newValue != null && textEntry != null)
 			{
 				textEntry.HorizontalTextAlignment = (TextAlignment) newValue;
 			}
@@ -528,7 +568,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void IsEditablePropertyChanged(object oldValue, object newValue)
 		{
-			if (oldValue != newValue && newValue != null)
+			if (oldValue != newValue && newValue != null && textEntry != null)
 			{
 				// Make text field readonly
 				textEntry.IsReadOnly = true;
@@ -544,11 +584,10 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			if (oldValue != newValue && newValue != null)
 			{
-				// Add the label
 				if (textLabel == null)
 				{
 					// Add extra row
-					RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+					RowDefinitions.Add(new RowDefinition {Height = GridLength.Auto});
 
 					// Adjust other controls
 					foreach (var childControl in Children)
@@ -567,18 +606,22 @@ namespace FBS.XF.Toolkit.Controls
 
 					SetGridRowColumn(textLabel, 0, 0, 0, 1);
 					Children.Add(textLabel);
+				}
+				else
+				{
+					Text = (string) newValue;
+				}
 
-					// Do we need helptext
-					if (ShowHelpIcon)
-					{
-						CreateHelpIconControl();
-					}
+				// Do we need helptext
+				if (ShowHelpIcon)
+				{
+					CreateHelpIconControl();
+				}
 
-					// Do we need optional?
-					if (ShowOptionalText)
-					{
-						CreateOptionalControl();
-					}
+				// Do we need optional?
+				if (ShowOptionalText)
+				{
+					CreateOptionalControl();
 				}
 			}
 		}
@@ -590,12 +633,9 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void LabelFontAttributesPropertyChanged(object oldValue, object newValue)
 		{
-			if (oldValue != newValue && newValue != null)
+			if (oldValue != newValue && newValue != null && textLabel != null)
 			{
-				if (textLabel != null)
-				{
-					textLabel.FontAttributes = FontAttributes;
-				}
+				textLabel.FontAttributes = FontAttributes;
 			}
 		}
 
@@ -606,7 +646,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void MaxLengthPropertyChanged(object oldValue, object newValue)
 		{
-			if (oldValue != newValue && newValue != null)
+			if (oldValue != newValue && newValue != null && textEntry != null)
 			{
 				// Adjust max length behavior
 				textEntry.MaxLength = (int) newValue;
@@ -620,7 +660,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void PlaceholderPropertyChanged(object oldValue, object newValue)
 		{
-			if (oldValue != newValue && newValue != null)
+			if (oldValue != newValue && newValue != null && textEntry != null)
 			{
 				textEntry.Placeholder = newValue.ToString();
 			}
@@ -633,7 +673,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void ReturnTypePropertyChanged(object oldValue, object newValue)
 		{
-			if (oldValue != newValue && newValue != null)
+			if (oldValue != newValue && newValue != null && textEntry != null)
 			{
 				textEntry.ReturnType = (ReturnType) newValue;
 			}
@@ -646,7 +686,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void ShowErrorMessageVisiblePropertyChanged(object oldValue, object newValue)
 		{
-			if (oldValue != newValue && newValue != null)
+			if (oldValue != newValue && newValue != null && errorLabel != null)
 			{
 				errorLabel.IsVisible = (bool) newValue;
 			}
@@ -685,8 +725,13 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void TextColorChanged(object oldValue, object newValue)
 		{
-			if (oldValue != newValue && newValue != null)
+			if (oldValue != newValue && newValue != null && textEntry != null && textLabel != null)
 			{
+				if (frame != null)
+				{
+					frame.BorderColor = (Color) newValue;
+				}
+
 				if (textLabel != null)
 				{
 					textLabel.TextColor = (Color) newValue;
@@ -834,7 +879,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private void VerticalTextAlignmentPropertyChanged(object oldValue, object newValue)
 		{
-			if (oldValue != newValue && newValue != null)
+			if (oldValue != newValue && newValue != null && textEntry != null)
 			{
 				textEntry.VerticalTextAlignment = (TextAlignment) newValue;
 			}
@@ -855,6 +900,17 @@ namespace FBS.XF.Toolkit.Controls
 		#endregion
 
 		#region Properties
+		/// <summary>
+		/// Gets or sets the color which will fill the background of a VisualElement. This is a bindable property.
+		/// </summary>
+		/// <value>The color that is used to fill the background of a VisualElement. The default is <see cref="P:Xamarin.Forms.Color.Default" />.</value>
+		/// <remarks>To be added.</remarks>
+		public new Color BackgroundColor
+		{
+			get => (Color) GetValue(BackgroundColorProperty);
+			set => SetValue(BackgroundColorProperty, value);
+		}
+
 		/// <summary>
 		/// Gets or sets a value indicating whether [automatic capitalization].
 		/// </summary>
@@ -1040,6 +1096,7 @@ namespace FBS.XF.Toolkit.Controls
 
 		#region Fields
 		private Binding binding;
+		private Frame frame;
 		private Image helpImage;
 		private TapGestureRecognizer helpImageTap;
 		private Label errorLabel;

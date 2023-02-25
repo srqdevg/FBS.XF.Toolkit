@@ -26,16 +26,29 @@ namespace FBS.XF.Toolkit.Converters
 				// Is parameter an int or string
 				if (parameter is int ip)
 				{
-					var isEqual = OrEquals ? v >= ip : v > ip;
-					return InvertReturnValue ? !isEqual : isEqual;
+					var isGreaterThan = OrEqualTo ? v >= ip : v > ip;
+
+					if (isGreaterThan && ExcludeValue != null && ip == ExcludeValue)
+					{
+						isGreaterThan = false;
+					}
+
+					return InvertReturnValue ? !isGreaterThan : isGreaterThan;
 				}
 
 				if (parameter is string sp)
 				{
 					if (int.TryParse(sp, out var isp))
 					{
-						var isEqual = OrEquals ? v >= isp : v > isp;
-						return InvertReturnValue ? !isEqual : isEqual;
+						var isGreaterThan = OrEqualTo ? v >= isp : v > isp;
+
+						if (isGreaterThan && ExcludeValue != null && isp == ExcludeValue)
+						{
+							isGreaterThan = false;
+						}
+
+
+						return InvertReturnValue ? !isGreaterThan : isGreaterThan;
 					}
 				}
 			}
@@ -66,10 +79,16 @@ namespace FBS.XF.Toolkit.Converters
 		public bool InvertReturnValue { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether [or equals].
+		/// Gets or sets a value indicating whether [or equal to].
 		/// </summary>
-		/// <value><c>true</c> if [or equals]; otherwise, <c>false</c>.</value>
-		public bool OrEquals { get; set; }
+		/// <value><c>true</c> if [or equal to]; otherwise, <c>false</c>.</value>
+		public bool OrEqualTo { get; set; }
+
+		/// <summary>
+		/// Gets or sets the exclude value.
+		/// </summary>
+		/// <value>The exclude value.</value>
+		public int? ExcludeValue { get; set; }
 		#endregion
 	}
 }

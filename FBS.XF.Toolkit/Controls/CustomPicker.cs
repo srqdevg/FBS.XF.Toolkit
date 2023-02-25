@@ -16,18 +16,24 @@ namespace FBS.XF.Toolkit.Controls
 	{
 		#region Dependency properties
 		/// <summary>
-		/// The size to fit property
+		/// The image property
 		/// </summary>
-		public static readonly BindableProperty SizeToFitProperty =
-			BindableProperty.Create(nameof(SizeToFit), typeof(bool), typeof(CustomPicker), default(bool), BindingMode.OneWay,
-				propertyChanged: (bd, ov, nv) => ((CustomPicker)bd).PropertyChanged(ov, nv));
+		public static readonly BindableProperty ImageProperty =
+			BindableProperty.Create(nameof(Image), typeof(string), typeof(CustomPicker), string.Empty);
 
 		/// <summary>
 		/// The items source property
 		/// </summary>
 		public new static readonly BindableProperty ItemsSourceProperty =
-					BindableProperty.Create(nameof(ItemsSource), typeof(IList), typeof(CustomPicker), null, BindingMode.OneWay,
-						propertyChanged: (bd, ov, nv) => ((CustomPicker)bd).PropertyChanged(ov, nv));
+			BindableProperty.Create(nameof(ItemsSource), typeof(IList), typeof(CustomPicker), null, BindingMode.OneWay,
+				propertyChanged: (bd, ov, nv) => ((CustomPicker) bd).PropertyChanged(ov, nv));
+
+		/// <summary>
+		/// The size to fit property
+		/// </summary>
+		public static readonly BindableProperty SizeToFitProperty =
+			BindableProperty.Create(nameof(SizeToFit), typeof(bool), typeof(CustomPicker), default(bool), BindingMode.OneWay,
+				propertyChanged: (bd, ov, nv) => ((CustomPicker)bd).PropertyChanged(ov, nv));
 		#endregion
 
 		#region Private methods
@@ -38,14 +44,14 @@ namespace FBS.XF.Toolkit.Controls
 		/// <param name="newValue">The new value.</param>
 		private new void PropertyChanged(object oldValue, object newValue)
 		{
-			if (SizeToFit && ItemsSource != null)
+			if (ItemsSource != null)
 			{
 				if (newValue.Equals(ItemsSource))
 				{
 					base.ItemsSource = ItemsSource;
 				}
 
-				if (Device.RuntimePlatform == Device.WPF)
+				if (Device.RuntimePlatform == Device.WPF && SizeToFit)
 				{
 					double width = 0;
 					var nativeService = DependencyService.Resolve<INativeService>();
@@ -100,13 +106,13 @@ namespace FBS.XF.Toolkit.Controls
 
 		#region Properties
 		/// <summary>
-		/// Gets or sets a value indicating whether [size to fit].
+		/// Gets or sets the image.
 		/// </summary>
-		/// <value><c>true</c> if [size to fit]; otherwise, <c>false</c>.</value>
-		public bool SizeToFit
+		/// <value>The image.</value>
+		public string Image
 		{
-			get => (bool)GetValue(SizeToFitProperty);
-			set => SetValue(SizeToFitProperty, value);
+			get => (string) GetValue(ImageProperty);
+			set => SetValue(ImageProperty, value);
 		}
 
 		/// <summary>
@@ -116,9 +122,20 @@ namespace FBS.XF.Toolkit.Controls
 		/// <remarks>To be added.</remarks>
 		public new IList ItemsSource
 		{
-			get => (IList)GetValue(ItemsSourceProperty);
+			get => (IList) GetValue(ItemsSourceProperty);
 			set => SetValue(ItemsSourceProperty, value);
+		}       
+		
+		/// <summary>
+		/// Gets or sets a value indicating whether [size to fit].
+		/// </summary>
+		/// <value><c>true</c> if [size to fit]; otherwise, <c>false</c>.</value>
+		public bool SizeToFit
+		{
+			get => (bool)GetValue(SizeToFitProperty);
+			set => SetValue(SizeToFitProperty, value);
 		}
+
 		#endregion
 	}
 }

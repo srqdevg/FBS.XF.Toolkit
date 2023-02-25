@@ -60,6 +60,16 @@ namespace FBS.XF.Toolkit.iOS.Services
 		}
 
 		/// <summary>
+		/// Gets the image rotation.
+		/// </summary>
+		/// <param name="filePath">The file path.</param>
+		/// <returns>System.Int32.</returns>
+		public int GetImageRotation(string filePath)
+		{
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
 		/// Gets the primary email.
 		/// </summary>
 		/// <returns>System.String.</returns>
@@ -106,42 +116,26 @@ namespace FBS.XF.Toolkit.iOS.Services
 		/// <returns>System.Int32.</returns>
 		public int GetRotation(string photofilePath)
 		{
-			////PHAsset asset = new PHAsset(photofilePath);
-
-			////PHImageManager.DefaultManager.RequestImageData(asset, null, (data, dataUti, orientation, info) =>
-			////{
-			////	Console.WriteLine(data);
-			////	Console.WriteLine(info);
-			////});
-
-
-			////var exif = new ExifInterface(photofilePath);
-
-			////try
-			////{
-			////	var orientation = (TagOrientation) exif.GetAttributeInt(ExifInterface.TagOrientation, -1);
-
-			////	switch (orientation)
-			////	{
-			////		case TagOrientation.OrientationRotate90:
-			////			return 90;
-			////		case TagOrientation.OrientationRotate180:
-			////			return 180;
-			////		case TagOrientation.OrientationRotate270:
-			////			return 270;
-			////		default:
-			////			return 0;
-			////	}
-			////}
-			////finally
-			////{
-			////	exif.Dispose();
-			////}
-			
-			return 0;
+			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Gets the width of the text.
+		/// </summary>
+		/// <param name="text">The text.</param>
+		/// <returns>System.Double.</returns>
 		public double GetTextWidth(string text)
+		{
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Rotates the image.
+		/// </summary>
+		/// <param name="image">The image.</param>
+		/// <param name="rotationDegrees">The rotation degrees.</param>
+		/// <returns>System.Byte[].</returns>
+		public byte[] RotateImage(byte[] image, int rotationDegrees)
 		{
 			throw new NotImplementedException();
 		}
@@ -152,7 +146,8 @@ namespace FBS.XF.Toolkit.iOS.Services
 		public void HideKeyboard()
 		{
 			// Close keyboard
-			UIApplication.SharedApplication.KeyWindow.EndEditing(true);
+			if (UIApplication.SharedApplication.KeyWindow != null)
+				UIApplication.SharedApplication.KeyWindow.EndEditing(true);
 		}
 
 		/// <summary>

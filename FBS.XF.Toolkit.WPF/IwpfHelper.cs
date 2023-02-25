@@ -4,13 +4,13 @@ using FBS.XF.Toolkit.Interfaces;
 using FBS.XF.Toolkit.WPF;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(UtilityHelper))]
+[assembly: Dependency(typeof(WPFHelper))]
 namespace FBS.XF.Toolkit.WPF
 {
 	/// <summary>
-	/// Utility Helper.
+	/// WPF Helper.
 	/// </summary>
-	public class UtilityHelper : IUtilityHelper
+	public class WPFHelper : IWPFHelper
 	{
 		#region Public methods
 		/// <summary>
@@ -39,32 +39,6 @@ namespace FBS.XF.Toolkit.WPF
 			{
 				HostWindow.UpdateLayout();
 				HostWindow.WindowState = HostWindow.WindowState;
-
-				//var windowHeight = HostWindow.Height;
-				//var windowWidth = HostWindow.Width;
-				//var windowState = HostWindow.WindowState;
-
-				//if (windowState == WindowState.Maximized)
-				//{
-				//	HostWindow.Height = ScreenHeight;
-				//	HostWindow.Width = ScreenWidth;
-				//	HostWindow.WindowState = WindowState.Normal;
-				//	HostWindow.UpdateLayout();
-
-				//	HostWindow.WindowState = WindowState.Maximized;
-				//	HostWindow.Height = windowHeight;
-				//	HostWindow.Width = windowWidth;
-				//}
-				//else if (windowState == WindowState.Normal)
-				//{
-				//	HostWindow.UpdateLayout();
-				//	HostWindow.Height = HostWindow.Height + 1;
-				//	HostWindow.Width = HostWindow.Width + 1;
-				//	HostWindow.UpdateLayout();
-
-				//	HostWindow.Height = windowHeight;
-				//	HostWindow.Width = windowWidth;
-				//}
 			});
 		}
 		#endregion

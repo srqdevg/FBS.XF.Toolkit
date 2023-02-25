@@ -36,6 +36,13 @@ namespace FBS.XF.Toolkit.Interfaces
 		string GetDownloadFolder();
 
 		/// <summary>
+		/// Gets the image rotation.
+		/// </summary>
+		/// <param name="filePath">The file path.</param>
+		/// <returns>System.Int32.</returns>
+		int GetImageRotation(string filePath);
+
+		/// <summary>
 		/// Gets the photo directory.
 		/// </summary>
 		/// <param name="sdStorage">if set to <c>true</c> [sd storage].</param>
@@ -62,18 +69,19 @@ namespace FBS.XF.Toolkit.Interfaces
 		string GetRootDirectory(bool sdStorage);
 
 		/// <summary>
-		/// Gets the rotation.
-		/// </summary>
-		/// <param name="photofilePath">The photofile path.</param>
-		/// <returns>System.Int32.</returns>
-		int GetRotation(string photofilePath);
-
-		/// <summary>
 		/// Gets the width of the text.
 		/// </summary>
 		/// <param name="text">The text.</param>
 		/// <returns>System.Double.</returns>
 		double GetTextWidth(string text);
+
+		/// <summary>
+		/// Rotates the image.
+		/// </summary>
+		/// <param name="image">The image.</param>
+		/// <param name="rotationDegrees">The rotation degrees.</param>
+		/// <returns>System.Byte[].</returns>
+		byte[] RotateImage(byte[] image, int rotationDegrees);
 		#endregion
 	}
 }

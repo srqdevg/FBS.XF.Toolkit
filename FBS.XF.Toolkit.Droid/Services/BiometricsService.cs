@@ -8,6 +8,7 @@ using AndroidX.Core.Content;
 using AndroidX.Core.Hardware.Fingerprint;
 using FBS.XF.Toolkit.Android.Services;
 using FBS.XF.Toolkit.Interfaces;
+using Java.IO;
 using Xamarin.Forms;
 using Application = Android.App.Application;
 
@@ -40,17 +41,17 @@ namespace FBS.XF.Toolkit.Android.Services
 		{
 			//var manager = Android.App.Application.Context.GetSystemService(Context.TelephonyService) as TelephonyManager;
 			//return true;
-			var permissionResult = ContextCompat.CheckSelfPermission(Application.Context, Manifest.Permission.UseBiometric);
+			//var permissionResult = ContextCompat.CheckSelfPermission(Application.Context, Manifest.Permission.UseBiometric);
 
-			if (permissionResult == Permission.Granted)
-			{
-				//_initialPanel.Visibility = ViewStates.Gone;
-				//_authenticatedPanel.Visibility = ViewStates.Gone;
-				//_errorPanel.Visibility = ViewStates.Gone;
-				//_scanInProgressPanel.Visibility = ViewStates.Visible;
-				//_dialogFrag.Init();
-				//_dialogFrag.Show(FragmentManager, DIALOG_FRAGMENT_TAG);
-			}
+			//if (permissionResult == Permission.Granted)
+			//{
+			//	//_initialPanel.Visibility = ViewStates.Gone;
+			//	//_authenticatedPanel.Visibility = ViewStates.Gone;
+			//	//_errorPanel.Visibility = ViewStates.Gone;
+			//	//_scanInProgressPanel.Visibility = ViewStates.Visible;
+			//	//_dialogFrag.Init();
+			//	//_dialogFrag.Show(FragmentManager, DIALOG_FRAGMENT_TAG);
+			//}
 			//else
 			//{
 			//	Snackbar.Make(FindViewById(Res.Id.Content),

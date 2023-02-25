@@ -3,7 +3,7 @@
 	/// <summary>
 	/// IUtility Helper
 	/// </summary>
-	public interface IUtilityHelper
+	public interface IWPFHelper
 	{
 		#region Methods
 		/// <summary>

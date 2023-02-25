@@ -137,6 +137,12 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		public static readonly BindableProperty TextColorProperty =
 			BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(RepeaterView), Color.Default);
+
+		/// <summary>
+		/// The tag property
+		/// </summary>
+		public static readonly BindableProperty TagProperty =
+			BindableProperty.Create(nameof(Tag), typeof(string), typeof(RepeaterView));
 		#endregion
 
 		#region UI methods
@@ -614,9 +620,10 @@ namespace FBS.XF.Toolkit.Controls
 			set => SetValue(TextColorProperty, value);
 		}
 
-		public static readonly BindableProperty TagProperty =
-			BindableProperty.Create(nameof(Tag), typeof(string), typeof(RepeaterView));
-
+		/// <summary>
+		/// Gets or sets the tag.
+		/// </summary>
+		/// <value>The tag.</value>
 		public string Tag
 		{
 			get => (string) GetValue(TagProperty);

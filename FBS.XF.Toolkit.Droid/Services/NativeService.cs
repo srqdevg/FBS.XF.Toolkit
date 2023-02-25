@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using Android.Accounts;
 using Android.Content;
+using Android.Graphics;
 using Android.Media;
 using Android.Telephony;
 using Android.Util;
@@ -74,12 +76,43 @@ namespace FBS.XF.Toolkit.Android.Services
 		public string GetDownloadFolder()
 		{
 			// Download folder
-			//var folder = AndroidOSApplication.Context.GetExternalFilesDir();
-			//return folder?.Path;
-			var folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+#pragma warning disable 618
+			var folder = AndroidOSEnvironment.GetExternalStoragePublicDirectory(AndroidOSEnvironment.DirectoryDownloads)?.AbsolutePath;
+#pragma warning restore 618'
 			return folder;
 		}
-		
+
+		/// <summary>
+		/// Gets the image rotation.
+		/// </summary>
+		/// <param name="filePath">The file path.</param>
+		/// <returns>System.Int32.</returns>
+		public int GetImageRotation(string filePath)
+		{
+			var exif = new ExifInterface(filePath);
+
+			try
+			{
+				var orientation = (TagOrientation) exif.GetAttributeInt(ExifInterface.TagOrientation, -1);
+
+				switch (orientation)
+				{
+					case TagOrientation.OrientationRotate90:
+						return 90;
+					case TagOrientation.OrientationRotate180:
+						return 180;
+					case TagOrientation.OrientationRotate270:
+						return 270;
+					default:
+						return 0;
+				}
+			}
+			finally
+			{
+				exif.Dispose();
+			}
+		}
+
 		/// <summary>
 		/// Gets the telephone number.
 		/// </summary>
@@ -144,39 +177,43 @@ namespace FBS.XF.Toolkit.Android.Services
 		}
 
 		/// <summary>
-		/// Gets the rotation.
+		/// Gets the width of the text.
 		/// </summary>
-		/// <param name="photofilePath">The photofile path.</param>
-		/// <returns>System.Int32.</returns>
-		public int GetRotation(string photofilePath)
-		{
-			var exif = new ExifInterface(photofilePath);
-
-			try
-			{
-				var orientation = (TagOrientation) exif.GetAttributeInt(ExifInterface.TagOrientation, -1);
-
-				switch (orientation)
-				{
-					case TagOrientation.OrientationRotate90:
-						return 90;
-					case TagOrientation.OrientationRotate180:
-						return 180;
-					case TagOrientation.OrientationRotate270:
-						return 270;
-					default:
-						return 0;
-				}
-			}
-			finally
-			{
-				exif.Dispose();
-			}
-		}
-
+		/// <param name="text">The text.</param>
+		/// <returns>System.Double.</returns>
 		public double GetTextWidth(string text)
 		{
 			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Rotates the image.
+		/// </summary>
+		/// <param name="image">The image.</param>
+		/// <param name="rotationDegrees">The rotation degrees.</param>
+		/// <returns>System.Byte[].</returns>
+		public byte[] RotateImage(byte[] image, int rotationDegrees)
+		{
+			try
+			{
+				var originalImage = BitmapFactory.DecodeByteArray(image, 0,image.Length);
+				var matrix = new Matrix();
+				matrix.PostRotate(rotationDegrees);
+
+				// ReSharper disable once AssignNullToNotNullAttribute
+				var rotatedBitmap = Bitmap.CreateBitmap(originalImage, 0, 0, originalImage!.Width, originalImage!.Height, matrix, true);
+
+				using (var memoryStream = new MemoryStream())
+				{
+					// ReSharper disable once PossibleNullReferenceException
+					rotatedBitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, memoryStream);
+					return memoryStream.ToArray();
+				}
+			}
+			catch
+			{
+				return null;
+			}
 		}
 		#endregion
 

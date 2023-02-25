@@ -4,19 +4,24 @@
                  xmlns:local="clr-namespace:FBS.XF.Toolkit.Controls;assembly=FBS.XF.Toolkit"
                  xmlns:controls="clr-namespace:Xamarin.Plugin.Calendar.Controls;assembly=Xamarin.Plugin.Calendar"
                  x:Class="FBS.XF.Toolkit.Controls.CalendarPopup">
-    <StackLayout BackgroundColor="{Binding BackgroundColor}"
-                 HeightRequest="410" HorizontalOptions="Center"
-                 VerticalOptions="Center"
-                 WidthRequest="380">
-        <!-- Title -->
-        <Label BackgroundColor="{Binding TitleBackgroundColor}"
-               FontAttributes="Bold" FontSize="24"
-               HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center"
-               Padding="0,10,0,10"
-               Text="{Binding TitleText}" VerticalTextAlignment="Center" />
 
-        <!-- Calendar -->
-        <controls:Calendar FooterSectionVisible="False"
+	<Frame BorderColor="{DynamicResource SeparatorColor}" 
+	       HorizontalOptions="Center" 
+	       Padding="1"
+	       VerticalOptions="Center" >
+		<StackLayout BackgroundColor="{DynamicResource BackgroundColor}"
+	             HeightRequest="440" HorizontalOptions="Center"
+	             VerticalOptions="Center"
+	             WidthRequest="380">
+			<!-- Title -->
+			<Label BackgroundColor="{Binding TitleBackgroundColor}"
+               HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center"
+               Style="{DynamicResource VeryLargeLabelStyle}"
+               Text="{Binding TitleText}" 
+               VerticalTextAlignment="Center" />
+
+			<!-- Calendar -->
+			<controls:Calendar FooterSectionVisible="False"
                            HorizontalOptions="Center"
                            MaximumDate="{Binding MaximumDate}"
                            MinimumDate="{Binding MinimumDate}"
@@ -26,105 +31,102 @@
                            VerticalOptions="Center"
                            WidthRequest="320"
                            Year="{Binding Year}">
-            <controls:Calendar.HeaderSectionTemplate>
-                <DataTemplate>
-                    <Grid HorizontalOptions="FillAndExpand"
+				<controls:Calendar.HeaderSectionTemplate>
+					<DataTemplate>
+						<Grid HorizontalOptions="FillAndExpand"
                           Margin="0,2,0,10"
                           Padding="0"
                           VerticalOptions="Start">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*" />
-                            <ColumnDefinition Width="1*" />
-                            <ColumnDefinition Width="4*" />
-                            <ColumnDefinition Width="1*" />
-                            <ColumnDefinition Width="1*" />
-                        </Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto" />
+							</Grid.RowDefinitions>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="1*" />
+								<ColumnDefinition Width="1*" />
+								<ColumnDefinition Width="4*" />
+								<ColumnDefinition Width="1*" />
+								<ColumnDefinition Width="1*" />
+							</Grid.ColumnDefinitions>
 
-                        <!-- Decrease year -->
-                        <local:SvgImage Grid.Column="0"
+							<!-- Decrease year -->
+							<local:SvgImage Grid.Column="0"
                                         Color="{AppThemeBinding Light=Black, Dark=White}"
                                         HeightRequest="18" HorizontalOptions="Center"
                                         Source="angle-double-left"
                                         VerticalOptions="Center"
                                         WidthRequest="18">
-                            <local:SvgImage.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding PrevYearCommand}" />
-                            </local:SvgImage.GestureRecognizers>
-                        </local:SvgImage>
+								<local:SvgImage.GestureRecognizers>
+									<TapGestureRecognizer Command="{Binding PrevYearCommand}" />
+								</local:SvgImage.GestureRecognizers>
+							</local:SvgImage>
 
-                        <!-- Decrease month -->
-                        <local:SvgImage Grid.Column="1"
+							<!-- Decrease month -->
+							<local:SvgImage Grid.Column="1"
                                         Color="{AppThemeBinding Light=Black, Dark=White}"
                                         HeightRequest="18" HorizontalOptions="Center"
                                         Source="angle-left"
                                         VerticalOptions="Center"
                                         WidthRequest="12">
-                            <local:SvgImage.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding PrevMonthCommand}" />
-                            </local:SvgImage.GestureRecognizers>
-                        </local:SvgImage>
+								<local:SvgImage.GestureRecognizers>
+									<TapGestureRecognizer Command="{Binding PrevLayoutUnitCommand}" />
+								</local:SvgImage.GestureRecognizers>
+							</local:SvgImage>
 
-                        <!-- Month/Year-->
-                        <Label Grid.Column="2"
-                               FontAttributes="Bold" FontSize="Medium"
+							<!-- Month/Year-->
+							<Label Grid.Column="2"
                                HorizontalOptions="Center"
-                               TextColor="{Binding MonthLabelColor}"
-                               VerticalOptions="Center">
-                            <Label.FormattedText>
-                                <FormattedString>
-                                    <Span Text="{Binding MonthText, Mode=TwoWay}" />
-                                    <Span Text=", " />
-                                    <Span Text="{Binding Year, Mode=TwoWay}" />
-                                </FormattedString>
-                            </Label.FormattedText>
-                        </Label>
+                               Style="{DynamicResource MediumLargeBoldLabelStyle}"
+                               Text="{Binding DisplayDate, StringFormat='{0:MMMM, yyyy}', Source={RelativeSource AncestorType={x:Type local:CalendarPopup}}}"
+                               VerticalOptions="Center" />
 
-                        <!-- Increase month -->
-                        <local:SvgImage Grid.Column="3"
+							<!-- Increase month -->
+							<local:SvgImage Grid.Column="3"
                                         Color="{AppThemeBinding Light=Black, Dark=White}"
                                         HeightRequest="18" HorizontalOptions="Center"
                                         Source="angle-right"
                                         VerticalOptions="Center"
                                         WidthRequest="12">
-                            <local:SvgImage.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding NextMonthCommand}" />
-                            </local:SvgImage.GestureRecognizers>
-                        </local:SvgImage>
+								<local:SvgImage.GestureRecognizers>
+									<TapGestureRecognizer Command="{Binding NextLayoutUnitCommand}" />
+								</local:SvgImage.GestureRecognizers>
+							</local:SvgImage>
 
-                        <!-- Increase year -->
-                        <local:SvgImage Grid.Column="4"
+							<!-- Increase year -->
+							<local:SvgImage Grid.Column="4"
                                         Color="{AppThemeBinding Light=Black, Dark=White}"
                                         HeightRequest="18" HorizontalOptions="Center"
                                         Source="angle-double-right"
                                         VerticalOptions="Center"
                                         WidthRequest="18">
-                            <local:SvgImage.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding NextYearCommand}" />
-                            </local:SvgImage.GestureRecognizers>
-                        </local:SvgImage>
-                    </Grid>
-                </DataTemplate>
-            </controls:Calendar.HeaderSectionTemplate>
-        </controls:Calendar>
+								<local:SvgImage.GestureRecognizers>
+									<TapGestureRecognizer Command="{Binding NextYearCommand}" />
+								</local:SvgImage.GestureRecognizers>
+							</local:SvgImage>
+						</Grid>
+					</DataTemplate>
+				</controls:Calendar.HeaderSectionTemplate>
+			</controls:Calendar>
 
-        <!-- Actions -->
-        <StackLayout HorizontalOptions="EndAndExpand"
-                     Margin="0,0,20,20"
+			<!-- Actions -->
+			<StackLayout HeightRequest="50" HorizontalOptions="EndAndExpand"
+                     Margin="0,0,20,10"
                      Orientation="Horizontal"
                      VerticalOptions="EndAndExpand">
-            <local:CustomButton BackgroundColor="Transparent"
-                                Clicked="CancelButton_Clicked"
-                                FontSize="12"
-                                Style="{DynamicResource NormalButton}"
-                                Text="CANCEL" />
-            <local:CustomButton BackgroundColor="Transparent"
-                                Clicked="OKButton_Clicked"
-                                FontSize="12"
-                                Padding="20,0"
-                                Text="OK"  />
-        </StackLayout>
-    </StackLayout>
+				<!-- OK -->
+				<Button BackgroundColor="{DynamicResource ControlBackgroundActiveColor}"
+				        Clicked="OKButton_Clicked"
+				        HorizontalOptions="End"
+				        Text="OK" TextColor="{DynamicResource TextAlternateColor}"
+				        WidthRequest="50" />
+
+				<!-- Cancel -->
+				<Button x:Name="cancelButton"
+				        BackgroundColor="Transparent"
+				        Clicked="CancelButton_Clicked"
+				        HorizontalOptions="End"
+				        Margin="10,0,0,0"
+				        Text="Cancel" TextColor="{DynamicResource TextColor}" />
+			</StackLayout>
+		</StackLayout>
+	</Frame>
 </pages:PopupPage>

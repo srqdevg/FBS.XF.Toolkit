@@ -142,7 +142,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// <summary>
 		/// Calendars the popup page data changed.
 		/// </summary>
-		/// <param name="obj">The <see cref="EventArgs"/> instance containing the event data.</param>
+		/// <param name="e">The <see cref="CalendarEventArgs"/> instance containing the event data.</param>
 		private void CalendarPopupPage_DataChanged(CalendarEventArgs e)
 		{
 			if (!string.IsNullOrWhiteSpace(Format))
@@ -187,6 +187,9 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		private void CreateControl()
 		{
+			// Background
+			BackgroundColor = Color.LightGray;
+
 			// Add rows and columns to grid
 			RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 			RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
