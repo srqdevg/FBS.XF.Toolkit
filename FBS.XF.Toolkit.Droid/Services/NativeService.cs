@@ -78,7 +78,7 @@ namespace FBS.XF.Toolkit.Android.Services
 			// Download folder
 #pragma warning disable 618
 			var folder = AndroidOSEnvironment.GetExternalStoragePublicDirectory(AndroidOSEnvironment.DirectoryDownloads)?.AbsolutePath;
-#pragma warning restore 618'
+#pragma warning restore 618
 			return folder;
 		}
 

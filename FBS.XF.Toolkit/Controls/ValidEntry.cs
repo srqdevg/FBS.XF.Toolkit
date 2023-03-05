@@ -39,14 +39,14 @@ namespace FBS.XF.Toolkit.Controls
 		/// The background color property
 		/// </summary>
 		public new static readonly BindableProperty BackgroundColorProperty =
-			BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(CustomButton), Color.Default,
+			BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(ValidEntry), Color.Default,
 				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).BackgroundColorPropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The font family property
 		/// </summary>
 		public static readonly BindableProperty FontFamilyProperty =
-			BindableProperty.Create(nameof(FontSize), typeof(string), typeof(ValidEntry), default(string),
+			BindableProperty.Create(nameof(FontFamily), typeof(string), typeof(ValidEntry), default(string),
 				propertyChanged: (bd, ov, nv) => ((ValidEntry) bd).FontFamilyPropertyChanged(ov, nv));
 
 		/// <summary>
@@ -727,10 +727,10 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			if (oldValue != newValue && newValue != null && textEntry != null && textLabel != null)
 			{
-				if (frame != null)
-				{
-					frame.BorderColor = (Color) newValue;
-				}
+				////if (frame != null)
+				////{
+				////	frame.BorderColor = (Color) newValue;
+				////}
 
 				if (textLabel != null)
 				{
@@ -1096,7 +1096,7 @@ namespace FBS.XF.Toolkit.Controls
 
 		#region Fields
 		private Binding binding;
-		private Frame frame;
+		//// private Frame frame;
 		private Image helpImage;
 		private TapGestureRecognizer helpImageTap;
 		private Label errorLabel;
