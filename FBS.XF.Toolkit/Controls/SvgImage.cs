@@ -356,7 +356,7 @@ namespace FBS.XF.Toolkit.Controls
 
 		#region Nested Types
 		/// <summary>
-		/// CachedImageSource.
+		/// Cached Image Source.
 		/// </summary>
 		internal class CachedImageSource
 		{
