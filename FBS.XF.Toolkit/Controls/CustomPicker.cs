@@ -46,7 +46,7 @@ namespace FBS.XF.Toolkit.Controls
 		{
 			if (ItemsSource != null)
 			{
-				if (newValue.Equals(ItemsSource))
+				if (newValue.Equals(ItemsSource) && oldValue != newValue)
 				{
 					base.ItemsSource = ItemsSource;
 				}

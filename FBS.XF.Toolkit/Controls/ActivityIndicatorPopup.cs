@@ -16,56 +16,56 @@ namespace FBS.XF.Toolkit.Controls
 		/// The background color property
 		/// </summary>
 		public new static readonly BindableProperty BackgroundColorProperty =
-			BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(CustomButton), Color.Default,
+			BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(ActivityIndicatorPopup), Color.Default,
 				propertyChanged: BackgroundColorPropertyChanged);
 
 		/// <summary>
 		/// The font family property
 		/// </summary>
 		public static readonly BindableProperty FontFamilyProperty =
-			BindableProperty.Create(nameof(FontFamily), typeof(string), typeof(CustomButton), default(string),
+			BindableProperty.Create(nameof(FontFamily), typeof(string), typeof(ActivityIndicatorPopup), default(string),
 				propertyChanged: FontFamilyPropertyChanged);
 
 		/// <summary>
 		/// The font size property
 		/// </summary>
 		public static readonly BindableProperty FontSizeProperty =
-			BindableProperty.Create(nameof(FontSize), typeof(double), typeof(CustomButton), default(double),
+			BindableProperty.Create(nameof(FontSize), typeof(double), typeof(ActivityIndicatorPopup), default(double),
 				propertyChanged: FontSizePropertyChanged);
 
 		/// <summary>
 		/// The image color property
 		/// </summary>
 		public static readonly BindableProperty ImageColorProperty =
-			BindableProperty.Create(nameof(ImageColor), typeof(Color), typeof(CustomButton), Color.Default,
+			BindableProperty.Create(nameof(ImageColor), typeof(Color), typeof(ActivityIndicatorPopup), Color.Default,
 				propertyChanged: ImageColorPropertyChanged);
 
 		/// <summary>
 		/// The image property
 		/// </summary>
 		public static readonly BindableProperty ImageProperty =
-			BindableProperty.Create(nameof(Image), typeof(string), typeof(CustomButton), default(string),
+			BindableProperty.Create(nameof(Image), typeof(string), typeof(ActivityIndicatorPopup), default(string),
 				propertyChanged: ImagePropertyChanged);
 
 		/// <summary>
 		/// The is running property
 		/// </summary>
 		public static readonly BindableProperty IsRunningProperty =
-			BindableProperty.Create(nameof(IsRunning), typeof(bool), typeof(CustomButton), default(bool),
+			BindableProperty.Create(nameof(IsRunning), typeof(bool), typeof(ActivityIndicatorPopup), default(bool),
 				BindingMode.TwoWay, propertyChanged: IsRunningPropertyChanged);
 
 		/// <summary>
 		/// The text property
 		/// </summary>
 		public static readonly BindableProperty TextProperty =
-			BindableProperty.Create(nameof(Text), typeof(string), typeof(CustomButton), default(string),
+			BindableProperty.Create(nameof(Text), typeof(string), typeof(ActivityIndicatorPopup), default(string),
 				propertyChanged: TextPropertyChanged);
 
 		/// <summary>
 		/// The text color property
 		/// </summary>
 		public static readonly BindableProperty TextColorProperty =
-			BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(CustomButton), Color.Default,
+			BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(ActivityIndicatorPopup), Color.Default,
 				propertyChanged: TextColorPropertyChanged);
 		#endregion
 
