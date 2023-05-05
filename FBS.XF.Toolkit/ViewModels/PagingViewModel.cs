@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FBS.XF.Toolkit.Models;
 using PropertyChanged;
 
@@ -26,50 +27,48 @@ namespace FBS.XF.Toolkit.ViewModels
 		/// Gets the page list.
 		/// </summary>
 		/// <returns>List&lt;System.Int32&gt;.</returns>
+		/// <remarks>
+		/// Some code from https://github.com/cornflourblue/JW.Pager/blob/master/Pager.cs
+		/// </remarks>
 		public void GeneratePageList()
 		{
-			// Calculate mid point
-			var midPoint = ShowPages / 2;
+			// Calculate total pages
+			var totalPages = (int) Math.Ceiling((decimal) TotalItems / ItemsPerPage);
+
+			// Show all pages
 			var startPage = 1;
-			var totalPages = Math.DivRem(TotalItems, ItemsPerPage, out var remainder);
+			var endPage = totalPages;
 
-			if (remainder > 0)
+			if (totalPages > ShowPages)
 			{
-				totalPages++;
-			}
+				// Total pages more than max so calculate start and end pages
+				var maxPagesBeforeCurrentPage = (int) Math.Floor((decimal) ShowPages / 2);
+				var maxPagesAfterCurrentPage = (int) Math.Ceiling((decimal) ShowPages / 2) - 1;
 
-			// Make sure current page is within range
-			if (totalPages < CurrentPage)
-			{
-				CurrentPage = totalPages;
-			}
-
-			if (CurrentPage > midPoint)
-			{
-				if (CurrentPage + midPoint + 1 > totalPages)
+				if (CurrentPage <= maxPagesBeforeCurrentPage)
 				{
-					if (totalPages - ShowPages > 1)
-					{
-						startPage = (totalPages +1 )- ShowPages;
-					}
+					// Current page near the start
+					startPage = 1;
+					endPage = ShowPages;
 				}
-				else if (CurrentPage - midPoint > 0)
+				else if (CurrentPage + maxPagesAfterCurrentPage >= totalPages)
 				{
-					startPage = CurrentPage - midPoint;
+					// Current page near the end
+					startPage = totalPages - ShowPages + 1;
+					endPage = totalPages;
+				}
+				else
+				{
+					// Current page somewhere in the middle
+					startPage = CurrentPage - maxPagesBeforeCurrentPage;
+					endPage = CurrentPage + maxPagesAfterCurrentPage;
 				}
 			}
 
-			var maxPage = totalPages > ShowPages ? ShowPages : totalPages;
-
-			Pages = null;
-
-			var pages = new List<IdText>();
-
-			for (var p = 0; p < maxPage; p++)
-			{
-				var pageNumber = startPage + p;
-				pages.Add(new IdText { Id = pageNumber.ToString(), IsSelected = CurrentPage.Equals(pageNumber), Text = pageNumber.ToString() });
-			}
+			// create an array of pages that can be looped over
+			var pages = Enumerable.Range(startPage, (endPage + 1) - startPage)
+				.Select(p => new IdText {Id = p.ToString(), IsSelected = CurrentPage.Equals(p), Text = p.ToString()})
+				.ToList();
 
 			Pages = pages;
 		}
@@ -106,5 +105,6 @@ namespace FBS.XF.Toolkit.ViewModels
 		/// <value>The total items.</value>
 		public int TotalItems { get; set; }
 		#endregion
+
 	}
 }
