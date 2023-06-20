@@ -178,11 +178,6 @@ namespace FBS.XF.Toolkit.Controls
 					return;
 				}
 
-				if (Tag == "XXXX")
-				{
-					Console.WriteLine("X");
-				}
-
 				// If we have an old data then clear out the controls
 				if (oldValue != null)
 				{

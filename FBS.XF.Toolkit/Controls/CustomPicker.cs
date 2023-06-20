@@ -25,14 +25,14 @@ namespace FBS.XF.Toolkit.Controls
 		/// The items source property
 		/// </summary>
 		public new static readonly BindableProperty ItemsSourceProperty =
-			BindableProperty.Create(nameof(ItemsSource), typeof(IList), typeof(CustomPicker), null, BindingMode.OneWay,
+			BindableProperty.Create(nameof(ItemsSource), typeof(IList), typeof(CustomPicker), 
 				propertyChanged: (bd, ov, nv) => ((CustomPicker) bd).PropertyChanged(ov, nv));
 
 		/// <summary>
 		/// The size to fit property
 		/// </summary>
 		public static readonly BindableProperty SizeToFitProperty =
-			BindableProperty.Create(nameof(SizeToFit), typeof(bool), typeof(CustomPicker), default(bool), BindingMode.OneWay,
+			BindableProperty.Create(nameof(SizeToFit), typeof(bool), typeof(CustomPicker), default(bool),
 				propertyChanged: (bd, ov, nv) => ((CustomPicker)bd).PropertyChanged(ov, nv));
 		#endregion
 
@@ -135,7 +135,6 @@ namespace FBS.XF.Toolkit.Controls
 			get => (bool)GetValue(SizeToFitProperty);
 			set => SetValue(SizeToFitProperty, value);
 		}
-
 		#endregion
 	}
 }
