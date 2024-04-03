@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace FBS.XF.Toolkit.Extensions
 {
@@ -34,6 +36,17 @@ namespace FBS.XF.Toolkit.Extensions
 			{
 				if (property.Name != "ExtensionData")
 				{
+					// Check if the property is in System.***
+					if (!property.PropertyType.FullName.StartsWith("System."))
+					{
+						continue;
+					}
+
+					if (Attribute.IsDefined(property, typeof(NotMappedAttribute)))
+					{
+						continue;
+					}
+
 					var object1Value = string.Empty;
 					var object2Value = string.Empty;
 
@@ -104,7 +117,7 @@ namespace FBS.XF.Toolkit.Extensions
 
 				foreach (var compareItem in currentList)
 				{
-					var compareKeyValues = propertyFields.Select(p => p!.GetValue(item, null)).ToList();
+					var compareKeyValues = propertyFields.Select(p => p!.GetValue(compareItem, null)).ToList();
 
 					if (compareKeyValues.OrderBy(t => t).SequenceEqual(keyValues.OrderBy(t => t)))
 					{
@@ -126,9 +139,11 @@ namespace FBS.XF.Toolkit.Extensions
 					// Different, so copy properties
 					toCompareItem.CopyTo(item);
 				}
-
-				// Remove from list
-				currentList.Remove(toCompareItem);
+				else
+				{
+					// Remove from list
+					currentList.Remove(toCompareItem);
+				}
 			}
 
 			// Whats left is new
