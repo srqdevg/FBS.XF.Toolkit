@@ -1,7 +1,7 @@
 ﻿namespace FBS.XF.Toolkit
 {
 	/// <summary>
-	/// Enum AnimationType
+	/// AnimationType
 	/// </summary>
 	public enum AnimationType
 	{
@@ -10,7 +10,7 @@
 	}   
 	
 	/// <summary>
-	/// Enum Button Mode
+	/// Button Mode
 	/// </summary>
 	public enum ButtonMode
 	{
@@ -19,7 +19,7 @@
 	}
 
 	/// <summary>
-	/// Enum DecimalTypes
+	/// DecimalTypes
 	/// </summary>
 	public enum DecimalTypes
 	{
@@ -30,7 +30,7 @@
 	}
 
 	/// <summary>
-	/// Enum Repeat Visibility Mode
+	/// Repeat Visibility Mode
 	/// </summary>
 	public enum RepeatVisibilityMode
 	{
@@ -39,7 +39,7 @@
 	}
 
 	/// <summary>
-	/// Enum Text Location Option
+	/// Text Location Option
 	/// </summary>
 	public enum TextLocationOption
 	{
@@ -50,7 +50,7 @@
 	}
 
 	/// <summary>
-	/// Enum WPF Mode
+	/// WPF Mode
 	/// </summary>
 	public enum WPFMode
 	{
