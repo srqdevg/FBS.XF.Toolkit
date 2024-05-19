@@ -2,17 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Company>Fairwinds Business Solutions</Company>
+    <Company>Fairwind Business Solutions</Company>
     <Product>FBS Toolkit</Product>
-    <Copyright>Copyright 2021 © Fairwinds Business Solutions</Copyright>
+    <Copyright>Copyright © Fairwinds Business Solutions</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageId>FBS.Toolkit</PackageId>
-    <Description>Library containing several controls and helper classess to support Xamarin Forms development</Description>
+    <PackageId>FBS.XF.Toolkit</PackageId>
+    <Description>The Fairwind Business Solutions XF toolkit is a .NET library that extends your .NET Xamaron applications with various controls, behaviours, collections, converters, extensions and other helper functions.The Fairwind Business Solutions XF toolkit is a .NET library that extends your .NET Xamaron applications with various controls, behaviours, collections, converters, extensions and other helper functions.</Description>
     <AssemblyVersion>1.27.0.0</AssemblyVersion>
     <FileVersion>1.27.0.0</FileVersion>
     <AssemblyName>FBS.XF.Toolkit</AssemblyName>
     <RootNamespace>FBS.XF.Toolkit</RootNamespace>
     <Version>1.27.0.0</Version>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>FBS Xamarin Toolkit</Title>
+    <PackageIcon>Fairwind.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -40,6 +44,17 @@
     <EmbeddedResource Include="Resources\angle-right.svg" />
     <EmbeddedResource Include="Resources\eye.svg" />
     <EmbeddedResource Include="Resources\microphone.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\Fairwind.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
