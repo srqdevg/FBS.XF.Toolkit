@@ -29,6 +29,7 @@
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\FBS.XF.Toolkit.iOS.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -49,9 +50,6 @@
     <Compile Include="Images\SvgImageSourceHandler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Syncfusion.Xamarin.SfListView">
-      <Version>20.1.0.47</Version>
-    </PackageReference>
     <PackageReference Include="Xamarin.Forms">
       <Version>5.0.0.2401</Version>
     </PackageReference>
@@ -61,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FBS.XF.Toolkit\FBS.XF.Toolkit.csproj">
-      <Project>{cd642ba3-cd92-4050-a09e-63c30274166e}</Project>
+      <Project>{5f7054d2-1472-4fa6-8e6b-1bba219051dc}</Project>
       <Name>FBS.XF.Toolkit</Name>
     </ProjectReference>
   </ItemGroup>

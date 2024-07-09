@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace FBS.XF.Toolkit.Extensions
 {
@@ -37,7 +36,7 @@ namespace FBS.XF.Toolkit.Extensions
 				if (property.Name != "ExtensionData")
 				{
 					// Check if the property is in System.***
-					if (!property.PropertyType.FullName.StartsWith("System."))
+					if (!property.PropertyType.FullName!.StartsWith("System."))
 					{
 						continue;
 					}
@@ -139,11 +138,9 @@ namespace FBS.XF.Toolkit.Extensions
 					// Different, so copy properties
 					toCompareItem.CopyTo(item);
 				}
-				else
-				{
-					// Remove from list
-					currentList.Remove(toCompareItem);
-				}
+				
+				// Remove from list
+				currentList.Remove(toCompareItem);
 			}
 
 			// Whats left is new

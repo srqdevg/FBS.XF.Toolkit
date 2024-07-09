@@ -17,6 +17,9 @@ namespace FBS.XF.Toolkit.Controls
 	public partial class CalendarPopup 
 	{
 		#region Events/Delegates
+		/// <summary>
+		/// Occurs when [data changed].
+		/// </summary>
 		public event Action<CalendarEventArgs> DataChanged;
 		#endregion
 

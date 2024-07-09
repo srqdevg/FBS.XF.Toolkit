@@ -67,6 +67,10 @@ namespace FBS.XF.Toolkit.Converters
 		#endregion
 
 		#region Properties
+		/// <summary>
+		/// Gets or sets the false object.
+		/// </summary>
+		/// <value>The false object.</value>
 		public object FalseObject { get; set; }
 
 		/// <summary>

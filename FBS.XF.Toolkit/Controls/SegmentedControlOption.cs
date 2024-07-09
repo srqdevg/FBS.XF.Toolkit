@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using PropertyChanged;
+using System.ComponentModel;
 using Xamarin.Forms;
 
 namespace FBS.XF.Toolkit.Controls
@@ -78,6 +79,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// </summary>
 		/// <param name="sender">The sender.</param>
 		/// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
+		[SuppressPropertyChangedWarnings]
 		private void OnItemPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName == TextPropertyName)

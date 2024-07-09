@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<package >
+    <metadata>
+    <id>FBS.XF.Toolkit</id>
+    <version>1.28.0</version>
+    <title>FBS Xamarin Forms Toolkit</title>
+    <description>The Fairwind Business Solutions XF toolkit is a .NET library that extends your .NET Xamarin applications with various controls, behaviours, collections, converters, extensions and other helper functions.</description>
+    <releaseNotes></releaseNotes>
+    <authors>Colin Blakey</authors>
+    <owners>Colin.Blakey</owners>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <copyright>Copyright © Fairwinds Business Solutions</copyright>
+    <!-- <icon>Fairwind.png</icon> -->
+    <readme>README.md</readme>
+    <tags>Xamarin Forms Controls</tags>
+    <dependencies>
+        <group targetFramework=".NETStandard2.1">
+            <dependency id="FluentValidation" version="11.8.0" exclude="Build,Analyzers" />
+            <dependency id="Microsoft.EntityFrameworkCore.Sqlite" version="5.0.17" exclude="Build,Analyzers" />
+            <dependency id="PropertyChanged.Fody" version="4.1.0" exclude="Build,Analyzers" />
+            <dependency id="Rg.Plugins.Popup" version="2.1.0" exclude="Build,Analyzers" />
+            <dependency id="SQLitePCLRaw.bundle_e_sqlite3" version="2.1.6" exclude="Build,Analyzers" />
+            <dependency id="SkiaSharp" version="2.80.3" exclude="Build,Analyzers" />
+            <dependency id="Svg.Skia" version="0.5.6.1" exclude="Build,Analyzers" />
+            <dependency id="System.Linq.Dynamic.Core" version="1.3.7" exclude="Build,Analyzers" />
+            <dependency id="Xamarin.Essentials" version="1.6.1" exclude="Build,Analyzers" />
+            <dependency id="Xamarin.Forms" version="5.0.0.2401" exclude="Build,Analyzers" />
+            <dependency id="Xamarin.Plugin.Calendar" version="2.0.9699" exclude="Build,Analyzers" />
+        </group>
+        <!--MonoAndroid dependencies go here-->
+        <group targetFramework="MonoAndroid10">
+        </group>
+        <!--Xamarin.iOS10 dependencies go here-->
+        <group targetFramework="Xamarin.iOS10">
+        </group>
+        <!--WPF dependencies go here-->
+        <group targetFramework="netcoreapp3.1">
+        </group>
+    </dependencies>
+    </metadata>
+    <files>
+        <file src="Fairwind.png" target="" />
+        <file src="README.md" target="" />
+
+        <!-- Cross-platform reference assemblies -->
+        <file src="FBS.XF.Toolkit\bin\Release\netstandard2.1\FBS.XF.Toolkit.dll" target="lib\netstandard2.1\FBS.XF.Toolkit.dll" />
+        <file src="FBS.XF.Toolkit\bin\Release\netstandard2.1\FBS.XF.Toolkit.xml" target="lib\netstandard2.1\FBS.XF.Toolkit.xml" />
+
+        <!-- Android reference assemblies -->
+        <file src="FBS.XF.Toolkit\bin\Release\netstandard2.1\FBS.XF.Toolkit.dll" target="lib\MonoAndroid10\FBS.XF.Toolkit.dll" />
+        <file src="FBS.XF.Toolkit\bin\Release\netstandard2.1\FBS.XF.Toolkit.xml" target="lib\MonoAndroid10\FBS.XF.Toolkit.xml" />
+        <file src="FBS.XF.Toolkit.Droid\bin\Release\FBS.XF.Toolkit.Android.dll" target="lib\MonoAndroid10\FBS.XF.Toolkit.Android.dll" />
+        <file src="FBS.XF.Toolkit.Droid\bin\Release\FBS.XF.Toolkit.Android.xml" target="lib\MonoAndroid10\FBS.XF.Toolkit.Android.xml" />
+
+        <!-- iOS reference assemblies -->
+        <file src="FBS.XF.Toolkit.iOS\bin\Release\FBS.XF.Toolkit.dll" target="lib\Xamarin.iOS10\FBS.XF.Toolkit.dll" />
+        <file src="FBS.XF.Toolkit.iOS\bin\Release\FBS.XF.Toolkit.xml" target="lib\Xamarin.iOS10\FBS.XF.Toolkit.xml" />
+        <file src="FBS.XF.Toolkit.iOS\bin\Release\FBS.XF.Toolkit.iOS.dll" target="lib\Xamarin.iOS10\FBS.XF.Toolkit.iOS.dll" />
+        <file src="FBS.XF.Toolkit.iOS\bin\Release\FBS.XF.Toolkit.iOS.xml" target="lib\Xamarin.iOS10\FBS.XF.Toolkit.iOS.xml" />
+
+        <!-- WPF reference assemblies -->
+        <file src="FBS.XF.Toolkit.WPF\bin\Release\netcoreapp3.1\FBS.XF.Toolkit.dll" target="lib\netcoreapp3.1\FBS.XF.Toolkit.dll" />
+        <file src="FBS.XF.Toolkit.WPF\bin\Release\netcoreapp3.1\FBS.XF.Toolkit.xml" target="lib\netcoreapp3.1\FBS.XF.Toolkit.xml" />
+        <file src="FBS.XF.Toolkit.WPF\bin\Release\netcoreapp3.1\FBS.XF.Toolkit.WPF.dll" target="lib\netcoreapp3.1\FBS.XF.Toolkit.WPF.dll" />
+        <file src="FBS.XF.Toolkit.WPF\bin\Release\netcoreapp3.1\FBS.XF.Toolkit.WPF.xml" target="lib\netcoreapp3.1\FBS.XF.Toolkit.WPF.xml" />
+    </files>
+</package>

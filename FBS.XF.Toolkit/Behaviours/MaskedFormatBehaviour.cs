@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using PropertyChanged;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace FBS.XF.Toolkit.Behaviours
 {
 	/// <summary>
 	/// Masked Format Behavior.
-	/// Implements the <see cref="Xamarin.Forms.Behavior`1" />
+	/// Implements the <see cref="Xamarin.Forms.Behavior{Xamarin.Forms.Entry}" />
 	/// </summary>
-	/// <seealso cref="Xamarin.Forms.Behavior`1" />
-	/// <remarks>
-	/// https://www.xamarinhelp.com/masked-entry-in-xamarin-forms/
-	/// </remarks>
+	/// <seealso cref="Xamarin.Forms.Behavior{Xamarin.Forms.Entry}" />
 	public class MaskedFormatBehavior : Behavior<Entry>
 	{
 		#region UI methods
@@ -19,6 +17,7 @@ namespace FBS.XF.Toolkit.Behaviours
 		/// </summary>
 		/// <param name="sender">The sender.</param>
 		/// <param name="args">The <see cref="Xamarin.Forms.TextChangedEventArgs"/> instance containing the event data.</param>
+		[SuppressPropertyChangedWarnings]
 		private void OnEntryTextChanged(object sender, TextChangedEventArgs args)
 		{
 			if (sender is Entry entry)

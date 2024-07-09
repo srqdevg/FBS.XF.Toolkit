@@ -11,6 +11,9 @@ namespace FBS.XF.Toolkit.Controls
 	public class TapImage : SvgImage, IDisposable
 	{
 		#region Events/Delegates
+		/// <summary>
+		/// Occurs when [tapped].
+		/// </summary>
 		public event EventHandler<ItemTappedEventArgs> Tapped;
 		#endregion
 

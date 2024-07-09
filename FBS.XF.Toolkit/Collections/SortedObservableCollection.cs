@@ -12,7 +12,7 @@ namespace FBS.XF.Toolkit.Collections
 	/// <typeparam name="T"></typeparam>
 	/// <seealso cref="System.Collections.ObjectModel.ObservableCollection{T}" />
 	/// <remarks>
-	/// All copyrigth remains with
+	/// All copyright remains with
 	/// https://brianlagunas.com/write-a-sortable-observablecollection-for-wpf/
 	/// </remarks>
 	public class SortableObservableCollection<T> : ObservableCollection<T>

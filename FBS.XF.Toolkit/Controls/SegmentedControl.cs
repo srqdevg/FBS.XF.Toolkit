@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using FBS.XF.Toolkit.Event;
+using PropertyChanged;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
@@ -275,6 +276,7 @@ namespace FBS.XF.Toolkit.Controls
 		/// Called when [selected item changed].
 		/// </summary>
 		/// <param name="forceUpdateSelectedSegment">if set to <c>true</c> [force update selected segment].</param>
+		[SuppressPropertyChangedWarnings]
 		private void OnSelectedItemChanged(bool forceUpdateSelectedSegment = false)
 		{
 			if (TextPropertyName != null)

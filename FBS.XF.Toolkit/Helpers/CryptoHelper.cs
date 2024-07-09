@@ -22,8 +22,13 @@ namespace FBS.XF.Toolkit.Helpers
 		/// </summary>
 		public enum CryptoType
 		{
-			// DES and RC2 have been removed due to reported compromises
+			/// <summary>
+			/// DES and RC2 have been removed due to reported compromises
+			/// </summary>
 			Rijndael,
+			/// <summary>
+			/// The triple DES
+			/// </summary>
 			// ReSharper disable once InconsistentNaming
 			TripleDES
 		}
@@ -217,6 +222,10 @@ namespace FBS.XF.Toolkit.Helpers
 		#endregion
 
 		#region Properties
+		/// <summary>
+		/// Gets or sets the salt.
+		/// </summary>
+		/// <value>The salt.</value>
 		public static byte[] Salt { get; set; }
 		#endregion
 

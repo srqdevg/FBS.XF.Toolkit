@@ -36,6 +36,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\FBS.XF.Toolkit.Android.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -58,9 +59,6 @@
     <Compile Include="Services\NativeService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Syncfusion.Xamarin.SfListView">
-      <Version>20.1.0.47</Version>
-    </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2401" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
     <PackageReference Include="Xamarin.Plugin.Calendar">
@@ -69,12 +67,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\strings.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FBS.XF.Toolkit\FBS.XF.Toolkit.csproj">
-      <Project>{cd642ba3-cd92-4050-a09e-63c30274166e}</Project>
-      <Name>FBS.XF.Toolkit</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\color\segmented_control_text.xml">
@@ -106,7 +98,12 @@
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\FBS.XF.Toolkit\FBS.XF.Toolkit.csproj">
+      <Project>{5f7054d2-1472-4fa6-8e6b-1bba219051dc}</Project>
+      <Name>FBS.XF.Toolkit</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\RadioButton.axml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

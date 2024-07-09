@@ -8,15 +8,16 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageId>FBS.XF.Toolkit</PackageId>
     <Description>The Fairwind Business Solutions XF toolkit is a .NET library that extends your .NET Xamaron applications with various controls, behaviours, collections, converters, extensions and other helper functions.The Fairwind Business Solutions XF toolkit is a .NET library that extends your .NET Xamaron applications with various controls, behaviours, collections, converters, extensions and other helper functions.</Description>
-    <AssemblyVersion>1.27.0.0</AssemblyVersion>
-    <FileVersion>1.27.0.0</FileVersion>
+    <AssemblyVersion>1.28.0.0</AssemblyVersion>
+    <FileVersion>1.28.0.0</FileVersion>
     <AssemblyName>FBS.XF.Toolkit</AssemblyName>
     <RootNamespace>FBS.XF.Toolkit</RootNamespace>
-    <Version>1.27.0.0</Version>
+    <Version>1.28.0.0</Version>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>FBS Xamarin Toolkit</Title>
     <PackageIcon>Fairwind.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

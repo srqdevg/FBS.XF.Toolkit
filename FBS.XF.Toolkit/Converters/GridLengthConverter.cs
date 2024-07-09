@@ -4,6 +4,11 @@ using Xamarin.Forms;
 
 namespace FBS.XF.Toolkit.Converters
 {
+	/// <summary>
+	/// GridLengthConverter.
+	/// Implements the <see cref="IValueConverter" />
+	/// </summary>
+	/// <seealso cref="IValueConverter" />
 	public class GridLengthConverter : IValueConverter
 	{
 		/// <summary>
